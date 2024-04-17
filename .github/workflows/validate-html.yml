@@ -14,5 +14,10 @@ jobs:
       uses: Cyb3r-Jak3/html5validator-action@v7.2.0
       with:
         root: /
+        blacklist: usr/local/lib/python3.12/*
         format: text
-        css: true
+        css: true 
+    - uses: actions/upload-artifact@v3
+      with:
+        name: log
+        path: log.log
