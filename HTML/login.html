@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+        <script src="../JavaScript/client-verification.js"></script>
+    </head>
+    <body>
+        <div class="swapForm">
+            <h2>Log in:</h2>
+            <form id="loginForm">
+
+                <label for="loginUname"><b>Username:</b></label>
+                <!-- Used a max username length of 12 for now. -->
+                <input type="text" id="loginUname" placeholder="Username" name="loginUname" maxlength="12" required>
+
+                <label for="loginPwd"><b>Password:</b></label>
+                <!-- Similar for password, but max of 20 instead.-->
+                <input type="password" id="loginPwd" placeholder="Password" name ="loginPwd" required>
+
+                <!-- A "remember me" option - implement cookies-->
+                <label for="rem">Remember Me</label>
+                <input type="checkbox" id="rem" checked="checked" name="rem">
+
+                <input type="submit" id="loginSubmit" value="Login">
+            </form>
+            <p>Don't have an account?<br><button type="button" class="swapForm">Sign Up</button></p>
+        </div>
+        <div class="swapForm">
+            <h2>Create an Account:</h2>
+            <form id="signupForm">
+                <label for="usrEmail"><b>Email:</b></label>
+                <input type="email" id="usrEmail" size="50" required>
+                <label for="signupUname"><b>Enter Username:</b></label>
+                <input type="text" id="signupUname" placeholder="Username" maxlength="12" required>
+
+                <label for="signupPwd"><b>Enter Password:</b></label>
+                <input type="password" id="signupPwd" placeholder="Password" minlength="7" maxlength = "20" required>
+
+                <label for="repwd"><b>Re-enter Password:</b></label>
+                <input type="password" id="repwd" placeholder="Repeat Password" required>
+
+                <input type="submit" id="signupSubmit" value="Create Account">
+            </form>
+            <p>Already have an account?<br><button type="button" class="swapForm">Log In</button></p>
+        </div>
+    </body>
+</html>
