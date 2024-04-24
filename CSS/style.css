@@ -54,6 +54,42 @@
     text-align: center;
   }
 
+  .banner {
+    width: 100%;
+    height: 400px;
+    margin: 0;
+    border: 2px solid red;
+  }
+
+  .mid-container {
+    display: flex;
+    width: 100%;
+    height: 600px;
+    margin: 0;
+    border: 2px solid yellow;
+  }
+
+  .about-section {
+    width: 50%;
+    height: 90%;
+    margin: 5% 5%;
+    border: 2px solid blue;
+  }
+  
+  .small-leaderboard {
+    width: 30%;
+    height: 90%;
+    margin: 5% 5%;
+    border: 2px solid blue; 
+  }
+
+  .bottom-container {
+    width: 100%;
+    height: 400px;
+    margin: 0 0 100px 0 ;
+    border: 2px solid green;
+  }
+
   .switch-container {
     display: flex;
     align-items: center;
