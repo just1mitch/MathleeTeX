@@ -1,16 +1,30 @@
 // Get references to form elements
+const switchInput = document.getElementById('switch');
+
 const form = document.querySelector('form');
+const loginForm = document.getElementById("login-form")
 const loginSubmit = document.getElementById("loginSubmit")
 const usernameInput = document.getElementById('username');
 const passwordInput = document.getElementById('password');
 
-const firstnameInput = document.getElementById('firstname');
-const lastnameInput = document.getElementById('lastname');
+const signupForm = document.getElementById("signup-form")
 const setusernameInput = document.getElementById('setusername');
+const emailInput = document.getElementById('setemail');
 const createpasswordInput = document.getElementById('createpassword');
 const confirmpasswordInput = document.getElementById('confirmpassword');
-const signUpSubmit = document.getElementById("signUpSubmit")
+const signUpSubmit = document.getElementById("signUpSubmit");
 
+if(switchInput) {
+    switchInput.addEventListener('change', function() {
+        if (this.checked) {
+          loginForm.style.display = 'none';
+          signupForm.style.display = 'block';
+        } else {
+          loginForm.style.display = 'block';
+          signupForm.style.display = 'none';
+        }
+      });
+}
 if (loginSubmit) {
     // Add event listener to form submission
     loginSubmit.addEventListener('click', function(event) {
@@ -37,15 +51,15 @@ if(signUpSubmit) {
         event.preventDefault();
 
         // Get the values from form inputs and store them as variables
-        const firstName = firstnameInput.value;
-        const lastName = lastnameInput.value;
+
         const username = setusernameInput.value;
+        const email = emailInput.value;
         const createPassword = createpasswordInput.value;
         const confirmPassword = confirmpasswordInput.value;
 
         // Do something with the values...
         console.log("NEW USER:")
-        console.log('Name:', firstName, " ", lastName);
+        console.log('Email:', email);
         console.log('Username:', username);
         console.log("Password:", createPassword)
     });
