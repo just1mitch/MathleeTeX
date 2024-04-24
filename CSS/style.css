@@ -127,7 +127,6 @@
     margin-bottom: 20px;
   }
   .remember {
-    border: 2px solid red;
     display: flex;
   }
   label {
@@ -143,41 +142,47 @@
     background-color: #222831;
     color: #EEEEEE;
   }
+/* Hide the default checkbox */
+input[type="checkbox"] {
+  display: none;
+}
 
-  
-  input[type="checkbox"] {
-    display: none;
-  }
-  input[type="checkbox"] + label {
-    position: relative;
-    display: inline-block;
-    cursor: pointer;
-    padding-left: 25px; /* Adjust spacing */
-  }
-  input[type="checkbox"] + label:before {
-    content: '';
-    position: absolute;
-    left: 0;
-    top: 0;
-    width: 18px; /* Checkbox width */
-    height: 18px; /* Checkbox height */
-    border: 2px solid #76ABAE; /* Border color */
-    background-color: #31363F; /* Background color */
-    border-radius: 4px; /* Border radius */
-  }
+/* Style the custom checkbox */
+input[type="checkbox"] + label {
+  position: relative;
+  display: inline-block;
+  cursor: pointer;
+  padding-left: 25px; /* Adjust spacing */
+}
 
-  input[type="checkbox"]:checked + label:before {
-    background-color: #76ABAE; /* Background color when checked */
-  }
+/* Create the checkbox design */
+input[type="checkbox"] + label:before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 18px; /* Checkbox width */
+  height: 18px; /* Checkbox height */
+  border: 2px solid #76ABAE; /* Border color */
+  background-color: #31363F; /* Background color */
+  border-radius: 4px; /* Border radius */
+}
 
-  input[type="checkbox"]:checked + label:after {
-    content: '\2713'; /* Unicode for checkmark */
-    position: absolute;
-    top: 2px;
-    left: 4px;
-    color: #EEEEEE; /* Checkmark color */
-    font-size: 16px; /* Checkmark size */
-  }
+/* Style the checkmark */
+input[type="checkbox"]:checked + label:before {
+  background-color: #76ABAE; /* Background color when checked */
+}
+
+/* Create the checkmark icon */
+input[type="checkbox"]:checked + label:after {
+  content: '\2713'; /* Unicode for checkmark */
+  position: absolute;
+  top: 2px; /* Adjust vertically */
+  left: 2px; /* Adjust horizontally */
+  color: #EEEEEE; /* Checkmark color */
+  font-family: Arial, sans-serif; /* Font family */
+  font-size: 12px; /* Checkmark size */
+}
 
   input[type="submit"] {
     width: 100%;
