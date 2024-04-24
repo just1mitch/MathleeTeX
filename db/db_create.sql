@@ -11,7 +11,7 @@ CREATE TABLE IF NOT EXISTS questions (
     question_id INTEGER PRIMARY KEY AUTOINCREMENT,
     user_id INTEGER NOT NULL,
     title TEXT NOT NULL,
-    body TEXT NOT NULL,
+    question_description TEXT NOT NULL,
     correct_answer TEXT NOT NULL,
     date_posted TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
     difficulty_level TEXT CHECK(difficulty_level IN ('Easy', 'Medium', 'Hard')),
