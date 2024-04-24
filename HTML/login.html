@@ -15,19 +15,21 @@
     <nav>
       <a href="home.html">Home</a>
       <a href="leaderboard.html">Leaderboard</a>
-      <a href="#">Play Quiz</a>
-      <a href="#">Make Quiz</a>
-      <a href="login.html">Login</a>
+      <a href="playQuiz.html">Play Quiz</a>
+      <a href="makeQuiz.html">Make Quiz</a>
+      <a class="active" href="login.html">Login</a>
     </nav>
   </header>
 
   <div class="switch-container">
+    <div class="switch-labels">
+      <span>Login</span>
+    </div>
     <label class="switch">
       <input type="checkbox" id="switch">
       <span class="slider"></span>
     </label>
     <div class="switch-labels">
-      <span>Login</span>
       <span>Sign Up</span>
     </div>
   </div>
@@ -43,11 +45,15 @@
         <label for="password">Password:</label>
         <input type="password" id="password" name="password" required>
       </div>
+      <div class="form-group remember">
+        <label for="rememberMe">Remember Me:</label>
+        <input type="checkbox" id="rememberMe" name="rememberMe">
+      </div>
       <input id="loginSubmit" type="submit" value="Login">
     </form>
   </div>
 
-  <div class="container" id="signup-form">
+  <div class="container" id="signup-form" style="display: none;">
     <h2>Sign Up</h2>
     <form action="#" method="post">
       <div class="form-group">
@@ -66,7 +72,7 @@
         <label for="password">Confirm Password:</label>
         <input type="password" id="confirmpassword" name="confirmpassword" required>
       </div>
-      <input id="signUpSubmit" type="submit" value="Login">
+      <input id="signUpSubmit" type="submit" value="Sign Up">
     </form>
   </div>
 </body>
