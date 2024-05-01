@@ -26,6 +26,10 @@ def handle_login():
     # super simple login for now - will use flask-login for a more secure login
     username = request.form['username']
     password = request.form['password']
+
+
+
+
     user = users.query.filter_by(username=username).first()
     if user is None or user.password != password:
         #return 'Invalid username or password', 400
