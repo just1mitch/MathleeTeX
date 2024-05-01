@@ -3,5 +3,11 @@
         <h1>
             Welcome, {{ name }}!
           </h1>
+
+          {% if current_user.is_authenticated %}
+          <a href="{{ url_for('logout') }}" class="navbar-item">
+              Logout
+          </a>
+          {% endif %}
     </body>
 </html>

@@ -1,5 +1,5 @@
 from flask import render_template, request, redirect, url_for, jsonify, flash
-from flask_login import login_required, current_user
+from flask_login import login_required, current_user, logout_user
 from flask_login import login_user
 from app import app, db
 from app.models import users, questions, user_answers, comments
@@ -27,9 +27,7 @@ def handle_login():
     username = request.form['username']
     password = request.form['password']
 
-
-
-
+   # https://docs.sqlalchemy.org/en/14/orm/query.html
     user = users.query.filter_by(username=username).first()
     if user is None or user.password != password:
         #return 'Invalid username or password', 400
@@ -69,6 +67,12 @@ def signup_user():
     # Successful signup
     return redirect(url_for('login_signup'))
 
+@app.route('/logout')
+@login_required
+def logout():
+    logout_user()
+    flash('You have been logged out')
+    return redirect(url_for('login_signup'))
 
 @app.route('/list_tables')
 def list_tables():
@@ -97,3 +101,21 @@ def list_users():
             'points': user.points
         })
     return jsonify(user_array)
+
+
+# @app.route('/list_questions')
+# def list_questions():
+#     questions_array = []
+#     questions_list = questions.query.all()
+#     for question in questions_list:
+#         questions_array.append({
+#             'question_id': question.question_id,
+#             'user_id': question.user_id,
+#             'title': question.title,
+#             'question_description': question.question_description,
+#             'correct_answer': question.correct_answer,
+#             'date_posted': question.date_posted,
+#             'difficulty_level': question.difficulty_level
+#         })
+#     return jsonify(questions_array)
+
