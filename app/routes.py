@@ -21,5 +21,15 @@ def list_columns(table_name):
 
 @app.route('/list_users')
 def list_users():
+    user_array = []
     users_list = users.query.all()
-    return jsonify(users_list)
+    for user in users_list:
+        user_array.append({
+            'user_id': user.user_id,
+            'username': user.username,
+            'email': user.email,
+            'password': user.password,
+            'sign_up_date': user.sign_up_date,
+            'points': user.points
+        })
+    return jsonify(user_array)
