@@ -196,3 +196,10 @@ input[type="checkbox"]:checked + label:after {
   input[type="submit"]:hover {
     background-color: #222831;
   }
+
+  .error-section {
+    padding: 0 20px;
+  }
+  .error-section p {
+    color: #ff8989;
+  }
