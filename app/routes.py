@@ -1,4 +1,6 @@
-from flask import render_template, request, redirect, url_for, jsonify
+from flask import render_template, request, redirect, url_for, jsonify, flash
+from flask_login import login_required, current_user
+from flask_login import login_user
 from app import app, db
 from app.models import users, questions, user_answers, comments
 from sqlalchemy import inspect
@@ -7,33 +9,61 @@ from sqlalchemy import inspect
 def index():
     return render_template('index.html')
 
+
+#https://www.digitalocean.com/community/tutorials/how-to-add-authentication-to-your-app-with-flask-login
+# This tutorial is exactly what we need to implement user authentication
+@app.route('/profile')
+@login_required
+def profile():
+    return render_template('profile.html', name=current_user.username)
+
 @app.route('/login', methods=['GET'])
-def login():
-    return render_template('login.html')
+def login_signup():
+    return render_template('login_signup.html')
+
+@app.route('/login', methods=['POST'])
+def handle_login():
+    # super simple login for now - will use flask-login for a more secure login
+    username = request.form['username']
+    password = request.form['password']
+    user = users.query.filter_by(username=username).first()
+    if user is None or user.password != password:
+        #return 'Invalid username or password', 400
+        flash('Invalid username or password, please try again')
+        return redirect(url_for('login_signup'))
+    login_user(user)
+    return redirect(url_for('profile'))
 
 @app.route('/signup', methods=['POST'])
-def signupUser():
-    username = request.form['username']
-    email = request.form['email']
-    password = request.form['password']
-    confirm_password = request.form['confirm_password']
+def signup_user():
+    username = request.form['setusername']
+    email = request.form['setemail']
+    password = request.form['createpassword']
+    confirm_password = request.form['confirmpassword']
 
     if password != confirm_password:
-        return 'Passwords do not match', 400
+        #return 'Passwords do not match', 400
+        flash ('Passwords do not match')
+        return redirect(url_for('login_signup'))
 
     user_exists = users.query.filter_by(username=username).first() is not None
     email_exists = users.query.filter_by(email=email).first() is not None
 
     if user_exists:
-        return 'Username already exists', 400
+        #return 'Username already exists', 400
+        flash ('Username already exists')
+        return redirect(url_for('login_signup'))
     if email_exists:
-        return 'Email already exists', 400
+        #return 'Email already exists', 400
+        flash ('Email already exists')
+        return redirect(url_for('login_signup'))
 
     # Some kind of password store/hash thing should go here for now will just use the password as is
     new_user = users(username=username, email=email, password=password)
     db.session.add(new_user)
     db.session.commit()
-    return redirect(url_for('index'))
+    # Successful signup
+    return redirect(url_for('login_signup'))
 
 
 @app.route('/list_tables')
