@@ -7,6 +7,35 @@ from sqlalchemy import inspect
 def index():
     return render_template('index.html')
 
+@app.route('/login', methods=['GET'])
+def login():
+    return render_template('login.html')
+
+@app.route('/signup', methods=['POST'])
+def signupUser():
+    username = request.form['username']
+    email = request.form['email']
+    password = request.form['password']
+    confirm_password = request.form['confirm_password']
+
+    if password != confirm_password:
+        return 'Passwords do not match', 400
+
+    user_exists = users.query.filter_by(username=username).first() is not None
+    email_exists = users.query.filter_by(email=email).first() is not None
+
+    if user_exists:
+        return 'Username already exists', 400
+    if email_exists:
+        return 'Email already exists', 400
+
+    # Some kind of password store/hash thing should go here for now will just use the password as is
+    new_user = users(username=username, email=email, password=password)
+    db.session.add(new_user)
+    db.session.commit()
+    return redirect(url_for('index'))
+
+
 @app.route('/list_tables')
 def list_tables():
     inspector = inspect(db.engine)
