@@ -17,7 +17,8 @@ def list_tables():
 def list_columns(table_name):
     inspector = inspect(db.engine)
     columns = inspector.get_columns(table_name)
-    return jsonify(columns)
+    column_info = [{ 'name': col['name'], 'type': str(col['type']) } for col in columns]
+    return jsonify(column_info)
 
 @app.route('/list_users')
 def list_users():
