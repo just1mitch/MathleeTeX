@@ -141,6 +141,50 @@
     font-size: 60px;
   }
 
+  .user-stat-section {
+    width: 80%;
+    height: 200px;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: #31363F;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+  }
+
+  .gobal-leaderboard-section {
+    width: 80%;
+    height: 1000px;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: #31363F;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+  }
+
+  .leaderboard-heading-section {
+    width: 96%;
+    height: 54px;
+    margin: 5px auto;
+    background-color: rgb(22, 22, 22);
+    display: flex;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+  }
+  
+  .leaderboard-heading {
+    width: 25%;
+    height: 100%;
+    margin: 0 auto;
+    padding: 10px;
+    justify-content: center;
+    border-right: 1px solid #b0b0b0;
+  }
+  .leaderboard-heading h3 {
+    font-size: 24px;
+    font-weight: bold;
+    color: #b0b0b0;
+  }
+
   .switch-container {
     display: flex;
     align-items: center;
