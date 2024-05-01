@@ -164,7 +164,7 @@
   .leaderboard-heading-section {
     width: 96%;
     height: 54px;
-    margin: 5px auto;
+    margin: 10px auto;
     background-color: rgb(22, 22, 22);
     display: flex;
     border-radius: 8px;
@@ -183,6 +183,15 @@
     font-size: 24px;
     font-weight: bold;
     color: #b0b0b0;
+  }
+  .leaderboard-section {
+    width: 96%;
+    height: 80px;
+    margin: 14px auto;
+    background-color: #222831;
+    display: flex;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
   }
 
   .switch-container {
