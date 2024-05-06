@@ -6,8 +6,8 @@ from app.models import users, questions, user_answers, comments
 from sqlalchemy import inspect
 
 @app.route('/')
-def index():
-    return render_template('index.html')
+def home():
+    return render_template('home.html')
 
 
 #https://www.digitalocean.com/community/tutorials/how-to-add-authentication-to-your-app-with-flask-login
@@ -93,3 +93,11 @@ def list_users():
             'points': user.points
         })
     return jsonify(user_array)
+
+@app.route('/create')
+def create_quiz():
+    return(render_template('create_quiz.html'))
+
+@app.route('/leaderboard')
+def leaderboard():
+    return(render_template('leaderboard.html'))
