@@ -1,82 +1,75 @@
-// Get references to form elements
-/*const switchInput = document.getElementById('switch');
-
-const form = document.querySelector('form');
-const loginForm = document.getElementById("login-form")
-const loginSubmit = document.getElementById("loginSubmit")
-const usernameInput = document.getElementById('username');
-const passwordInput = document.getElementById('password');
-
-const signupForm = document.getElementById("signup-form")
-const setusernameInput = document.getElementById('setusername');
-const emailInput = document.getElementById('setemail');
-const createpasswordInput = document.getElementById('createpassword');
-const confirmpasswordInput = document.getElementById('confirmpassword');
-const signUpSubmit = document.getElementById("signUpSubmit");
-
-if(switchInput) {
-    switchInput.addEventListener('change', function() {
-        if (this.checked) {
-          loginForm.style.display = 'none';
-          signupForm.style.display = 'block';
-        } else {
-          loginForm.style.display = 'block';
-          signupForm.style.display = 'none';
-        }
-      });
+function switchContainers(a, b) {
+    $("#"+ a + "-form").hide();
+    $("#" + b + "-form").show();
+    sessionStorage.setItem("lastForm", b);
 }
-if (loginSubmit) {
-    // Add event listener to form submission
-    loginSubmit.addEventListener('click', function(event) {
-        // Prevent the default form submission behavior
-        event.preventDefault();
-
-        // Get the values from form inputs and store them as variables
-        const username = usernameInput.value;
-        const password = passwordInput.value;
-
-        // Do something with the values...
-        console.log("LOGIN:")
-        console.log('Username:', username);
-        console.log('Password:', password);
-
-    
-    });
-}
-
-if(signUpSubmit) {
-    signUpSubmit.addEventListener('click', function(event) {
-
-        // Prevent the default form submission behavior
-        event.preventDefault();
-
-        // Get the values from form inputs and store them as variables
-
-        const username = setusernameInput.value;
-        const email = emailInput.value;
-        const createPassword = createpasswordInput.value;
-        const confirmPassword = confirmpasswordInput.value;
-
-        // Do something with the values...
-        console.log("NEW USER:")
-        console.log('Email:', email);
-        console.log('Username:', username);
-        console.log("Password:", createPassword)
-    });
-}*/
 
 $(document).ready(function() {
+    //Define the Regular Expressions to validate inputs on client-end (Length is checked in the HTML form)
+    const userRegex = /^\w{3,20}$/; //requires one or more: Letters, numbers and underscores
+    const pwdRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^\\w\\d\\s]).{8,}$/; //requires at least one: lowercase, uppercase, digit and special character (character that isn't alphanumeric or whitespace)
+
     
     //Hide Form based on whichever option was last selected
-    if($("#switch").is(":checked")){
-        $("#login-form").hide();
-        $("#signup-form").show();
-    } else {
-        $("#login-form").show();
-        $("#signup-form").hide();
+    if(sessionStorage.getItem('lastForm') === "signup"){
+        $('#switch').prop("checked", true);
+        switchContainers("login", "signup");
     } 
     $('#switch').change(function() {
-        $(".container").toggle();
+        if(sessionStorage.getItem("lastForm") === "signup") {
+            switchContainers("signup", "login");
+        } else {
+            switchContainers("login", "signup");
+        }
     });
 
+    $('#loginformelement').submit(function() {
+        var $errorContainer = $(this).find(".error-section");
+        //remove any prior error messages
+        $errorContainer.empty();
+        const validUser = userRegex.test($("#username").val().trim());
+        if(!validUser) {
+            $errorContainer.append("<p class='error-message-login'>Invalid username</p>");
+        }
+        const validPwd = pwdRegex.test($("#password").val().trim());
+        if(!validPwd) {
+            $errorContainer.append("<p class='error-message-login'>Invalid password</p>");
+        }
+        if(validPwd && validUser) {
+            //credentials are valid - continue with submission
+            return;
+        } 
+        //credentials are invalid OR validation failed in some way - prevent submission
+        return false;
+    });
+
+    $('#signupformelement').submit(function() {
+        var $errorContainer = $(this).find(".error-section");
+        $errorContainer.empty();
+        //validate username
+        const validUser = userRegex.test($("#setusername").val().trim());
+        if(!validUser) {
+            $errorContainer.append("<p class='error-message-signup'>Username must be between 3 and 20 characters in length and may only contain Letters, numbers and underscores.</p>");
+        }
+        //validate password
+        const validPwd = pwdRegex.test($("#createpassword").val().trim());
+        if(!validPwd) {
+            $errorContainer.append("<p class='error-message-signup'>Password must be at least 8 characters in length, and must contain:<br>\
+            - At least one uppercase letter<br>\
+            - At least one lowercase letter<br>\
+            - At least one digit<br>\
+            - At least one special character</p>");
+        }
+        //validate confirm password
+        const validConfirm = ($("#createpassword").val() === $("#confirmpassword").val());
+        if(!validConfirm) {
+            $errorContainer.append("<p class='error-message-signup'>Passwords do not match</p>");
+        }
+        if(validUser && validPwd && validConfirm) {
+            //credentials are valid - send request
+            return;
+        }
+        //credentials are invalid OR validation failed - prevent submission
+        return false;
+    });
 });
