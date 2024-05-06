@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="../static/style.css">
+</head>
+<body>
+    <header>
+        <div class="logo">Mathleteizzle</div>
+        <nav>
+          <a href="{{url_for('home')}}">Home</a>
+          <a href="{{url_for('leaderboard')}}">Leaderboard</a>
+          <a href="#">Play Quiz</a>
+          <a href="{{url_for('create_quiz')}}">Create Quiz</a>
+          <a href="{{url_for('login_signup')}}">Login</a>
+        </nav>
+      </header>
+</body>
+</html>
