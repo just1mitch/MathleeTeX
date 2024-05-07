@@ -2,7 +2,7 @@ from flask import render_template, request, redirect, url_for, jsonify, flash
 from flask_login import login_required, current_user, logout_user
 from flask_login import login_user
 from app import app, db
-from app.models import users, questions, user_answers, comments
+from app.models import users, questions, user_answers, comments, LoginForm, SignupForm
 from sqlalchemy import inspect
 
 @app.route('/')
@@ -10,69 +10,78 @@ def index():
     return render_template('index.html')
 
 
-#https://www.digitalocean.com/community/tutorials/how-to-add-authentication-to-your-app-with-flask-login
-# This tutorial is exactly what we need to implement user authentication
 @app.route('/profile')
 @login_required
 def profile():
     return render_template('profile.html', name=current_user.username)
 
-@app.route('/login', methods=['GET'])
-def login_signup():
-    return render_template('login_signup.html')
+#Login attempts are directed here
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    if current_user.is_authenticated:
+        return redirect(url_for('profile'))
+    login_form = LoginForm()
+    signup_form = SignupForm()
+    #Process submitted form
+    if login_form.validate_on_submit():
+        usr = users.query.filter_by(username=login_form.username.data).first()
+        if usr is not None and usr.password == login_form.password.data:
+            login_user(usr, remember=login_form.remember.data)
+            return redirect(request.args.get('next') or url_for('profile'))
+        else:
+            flash('flash_login: Incorrect username or password. Please try again.', 'error')
+    #Return login page for failed login and GET requests
+    return render_template('login_signup.html', login_form=login_form, signup_form=signup_form)
 
-@app.route('/login', methods=['POST'])
-def handle_login():
-    # super simple login for now - will use flask-login for a more secure login
-    username = request.form['username']
-    password = request.form['password']
-
-   # https://docs.sqlalchemy.org/en/14/orm/query.html
-    user = users.query.filter_by(username=username).first()
-    if user is None or user.password != password:
-        #return 'Invalid username or password', 400
-        flash('Invalid username or password, please try again')
-        return redirect(url_for('login_signup'))
-    login_user(user)
-    return redirect(url_for('profile'))
-
+        
+#Signup attempts are directed here
 @app.route('/signup', methods=['POST'])
 def signup_user():
-    username = request.form['setusername']
-    email = request.form['setemail']
-    password = request.form['createpassword']
-    confirm_password = request.form['confirmpassword']
-
-    if password != confirm_password:
-        #return 'Passwords do not match', 400
-        flash ('Passwords do not match')
-        return redirect(url_for('login_signup'))
-
-    user_exists = users.query.filter_by(username=username).first() is not None
-    email_exists = users.query.filter_by(email=email).first() is not None
-
-    if user_exists:
-        #return 'Username already exists', 400
-        flash ('Username already exists')
-        return redirect(url_for('login_signup'))
-    if email_exists:
-        #return 'Email already exists', 400
-        flash ('Email already exists')
-        return redirect(url_for('login_signup'))
-
-    # Some kind of password store/hash thing should go here for now will just use the password as is
-    new_user = users(username=username, email=email, password=password)
-    db.session.add(new_user)
-    db.session.commit()
-    # Successful signup
-    return redirect(url_for('login_signup'))
+    signup_form = SignupForm()
+    if signup_form.validate_on_submit():
+        user_exists = users.query.filter_by(username=signup_form.setusername.data).first() is not None
+        email_exists = users.query.filter_by(email=signup_form.setemail.data).first() is not None
+        #Check for duplicate credentials
+        if user_exists:
+            #Username is taken
+            print('username already exists')
+            flash ('flash_signup: Username is taken')
+        elif email_exists:
+            #Email is taken
+            flash ('flash_signup: Email is in use')    
+        else:
+            # Some kind of password store/hash thing should go here for now will just use the password as is
+            new_user = users(username=signup_form.setusername.data, email=signup_form.setemail.data, password=signup_form.createpassword.data)
+            db.session.add(new_user)
+            db.session.commit()
+            # Successful signup - automatically log the user in
+            usr = users.query.filter_by(username=signup_form.setusername.data).first()
+            login_user(usr)
+            return redirect(url_for('profile'))
+    return redirect(url_for('login'))
 
 @app.route('/logout')
 @login_required
 def logout():
     logout_user()
     flash('You have been logged out')
-    return redirect(url_for('login_signup'))
+    return redirect(url_for('login'))
+
+
+@app.route('/leaderboard')
+def leaderboard():
+    return render_template("leaderboard.html")
+
+@app.route('/play')
+def play_quiz():
+    return render_template("playQuiz.html")
+
+@app.route('/create')
+@login_required
+def make_quiz():
+    return render_template("makeQuiz.html")
+
+
 
 @app.route('/list_tables')
 def list_tables():
