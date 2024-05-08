@@ -14,7 +14,12 @@
       <a href="{{ url_for('leaderboard') }}">Leaderboard</a>
       <a href="{{ url_for('play_quiz') }}">Play Quiz</a>
       <a href="{{url_for('make_quiz') }}">Make Quiz</a>
-      <a href="{{ url_for('login') }}">Login</a>
+      <!-- Display a link to the login page if the user is authenticated: otherwise display a link to the user's profile page -->
+      {% if current_user.is_authenticated %}
+        <a href="{{url_for('profile') }}">Profile</a>
+      {% else %}
+        <a href="{{ url_for('login') }}">Login</a>
+      {% endif %}
     </nav>
   </header>
   {% block body %}

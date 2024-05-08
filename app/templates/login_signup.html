@@ -4,7 +4,6 @@
 {% block body %}
 
 
-        
 <div class="switch-container">
     <div class="switch-labels">
         <span>Login</span>
@@ -21,6 +20,7 @@
 <div class="container" id="login-form">
     <h2>Login</h2>
     <form id="loginformelement" action="{{ url_for('login') }}" method="post">
+        {{ login_form.hidden_tag() }}
         <div class="form-group">
             <label for="username">Username:</label>
             <input type="text" id="username" name="username" required>
@@ -33,7 +33,17 @@
             <input type="checkbox" id="rememberMe">
             <label for="rememberMe">Remember Me</label>
         </div>
-        <div class="error-section"></div>
+        <div class="error-section">
+            {% with messages = get_flashed_messages() %}
+                {% if messages %}
+                    {% for message in messages %}
+                        {% if 'flash_login' in message %}
+                            <p class="error-message-login">{{ message|replace('flash_login: ', '') }}</p>
+                        {% endif %}
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+        </div>
         <input id="loginSubmit" type="submit" value="Login">
     </form>
 </div>
@@ -41,13 +51,14 @@
 <div class="container" id="signup-form" style="display:none;">
     <h2>Sign Up</h2>
     <form id="signupformelement" action="{{ url_for('signup_user') }}" method="post">
+        {{ signup_form.hidden_tag() }}
         <div class="form-group">
             <label for="setemail">Set Email:</label>
             <input type="email" id="setemail" name="setemail" required>
         </div>
         <div class="form-group">
             <label for="setusername">Set Username:</label>
-            <input type="text" id="setusername" name="setusername" required> 
+            <input type="text" id="setusername" name="setusername" required>
         </div>
         <div class="form-group">
             <label for="createpassword">Create Password:</label>
@@ -57,7 +68,17 @@
             <label for="confirmpassword">Confirm Password:</label>
             <input type="password" id="confirmpassword" name="confirmpassword" required>
         </div>
-        <div class="error-section"></div>
+        <div class="error-section">
+            {% with messages = get_flashed_messages() %}
+                {% if messages %}
+                    {% for message in messages %}
+                        {% if 'flash_signup' in message %}
+                            <p class="error">✘ {{ message|replace('flash_signup: ', '') }}</p>
+                        {% endif %}
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+        </div>
         <input id="signupSubmit" type="submit" value="Sign Up">
     </form>
 </div>
