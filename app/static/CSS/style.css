@@ -121,7 +121,6 @@ input:checked + .slider:before {
   margin: 0 10px;
   cursor: pointer;
   text-align: center;
-
 }
 .form-group {
   margin-bottom: 20px;

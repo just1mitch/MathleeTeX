@@ -127,4 +127,3 @@ def list_users():
 #             'difficulty_level': question.difficulty_level
 #         })
 #     return jsonify(questions_array)
-

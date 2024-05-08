@@ -15,7 +15,6 @@ $(document).ready(function() {
         $("#" + b + "-form").show();
         sessionStorage.setItem("lastForm", b);
     }
-
     //Hide Form based on whichever option was last selected
     if(sessionStorage.getItem('lastForm') === "signup"){
         $('#switch').prop("checked", true);
