@@ -1,8 +1,7 @@
 venv/
 __pycache__/
-app/__pycache__/
 development/
-migrations/
 *.pyc
 *.db
 .DS_Store
+

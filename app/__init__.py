@@ -19,3 +19,4 @@ from app import routes, models
 @login_manager.user_loader
 def load_user(user_id):
     return models.users.query.get(int(user_id))
+

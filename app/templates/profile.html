@@ -1,7 +1,14 @@
-<html>
-    <body>
-        <h1>
-            Welcome, {{ name }}!
-          </h1>
-    </body>
-</html>
+{% extends "base.html" %}
+{% block title %}{{ name }}{% endblock %}
+
+{% block body %}
+    <h1>Welcome, {{ name }}!</h1>
+    
+
+    <!--Can include other profile info such as points, created quizzes and so forth once they're implemented-->
+    <a href="{{url_for('logout') }}" class="navbar-item">Logout</a>
+{% endblock %}
+
+{% block footer %}
+<!--Footer content...-->
+{% endblock %}

@@ -1,6 +1,25 @@
 from app import db
 from datetime import datetime
 from flask_login import UserMixin
+from flask_wtf import FlaskForm
+from wtforms import StringField, PasswordField, SubmitField, BooleanField, EmailField
+from wtforms.validators import DataRequired, Length, Email, EqualTo, Regexp, ValidationError
+
+
+
+# This class is for formatting/validating Login Form input - username, password, remember me
+class LoginForm(FlaskForm):
+    username = StringField('Username:', validators=[DataRequired(), Length(min=3, max=20)])
+    password = PasswordField('Password:', validators=[DataRequired(), Length(min=8)])
+    remember = BooleanField('Remember Me:')
+    submit = SubmitField('Login')
+
+# This class is for formatting/validating Signup Form input - email, username, password, confirm password
+class SignupForm(FlaskForm):
+    setemail = EmailField('Email:', validators=[DataRequired()])
+    setusername = StringField('Username:', validators=[DataRequired(), Length(min=3, max=20)])
+    createpassword = PasswordField('Password:', validators=[DataRequired(), Length(min=8)])
+    confirmpassword = PasswordField('Repeat Password', validators=[DataRequired(), EqualTo('createpassword')])
 
 
 # This table is for storing user information - username, email, password, sign up date, and points
