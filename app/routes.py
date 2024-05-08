@@ -33,7 +33,7 @@ def login():
     #Return login page for failed login and GET requests
     return render_template('login_signup.html', login_form=login_form, signup_form=signup_form)
 
-        
+
 #Signup attempts are directed here
 @app.route('/signup', methods=['POST'])
 def signup_user():
@@ -45,10 +45,10 @@ def signup_user():
         if user_exists:
             #Username is taken
             print('username already exists')
-            flash ('flash_signup: Username is taken')
+            flash ('flash_signup: Username is taken. Please try again.')
         elif email_exists:
             #Email is taken
-            flash ('flash_signup: Email is in use')    
+            flash ('flash_signup: Email is already in use. Please try again.')
         else:
             # Some kind of password store/hash thing should go here for now will just use the password as is
             new_user = users(username=signup_form.setusername.data, email=signup_form.setemail.data, password=signup_form.createpassword.data)
