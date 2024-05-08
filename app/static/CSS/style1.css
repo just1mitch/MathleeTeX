@@ -103,6 +103,8 @@ h2 {
 
 .mid-container {
   display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
   width: 100%;
   height: 600px;
   margin: 0;
@@ -127,16 +129,31 @@ h2 {
   text-align: center ;
 }
 
+@media (max-width: 768px) {
+  .about-section, .small-leaderboard {
+    flex: 0 1 90%; /* Takes full width on small screens */
+  }
+}
+
 .about-header h2 {
   font-size: 3.75vw;
   overflow: hidden;
   text-overflow: clip;
 }
 
+.about-content {
+  font-size: 1.5vw
+
+}
+
+.about-header {
+  font-size: clamp(0.3rem, 1.5vw, 1.25rem); /* Responsive paragraph sizing */
+}
+
 .leaderboard-header {
   width: 100%;
   height: 100px;
-  margin: 0;
+
   color: #EEEEEE;
   text-align: center ;
 }
@@ -149,8 +166,7 @@ h2 {
 
 
 .small-leaderboard {
-  width: 30%;
-  height: 540px;
+  width: 40%;
   margin: 20px auto;
   padding: 20px;
   background-color: #31363F;
@@ -163,7 +179,10 @@ h2 {
   width: 100%;
   height: 500px;
   margin: 0 0 100px 0 ;
+  display: flex;
+  justify-content: space-between;
 }
+
 .instructions-section {
   width: 90%;
   height: 460px;
@@ -180,7 +199,9 @@ h2 {
   color: #EEEEEE;
 }
 .instructions-header h2 {
-  font-size: 60px;
+  font-size: 3.75vw;
+  overflow: hidden;
+  text-overflow: clip;
 }
 
 .switch-container {
