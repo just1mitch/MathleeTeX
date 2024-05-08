@@ -38,6 +38,7 @@ nav a {
 nav a:hover {
   color: #76ABAE;
 }
+
 .active {
   text-decoration: underline;
 }
@@ -50,6 +51,8 @@ nav a:hover {
   border-radius: 8px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
 }
+
+
 h2 {
   text-align: center;
 }
