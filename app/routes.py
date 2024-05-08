@@ -94,9 +94,14 @@ def list_users():
         })
     return jsonify(user_array)
 
-@app.route('/create')
-def create_quiz():
-    return(render_template('create_quiz.html'))
+@app.route('/create', methods=["GET"])
+def create():
+    return(render_template('create_question.html'))
+
+@app.route('/create', methods=["POST"])
+def create_question():
+    print("received POST")
+    return
 
 @app.route('/leaderboard')
 def leaderboard():
