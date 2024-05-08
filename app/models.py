@@ -2,7 +2,7 @@ from app import db
 from datetime import datetime
 from flask_login import UserMixin
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, SubmitField, BooleanField, EmailField
+from wtforms import StringField, PasswordField, SubmitField, BooleanField, EmailField, RadioField
 from wtforms.validators import DataRequired, Length, Email, EqualTo, Regexp, ValidationError
 
 
@@ -21,6 +21,13 @@ class SignupForm(FlaskForm):
     createpassword = PasswordField('Password:', validators=[DataRequired(), Length(min=8)])
     confirmpassword = PasswordField('Repeat Password', validators=[DataRequired(), EqualTo('createpassword')])
 
+# This class if for formatting/validating Creating Question input - difficulty, title, description, code
+# Note: WTForms' RadioField is not compatible with Bootstrap 5 radio buttons, due to the buttons being rendered
+# in the 'label' of the button via bootstrap. Therefore, difficulty buttons need to be handled manually
+class QuestionForm(FlaskForm):
+    title = StringField('Title:', validators=[DataRequired(), Length(min=1, max=50)])
+    description = StringField('Description:', validators=[DataRequired(), Length(min=1, max=250)])
+    code = StringField('Code:', validators=[DataRequired()])
 
 # This table is for storing user information - username, email, password, sign up date, and points
 class users(UserMixin, db.Model):

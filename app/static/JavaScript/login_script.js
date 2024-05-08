@@ -63,6 +63,7 @@ $(document).ready(function() {
         }
         return validUser && validPwd && validConfirm;
     });
+    
     $('#createpassword').on('input', function() {
         updatePasswordValidation($(this).val().trim()); // Validate in real-time as user types
     });

@@ -2,7 +2,7 @@ from flask import render_template, request, redirect, url_for, jsonify, flash
 from flask_login import login_required, current_user, logout_user
 from flask_login import login_user
 from app import app, db
-from app.models import users, questions, user_answers, comments, LoginForm, SignupForm
+from app.models import users, questions, user_answers, comments, LoginForm, SignupForm, QuestionForm
 from sqlalchemy import inspect
 
 @app.route('/')
@@ -71,13 +71,6 @@ def logout():
 def play_quiz():
     return render_template("playQuiz.html")
 
-@app.route('/create')
-@login_required
-def make_quiz():
-    return render_template("makeQuiz.html")
-
-
-
 @app.route('/list_tables')
 def list_tables():
     inspector = inspect(db.engine)
@@ -106,14 +99,22 @@ def list_users():
         })
     return jsonify(user_array)
 
-@app.route('/create', methods=["GET"])
+@app.route('/create', methods=["GET", "POST"])
 def create():
-    return(render_template('create_question.html'))
-
-@app.route('/create', methods=["POST"])
-def create_question():
-    print("received POST")
-    return
+    question_form = QuestionForm()
+    if question_form.validate_on_submit():
+        # difficulty = question_form.difficulty.data
+        # print(difficulty)
+        title = question_form.title.data
+        print(title)
+        description = question_form.description.data
+        print(description)
+        code = question_form.code.data
+        print(code)
+        return jsonify([title, description, code])
+    else:
+        print(question_form.errors)
+    return(render_template('create_question.html', question_form=question_form))
 
 @app.route('/leaderboard')
 def leaderboard():

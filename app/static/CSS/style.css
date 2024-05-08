@@ -50,8 +50,28 @@ nav a:hover {
   border-radius: 8px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
 }
-h2 {
+
+h2, h4 {
   text-align: center;
+}
+
+.large-text-box {
+  height: 200px;
+  resize: none;
+}
+
+.radio-group {
+  display: flex;
+  justify-content: center;
+  padding: 10px 30%;
+}
+
+.radio-group label {
+  margin: 0px 10px;
+}
+
+.katex-display {
+  overflow-x: auto;
 }
 
 .switch-container {
@@ -122,16 +142,21 @@ input:checked + .slider:before {
   cursor: pointer;
   text-align: center;
 }
+
 .form-group {
   margin-bottom: 20px;
 }
+
 .remember {
   display: flex;
 }
+
 label {
   display: block;
   margin-bottom: 5px;
 }
+
+textarea,
 input[type="text"],
 input[type="email"],
 input[type="password"] {
@@ -143,6 +168,7 @@ input[type="password"] {
   background-color: #222831;
   color: #EEEEEE;
 }
+
 /* Hide the default checkbox */
 input[type="checkbox"] {
 display: none;
@@ -194,6 +220,7 @@ input[type="submit"] {
   color: #EEEEEE;
   cursor: pointer;
 }
+
 input[type="submit"]:hover {
   background-color: #222831;
 }
@@ -207,4 +234,9 @@ input[type="submit"]:hover {
 
 .error-section p.success {
   color: #76ABAE;
+}
+
+.katex-error-section {
+  color: #ff8989;
+  font-size: small;
 }
