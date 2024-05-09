@@ -103,15 +103,15 @@ def list_users():
 def create():
     question_form = QuestionForm()
     if question_form.validate_on_submit():
-        # difficulty = question_form.difficulty.data
-        # print(difficulty)
+        difficulty = question_form.difficulty.data
+        print(difficulty)
         title = question_form.title.data
         print(title)
         description = question_form.description.data
         print(description)
         code = question_form.code.data
         print(code)
-        return jsonify([title, description, code])
+        return jsonify([difficulty, title, description, code])
     else:
         print(question_form.errors)
     return(render_template('create_question.html', question_form=question_form))

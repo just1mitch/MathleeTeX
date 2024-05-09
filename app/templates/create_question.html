@@ -34,9 +34,9 @@
 
 {% block body %}
     <div class="container" id="question-form">
-        <h2>Create a Question</h2><br>
-        {{ question_form.hidden_tag() }}
+        <h2>Create a Question</h2><br>        
         <form action="{{ url_for('create') }}" id="submit-question" method="post">
+            {{ question_form.hidden_tag() }}
             <h4>{{ question_form.difficulty.label }}</h4>
             <div class="radio-group">
                 {% for choice in question_form.difficulty %}
@@ -77,7 +77,7 @@
             <input id="questionSubmit" type="submit" value="Submit">
         </form>
     </div>
-    <script src="..\static\JavaScript\create_question.js"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='JavaScript/create_question.js')}}"></script>
 {% endblock %}
 
 {% block footer %}

@@ -26,8 +26,8 @@ class SignupForm(FlaskForm):
 # in the 'label' of the button via bootstrap. Therefore, difficulty buttons need to be handled manually
 class QuestionForm(FlaskForm):
     difficulty = RadioField('Select a Difficulty:', choices=[('easy', 'Easy'), ('medium', 'Medium'), ('hard', 'Hard')], default='easy', validators=[DataRequired()])
-    title = StringField('Question Title:', validators=[DataRequired(), Length(min=1)])
-    description = TextAreaField('Question Description:', validators=[DataRequired(), Length(min=1)])
+    title = StringField('Question Title:', validators=[DataRequired(), Length(min=1, max=50)])
+    description = TextAreaField('Question Description:', validators=[DataRequired(), Length(min=1, max=250)])
     code = StringField('Enter Your LaTeX Code:', validators=[DataRequired()])
 
 # This table is for storing user information - username, email, password, sign up date, and points
