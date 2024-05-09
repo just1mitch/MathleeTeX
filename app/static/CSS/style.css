@@ -70,10 +70,6 @@ h2, h4 {
   margin: 0px 10px;
 }
 
-.katex-display {
-  overflow-x: auto;
-}
-
 .switch-container {
   display: flex;
   align-items: center;
@@ -169,7 +165,6 @@ input[type="password"] {
   color: #EEEEEE;
 }
 
-textarea::placeholder,
 [type="text"]::placeholder {
   text-align: center;
 }

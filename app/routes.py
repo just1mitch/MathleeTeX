@@ -99,18 +99,32 @@ def list_users():
         })
     return jsonify(user_array)
 
+@app.route('/list_questions')
+def list_questions():
+    question_array = []
+    question_list = questions.query.all()
+    for question in question_list:
+        question_array.append({
+            'question_id': question.question_id,
+            'user_id': question.user_id,
+            'title': question.title,
+            'question_description': question.question_description,
+            'correct_answer': question.correct_answer,
+            'date_posted': question.date_posted,
+            'difficulty_level': question.difficulty_level
+        })
+    return jsonify(question_array)
+
 @app.route('/create', methods=["GET", "POST"])
+@login_required
 def create():
     question_form = QuestionForm()
     if question_form.validate_on_submit():
         difficulty = question_form.difficulty.data
-        print(difficulty)
         title = question_form.title.data
-        print(title)
         description = question_form.description.data
-        print(description)
         code = question_form.code.data
-        print(code)
+        # Enter question into database
         return jsonify([difficulty, title, description, code])
     else:
         print(question_form.errors)

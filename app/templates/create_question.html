@@ -57,7 +57,7 @@
 
             <div class="form-group">
                 <h4>{{ question_form.title.label.text }}</h4>
-                {{ question_form.title(placeholder_="Enter a question title", autocomplete="off") }}
+                {{ question_form.title(class_='katex-display', placeholder_="Enter a question title", autocomplete="off") }}
                 <div class="error-section"><p class="katex-error-section" id="titleError"></p></div>
             </div>
 
@@ -70,6 +70,7 @@
             <div class="form-group">
                 <h4>{{ question_form.code.label }}</h4>
                 {{ question_form.code(class_='katex-display', placeholder_="Enter Raw LaTeX", autocomplete="off") }}
+                <div class="error-section"><p class="katex-error-section" id="codeError"></p></div>
                 <h2 class="katex-display" id="katexdyna" hidden></h2>
                 <p class="katex-display katex-error-section" id="katexErrorCode"></p>
             </div>

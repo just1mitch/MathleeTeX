@@ -2,6 +2,7 @@
 function validateInput() {
     const title = $("#title").val().trim();
     const description = $("#description").val().trim();
+    const code = $("#code").val().trim();
     let valid = true;
 
     // Check if Title and Description lengths are valid
@@ -17,6 +18,12 @@ function validateInput() {
         valid = false;
     }
     else $('#descriptionError').parent().hide()
+    if(code.length > 50) {
+        $('#codeError').html("Error: Code length must be less than 50 characters (currently " + code.length + ")")
+        $('#codeError').parent().show();
+        valid = false;
+    }
+    else $('#codeError').parent().hide()
 
     // Disable submit button if inputs are invalid
     if(valid) $('#questionSubmit').prop('disabled', false);
@@ -36,6 +43,8 @@ $('#code').on('input', function() {
         if($(this).val().length === 0) $('#katexdyna').prop('hidden', true);
         $('#questionSubmit').prop('disabled', false);
         $('#katexErrorCode').prop('hidden', true);
+        validateInput();
+
     }
     catch (e) {
         if (e instanceof katex.ParseError) {
