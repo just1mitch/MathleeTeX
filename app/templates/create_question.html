@@ -57,20 +57,20 @@
 
             <div class="form-group">
                 <h4>{{ question_form.title.label.text }}</h4>
-                {{ question_form.title(placeholder_="Enter a question title") }}
+                {{ question_form.title(placeholder_="Enter a question title", autocomplete="off") }}
                 <div class="error-section"><p class="katex-error-section" id="titleError"></p></div>
             </div>
 
             <div class="form-group">
                 <h4>{{ question_form.description.label }}</h4>
-                {{ question_form.description(class_='large-text-box', placeholder_="Enter a description (max 250 characters)...") }}
+                {{ question_form.description(class_='large-text-box', placeholder_="Enter a description (max 250 characters)...", autocomplete="off") }}
                 <div class="error-section"><p class="katex-error-section" id="descriptionError"></p></div>
             </div>
 
             <div class="form-group">
                 <h4>{{ question_form.code.label }}</h4>
-                {{ question_form.code(class_='katex-display', placeholder_="Enter Raw LaTeX") }}
-                <br><br><h2 class="katex-display" id="katexdyna"></h2>
+                {{ question_form.code(class_='katex-display', placeholder_="Enter Raw LaTeX", autocomplete="off") }}
+                <h2 class="katex-display" id="katexdyna" hidden></h2>
                 <p class="katex-display katex-error-section" id="katexErrorCode"></p>
             </div>
 

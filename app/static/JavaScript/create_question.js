@@ -28,18 +28,20 @@ $('#title').on('input', validateInput);
 $('#description').on('input', validateInput);
 
 $('#code').on('input', function() {
+    $('#katexdyna').prop('hidden', false);
     try {
         katex.render($(this).val(), document.getElementById('katexdyna'), {throwOnError: false})
         // Also render to string - if there are errors, will catch and display underneath the rendered text
         katex.renderToString($(this).val())
-        $('#katexErrorCode').css('display', 'none');
+        if($(this).val().length === 0) $('#katexdyna').prop('hidden', true);
         $('#questionSubmit').prop('disabled', false);
+        $('#katexErrorCode').prop('hidden', true);
     }
     catch (e) {
         if (e instanceof katex.ParseError) {
             debugger;
             $('#katexErrorCode').html(e.message);
-            $('#katexErrorCode').css('display', 'block');
+            $('#katexErrorCode').prop('hidden', false);
             // Prevent submitting form if katex is invalid
             $('#questionSubmit').prop('disabled', true);
         }
