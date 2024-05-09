@@ -33,38 +33,51 @@
 {% endblock %}
 
 {% block body %}
-<div class="container" id="question-form">
-    <h2>Create a Question</h2>
-    <form action="{{ url_for('create') }}" id="submit-question" method="post">
+    <div class="container" id="question-form">
+        <h2>Create a Question</h2><br>
         {{ question_form.hidden_tag() }}
-        <br><h4>Select a Difficulty:</h4>
-        <div class="radio-group">
-            <input type="radio" class="btn-check" name="difficulty" id="difficulty-easy" checked required>
-            <label class="btn btn-outline-success" for="difficulty-easy">Easy</label>
-            
-            <input type="radio" class="btn-check" name="difficulty" id="difficulty-medium"  value="Medium">
-            <label class="btn btn-outline-warning" for="difficulty-medium">Medium</label>
-            
-            <input type="radio" class="btn-check" name="difficulty" id="difficulty-hard"  value="Hard">
-            <label class="btn btn-outline-danger" for="difficulty-hard">Hard</label>
-        </div>
-        <div class="form-group">
-            <h4>Question Title:</h2>
-            <input type="text" id="title" name="title" placeholder="Enter a question title" required>
-        </div>
-        <div class="form-group">
-            <h4>Question Description:</h2>
-            <textarea class="large-text-box" id="description" name="description" maxlength="250" placeholder="Enter a description (max 250 characters)... " required></textarea>
-        </div>
-        <h4>Enter your LaTeX code:</h4>
-        <div class="form-group">
-            <input type="text" id="code" name="code" autocomplete="off" placeholder="Enter raw LaTeX" required>
-            <br><br><h2 class="katex-display" id="katexdyna"></h2><p class="katex-display katex-error-section" id="katexErrorCode"></p>
-        </div>
-        <input id="questionSubmit" type="submit" value="Submit">
-    </form>
-</div>
-<script src="..\static\JavaScript\create_question.js"></script>
+        <form action="{{ url_for('create') }}" id="submit-question" method="post">
+            <h4>{{ question_form.difficulty.label }}</h4>
+            <div class="radio-group">
+                {% for choice in question_form.difficulty %}
+                    {% if choice.label.text == 'Easy' %}
+                        {{ choice(class_="btn-check") }}
+                        {{ choice.label(class_="btn btn-outline-success") }}
+                    {% endif %}
+                    {% if choice.label.text == 'Medium' %}
+                        {{ choice(class_="btn-check") }}
+                        {{ choice.label(class_="btn btn-outline-warning") }}
+                    {% endif %}
+                    {% if choice.label.text == 'Hard' %}
+                        {{ choice(class_="btn-check") }}
+                        {{ choice.label(class_="btn btn-outline-danger") }}
+                    {% endif %}
+                {% endfor %}
+            </div>
+
+            <div class="form-group">
+                <h4>{{ question_form.title.label.text }}</h4>
+                {{ question_form.title(placeholder_="Enter a question title") }}
+                <div class="error-section"><p class="katex-error-section" id="titleError"></p></div>
+            </div>
+
+            <div class="form-group">
+                <h4>{{ question_form.description.label }}</h4>
+                {{ question_form.description(class_='large-text-box', placeholder_="Enter a description (max 250 characters)...") }}
+                <div class="error-section"><p class="katex-error-section" id="descriptionError"></p></div>
+            </div>
+
+            <div class="form-group">
+                <h4>{{ question_form.code.label }}</h4>
+                {{ question_form.code(class_='katex-display', placeholder_="Enter Raw LaTeX") }}
+                <br><br><h2 class="katex-display" id="katexdyna"></h2>
+                <p class="katex-display katex-error-section" id="katexErrorCode"></p>
+            </div>
+
+            <input id="questionSubmit" type="submit" value="Submit">
+        </form>
+    </div>
+    <script src="..\static\JavaScript\create_question.js"></script>
 {% endblock %}
 
 {% block footer %}

@@ -169,6 +169,11 @@ input[type="password"] {
   color: #EEEEEE;
 }
 
+textarea::placeholder,
+[type="text"]::placeholder {
+  text-align: center;
+}
+
 /* Hide the default checkbox */
 input[type="checkbox"] {
 display: none;
@@ -225,9 +230,15 @@ input[type="submit"]:hover {
   background-color: #222831;
 }
 
+input[type="submit"]:disabled {
+  background-color: #222831;
+  cursor: default;
+}
+
 .error-section {
   padding: 0 20px;
 }
+
 .error-section p.error {
   color: #ff8989;
 }
@@ -238,5 +249,6 @@ input[type="submit"]:hover {
 
 .katex-error-section {
   color: #ff8989;
-  font-size: small;
+  font-size: x-small;
+  text-align: center;
 }
