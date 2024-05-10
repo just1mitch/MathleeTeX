@@ -14,7 +14,7 @@
     <nav>
       <a href="{{ url_for('index') }}">Home</a>
       <a href="{{ url_for('leaderboard') }}">Leaderboard</a>
-      <a href="{{ url_for('play_quiz') }}">Play Quiz</a>
+      <a href="{{ url_for('play') }}">Play Quiz</a>
       <a href="{{url_for('create') }}">Make Quiz</a>
       <!-- Display a link to the login page if the user is authenticated: otherwise display a link to the user's profile page -->
       {% if current_user.is_authenticated %}

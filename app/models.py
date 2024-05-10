@@ -21,14 +21,12 @@ class SignupForm(FlaskForm):
     createpassword = PasswordField('Password:', validators=[DataRequired(), Length(min=8)])
     confirmpassword = PasswordField('Repeat Password', validators=[DataRequired(), EqualTo('createpassword')])
 
-# This class if for formatting/validating Creating Question input - difficulty, title, description, code
-# Note: WTForms' RadioField is not compatible with Bootstrap 5 radio buttons, due to the buttons being rendered
-# in the 'label' of the button via bootstrap. Therefore, difficulty buttons need to be handled manually
+# This class is for formatting/validating Creating Question input - difficulty, title, description, code
 class QuestionForm(FlaskForm):
-    difficulty = RadioField('Select a Difficulty:', choices=[('easy', 'Easy'), ('medium', 'Medium'), ('hard', 'Hard')], default='easy', validators=[DataRequired()])
+    difficulty = RadioField('Select a Difficulty:', choices=[('Easy', 'Easy'), ('Medium', 'Medium'), ('Hard', 'Hard')], default='Easy', validators=[DataRequired()])
     title = StringField('Question Title:', validators=[DataRequired(), Length(min=1)])
     description = TextAreaField('Question Description:', validators=[DataRequired(), Length(min=1)])
-    code = StringField('Enter Your LaTeX Code:', validators=[DataRequired()])
+    code = StringField('Enter Your LaTeX Code:', validators=[DataRequired(), Length(min=1)])
 
 # This table is for storing user information - username, email, password, sign up date, and points
 class users(UserMixin, db.Model):
