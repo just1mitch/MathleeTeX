@@ -6,9 +6,9 @@
     <div class="section question container">
         <div class="row">
             <div class="col-8">
-                <h5 class="render-katex">{{ question.title }}</h5>
+                <h5 class="fw-bold render-katex">{{ question.title }}</h5>
             </div>
-            <div class="col-4 text-end">
+            <div class="col-4 text-end opacity-50">
                 <p>Posted by {{ question.user }}</p>
             </div>
         </div>
@@ -16,7 +16,7 @@
             <div class="col-10 mr-2">
                 <p class="render-katex">{{ question.description }}</p>
             </div>
-            <div class="col-2 text-end">
+            <div class="col-2 text-end align-self-end">
                 {% if question.difficulty == 'Easy' %}
                     <span class="easy btn btn-success">Easy</span>
                 {% endif %}

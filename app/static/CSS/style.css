@@ -56,22 +56,30 @@ nav a:hover {
   max-width: 800px;
 }
 
+.question:hover {
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+  transform: translateY(-2px);
+}
+
+.question:active {
+  transform: translateY(-1px);
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2)
+}
+
 h2, h4 {
   text-align: center;
 }
 
 .easy:hover {
-  cursor: default;
   background-color: #198754;
 }
 
 .medium:hover {
-  cursor: default;
   background-color: #ffc107;
 }
 
 .hard:hover {
-  cursor: default;
   background-color: #dc3545;
 }
 
