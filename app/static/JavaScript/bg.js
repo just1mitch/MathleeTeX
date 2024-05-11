@@ -1,4 +1,4 @@
-// Function to add an equation element to the page
+
 function addEquation() {
   const equation = document.createElement('div');
   equation.className = 'equation';
@@ -37,13 +37,12 @@ function randomPercentage(range, offset, isNegative = false) {
   return `${isNegative ? baseValue * -1 : baseValue}%`;
 }
 
-// Generate a random equation from a predefined list
+// Generate a random equation from a predefined list - thanks chatgpt for creating this list
 function generateRandomEquation() {
   const equations = [
       'E=mc^2',
       '\\int_0^\\infty e^{-x^2} dx=\\frac{\\sqrt{\\pi}}{2}',
       '\\frac{d}{dx} (\\sin x) = \\cos x',
-      '\\text{Jack was here}',
       '\\sum_{n=1}^\\infty \\frac{1}{n^2} = \\frac{\\pi^2}{6}',
       '\\lim_{x \\to 0} \\frac{\\sin x}{x} = 1',
       'f(x) = a_0 + \\sum_{n=1}^\\infty (a_n \\cos nx + b_n \\sin nx)',
