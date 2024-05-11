@@ -3,7 +3,7 @@
 {% block title %}Make a Quiz{% endblock %}
 
 {% block body %}
-    <div class="container" id="question-form">
+    <div class="section" id="question-form">
         <h2>Create a Question</h2><br>        
         <form action="{{ url_for('create') }}" id="submit-question" method="post">
             {{ question_form.hidden_tag() }}

@@ -69,9 +69,19 @@ def logout():
     flash('You have been logged out')
     return redirect(url_for('login'))
 
-@app.route('/play')
+@app.route('/play', methods=['GET'])
 def play():
-    return render_template("play_quiz.html")
+    # Query database for all questions
+    question_list = questions.query.all()
+    question_array = [{
+        'question_id': question.question_id,
+        'title': question.title,
+        'description': question.question_description,
+        'difficulty': question.difficulty_level,
+        'user': users.query.filter_by(user_id=question.user_id).first().username,
+    } for question in question_list]
+    
+    return render_template("play_quiz.html", question_array=question_array)
 
 @app.route('/list_tables')
 def list_tables():
@@ -113,7 +123,7 @@ def list_questions():
             'question_description': question.question_description,
             'correct_answer': question.correct_answer,
             'date_posted': question.date_posted,
-            'difficulty_level': question.difficulty_level
+            'difficulty': question.difficulty_level
         })
     return jsonify(question_array)
 

@@ -2,7 +2,35 @@
 {% block title %}Play a Quiz{% endblock %}
 
 {% block body %}
-<p>Play quiz content...</p>
+{% for question in question_array %}
+    <div class="section question container">
+        <div class="row">
+            <div class="col-8">
+                <h5 class="render-katex">{{ question.title }}</h5>
+            </div>
+            <div class="col-4 text-end">
+                <p>Posted by {{ question.user }}</p>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-10 mr-2">
+                <p class="render-katex">{{ question.description }}</p>
+            </div>
+            <div class="col-2 text-end">
+                {% if question.difficulty == 'Easy' %}
+                    <span class="easy btn btn-success">Easy</span>
+                {% endif %}
+                {% if question.difficulty == 'Medium' %}
+                    <span class="medium btn btn-warning">Medium</span>
+                {% endif %}
+                {% if question.difficulty == 'Hard' %}
+                    <span class="hard btn btn-danger">Hard</span>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+{% endfor %}
+    <script type="text/javascript" src="{{ url_for('static', filename='JavaScript/render_katex.js')}}"></script>
 {% endblock %}
 
 {%block footer %}

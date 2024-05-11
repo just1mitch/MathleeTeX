@@ -41,7 +41,7 @@
   .active {
     text-decoration: underline;
   }
-  .container {
+  .section {
     width: 100%;
     max-width: 400px;
     margin: 20px auto;
@@ -54,7 +54,7 @@
     text-align: center;
   }
 
-  .switch-container {
+  .switch-section {
     display: flex;
     align-items: center;
     width: 40%;

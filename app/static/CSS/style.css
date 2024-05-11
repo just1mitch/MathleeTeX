@@ -41,7 +41,8 @@ nav a:hover {
 .active {
   text-decoration: underline;
 }
-.container {
+
+.section {
   width: 100%;
   max-width: 400px;
   margin: 20px auto;
@@ -51,8 +52,27 @@ nav a:hover {
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
 }
 
+.question {
+  max-width: 800px;
+}
+
 h2, h4 {
   text-align: center;
+}
+
+.easy:hover {
+  cursor: default;
+  background-color: #198754;
+}
+
+.medium:hover {
+  cursor: default;
+  background-color: #ffc107;
+}
+
+.hard:hover {
+  cursor: default;
+  background-color: #dc3545;
 }
 
 .large-text-box {
@@ -70,7 +90,7 @@ h2, h4 {
   margin: 0px 10px;
 }
 
-.switch-container {
+.switch-section {
   display: flex;
   align-items: center;
   width: 40%;
