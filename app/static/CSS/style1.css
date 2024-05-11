@@ -57,8 +57,6 @@ h2 {
   color: #76ABAE;
 }
 
-
-
 .card {
   margin: 20px auto;
   padding: 20px;
@@ -75,6 +73,15 @@ h2 {
 .card-body {
   padding: 20px;
   font-size: 1rem;
+}
+
+.card-body h4 {
+  color: #76ABAE;
+  margin-top: 20px;
+}
+
+.card-body p {
+  margin-bottom: 10px;
 }
 
 ul {
