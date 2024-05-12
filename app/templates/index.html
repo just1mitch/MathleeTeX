@@ -1,12 +1,115 @@
 {% extends "base.html" %}
-{% block title %}Home{% endblock %}
+{%block title %}Home{% endblock %}
 
 {% block body %}
-<p>Homepage content...</p>
-{% endblock %}
+  <div class="banner">
+    <div id="equation-background"></div>
+    <div class="content">
+      <h1>Welcome to MathleeTeX!</h1>
+      <p>Simplified questions by the community for the community!</p>
+    </div>
+    <button class="start-button">Start your Mathleetex today!</button>
+  </div>
+  <br>
+  <div class="row">
+    <!-- About Section -->
+    <div class="col-lg-6 col-md-12">
+      <div class="card bg-dark text-white mb-4">
+        <div class="card-header">
+          <h2>About</h2>
+        </div>
+        <div class="card-body">
+            <p>Welcome to <b class="katex-render">\sqrt{MathleeTeX},</b> a unique community-driven platform designed to empower individuals to enhance their LaTeX skills through a collaborative question-and-answer format. We believe in the power of community engagement, acting as a key tool in accelerating learning and mastering complex LaTeX concepts.</p>
+            <p>Whether you're a beginner looking to understand the basics or an advanced user seeking to solve intricate typesetting challenges, <b class="katex-render">\sqrt{MathleeTeX}</b> is your go-to resource.</p>
+            <ul>
+                <li>Ask and Answer Questions: Dive into a vast array of type-set challenges ranging from beginner to advanced levels. Whether you’re starting out or are looking to polish your expertise, there’s something here for everyone.</li>
+                <li>Leaderboard: Track your progress and compare your performance with other users. Earn points and climb the ranks to become a MathleeTex champion.</li>
+                <li>Comment and Collaborate: Engage with the community by sharing your thoughts, feedback, and insights. Collaborate with other users to solve complex problems and learn from one another.</li>
+            </ul>
+            
+        </div>
+      </div>
+    </div>
+    <!-- Leaderboard Section -->
+    <div class="col-lg-6 col-md-12">
+      <div class="card bg-dark text-white mb-4">
+        <div class="card-header">
+          <h2>Leaderboard</h2>
+        </div>
+        <div class="card-body">
+          <!-- Content of leaderboard -->
+          <table class="table table-dark table-hover">
+            <thead>
+              <tr>
+                <th scope="col">Rank #</th>
+                <th scope="col">Username</th>
+                <th scope="col">Score</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th scope="row">1</th>
+                <td>test</td>
+                <td>0</td>
+              </tr>
+              <tr>
+                <th scope="row">2</th>
+                <td>test</td>
+                <td>0</td>
+              </tr>
+              <tr>
+                <th scope="row">3</th>
+                <td>test</td>
+                <td>0</td>
+              </tr>
+                <tr>
+                    <th scope="row">4</th>
+                    <td>test</td>
+                    <td>0</td>
+                </tr>
+                <tr>
+                    <th scope="row">5</th>
+                    <td>test</td>
+                    <td>0</td>
+                </tr>
+            </tbody>
+          </table>
+          <button class="start-button">View Leaderboard ➤</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Instructions Section -->
+  <div class="row">
+    <div class="col-12">
+      <div class="card bg-dark text-white mb-4">
+        <div class="card-header">
+          <h2>Instructions</h2>
+        </div>
+        <div class="card-body">
+          <!-- Content of instructions -->
+          <h4>Create an Account</h4>
+            <p>To participate, start by creating an account using the sign-up page. Fill in your details to get started.</p>
 
+            <h4>Ask a Question</h4>
+            <p>Once registered, you can ask questions by navigating to the "Ask Question" section. Specify the difficulty level of your question, type your question, and provide an answer using LaTeX format for mathematical expressions.</p>
+
+            <h4>Answer a Question</h4>
+            <p>Browse existing questions to answer them. You have three attempts to provide the correct answer. After submitting each answer, you will see if it was correct. You can also leave comments, upvote, or downvote questions to participate in the community discussion.</p>
+            
+            <h4>Earning Points</h4>
+            <p>Points are awarded for each attempt based on accuracy and helpfulness of your contributions like answering questions and providing useful comments.</p>
+        </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  </div>
+  <div class="bottom-container">
+
+
+  </div>
+{% endblock %}
 {% block footer %}
-<footer>
-  <p>Footer Content...</p>
-</footer>
 {% endblock %}
