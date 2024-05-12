@@ -1,6 +1,5 @@
 venv/
 __pycache__/
-app/__pycache__/
 development/
 *.pyc
 *.db

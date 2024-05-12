@@ -2,7 +2,7 @@ from app import db
 from datetime import datetime
 from flask_login import UserMixin
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, SubmitField, BooleanField, EmailField
+from wtforms import StringField, PasswordField, SubmitField, BooleanField, EmailField, RadioField, TextAreaField
 from wtforms.validators import DataRequired, Length, Email, EqualTo, Regexp, ValidationError
 
 
@@ -21,6 +21,12 @@ class SignupForm(FlaskForm):
     createpassword = PasswordField('Password:', validators=[DataRequired(), Length(min=8)])
     confirmpassword = PasswordField('Repeat Password', validators=[DataRequired(), EqualTo('createpassword')])
 
+# This class is for formatting/validating Creating Question input - difficulty, title, description, code
+class QuestionForm(FlaskForm):
+    difficulty = RadioField('Select a Difficulty:', choices=[('Easy', 'Easy'), ('Medium', 'Medium'), ('Hard', 'Hard')], default='Easy', validators=[DataRequired()])
+    title = StringField('Question Title:', validators=[DataRequired(), Length(min=1)])
+    description = TextAreaField('Question Description:', validators=[DataRequired(), Length(min=1)])
+    code = StringField('Enter Your LaTeX Code:', validators=[DataRequired(), Length(min=1)])
 
 # This table is for storing user information - username, email, password, sign up date, and points
 class users(UserMixin, db.Model):
