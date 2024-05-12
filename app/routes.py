@@ -81,7 +81,7 @@ def play():
         'user': users.query.filter_by(user_id=question.user_id).first().username,
     } for question in question_list]
     
-    return render_template("play_quiz.html", question_array=question_array)
+    return render_template("play_question.html", question_array=question_array)
 
 @app.route('/list_tables')
 def list_tables():

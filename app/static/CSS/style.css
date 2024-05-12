@@ -52,6 +52,12 @@ nav a:hover {
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
 }
 
+.prevent-select {
+  -webkit-user-select: none; /* Safari */
+  -ms-user-select: none; /* IE 10 and IE 11 */
+  user-select: none; /* Standard syntax */
+}
+
 .question {
   max-width: 800px;
 }
@@ -71,16 +77,28 @@ h2, h4 {
   text-align: center;
 }
 
-.easy:hover {
+span.easy {
+  color: #fff;
   background-color: #198754;
+  border-color: #198754;
+  padding: 0.375rem 0.75rem;
+  border-radius: 0.375rem;
 }
 
-.medium:hover {
+span.medium {
+  color: #000;
   background-color: #ffc107;
+  border-color: #ffc107;
+  padding: 0.375rem 0.75rem;
+  border-radius: 0.375rem;
 }
 
-.hard:hover {
+span.hard {
+  color: #fff;
   background-color: #dc3545;
+  border-color: #dc3545;
+  padding: 0.375rem 0.75rem;
+  border-radius: 0.375rem;
 }
 
 .large-text-box {
