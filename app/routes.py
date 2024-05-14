@@ -1,9 +1,11 @@
 from flask import render_template, request, redirect, url_for, jsonify, flash
 from flask_login import login_required, current_user, logout_user
 from flask_login import login_user
-from app import app, db
-from app.models import users, questions, user_answers, comments, LoginForm, SignupForm
 from sqlalchemy import inspect
+
+from app import app, db
+from app.models import users, questions, user_answers, comments, LoginForm, SignupForm, QuestionForm
+
 
 @app.route('/')
 def index():
@@ -67,21 +69,9 @@ def logout():
     flash('You have been logged out')
     return redirect(url_for('login'))
 
-
-@app.route('/leaderboard')
-def leaderboard():
-    return render_template("leaderboard.html")
-
 @app.route('/play')
-def play_quiz():
-    return render_template("playQuiz.html")
-
-@app.route('/create')
-@login_required
-def make_quiz():
-    return render_template("makeQuiz.html")
-
-
+def play():
+    return render_template("play_quiz.html")
 
 @app.route('/list_tables')
 def list_tables():
@@ -111,6 +101,47 @@ def list_users():
         })
     return jsonify(user_array)
 
+@app.route('/list_questions')
+def list_questions():
+    question_array = []
+    question_list = questions.query.all()
+    for question in question_list:
+        question_array.append({
+            'question_id': question.question_id,
+            'user_id': question.user_id,
+            'title': question.title,
+            'question_description': question.question_description,
+            'correct_answer': question.correct_answer,
+            'date_posted': question.date_posted,
+            'difficulty_level': question.difficulty_level
+        })
+    return jsonify(question_array)
+
+@app.route('/create', methods=["GET", "POST"])
+@login_required
+def create():
+    question_form = QuestionForm()
+    if question_form.validate_on_submit():
+        difficulty = question_form.difficulty.data
+        title = question_form.title.data
+        description = question_form.description.data
+        code = question_form.code.data
+        # Enter question into database
+        new_question = questions(user_id=int(current_user.get_id()), 
+                                 title=title, 
+                                 question_description=description, 
+                                 correct_answer=code, 
+                                 difficulty_level=difficulty)
+        db.session.add(new_question)
+        db.session.commit()
+        return redirect(url_for('play'))
+    else:
+        print(question_form.errors)
+    return(render_template('create_question.html', question_form=question_form))
+
+@app.route('/leaderboard')
+def leaderboard():
+    return(render_template('leaderboard.html'))
 
 # @app.route('/list_questions')
 # def list_questions():
