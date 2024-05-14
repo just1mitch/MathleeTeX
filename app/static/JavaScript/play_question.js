@@ -1,6 +1,6 @@
 function timeSince(_, dateposted) {
     let date = new Date(dateposted.getAttribute('dateposted'));
-    let seconds = Math.floor((new Date() - date) / 1000);
+    let seconds = Math.floor((new Date() - date) / 1000) + date.getTimezoneOffset() * 60;
     let interval = seconds / 31536000;
     if (interval > 1) {
         dateposted.innerText = Math.floor(interval) + " years ago";

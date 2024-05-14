@@ -52,28 +52,34 @@ nav a:hover {
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
 }
 
+/* Use at final div on screen to show gap before footer */
+.end-section {
+  margin-bottom: 60px;
+}
+
 .paginate {
   padding-left: 0.2rem;
 }
 
 .page-link {
-  color: #76ABAE;
+  color: #76ABAE !important;
 }
 
 .page-link:hover {
-  color: #31363F;
+  color: #31363F !important;
 }
 
 .page-status {
   padding-left: 0.275rem;
   font-size: x-small;
   margin-bottom: auto;
+  text-align: center;
 }
 
 .active > .page-link {
-  color: #fff;
-  background-color: #76ABAE;
-  border-color: #76ABAE;
+  color: #fff !important;
+  background-color: #76ABAE !important;
+  border-color: #76ABAE !important;
 }
 
 .prevent-select {

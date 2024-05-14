@@ -3,9 +3,8 @@
 
 {% block body %}
     <div>
-        <p class="page-status">Showing Questions {{ question_list.first }} - {{ question_list.last }} of {{ question_list.total }}</p>
-        <nav>
-            <ul class="pagination paginate justify-content-center">
+        <nav >
+            <ul class="pagination paginate justify-content-center my-2">
                 {% for page in question_list.iter_pages() %}
                     {% if page %}
                         {% if page != question_list.page %}
@@ -18,13 +17,17 @@
                             </li>
                         {% endif %}
                     {% else %}
-                        <span>...</span>
+                    <li class="page-item disabled">
+                        <a class="page-link">...</a>
+                    </li> 
                     {% endif %}
                 {% endfor %}
             </ul>
-        </nav> 
+        </nav>
+        <p class="page-status">Showing Questions {{ question_list.first }} - {{ question_list.last }} of {{ question_list.total }}</p>
     </div>
     
+<div class="end-section">
 {% for question in question_list.items %}
     <div class="section question container prevent-select" onclick="">
         <div class="row">
@@ -32,17 +35,17 @@
                 <h5 class="fw-bold render-katex">{{ question.title }}</h5>
             </div>
             <div class="col-4 text-end opacity-50">
-                <p>
+                <p class="mb-0">
                     Posted by {{ question.username }}<br>
                     <span dateposted="{{ question.date_posted }}" class="dateposted"></span>
                 </p>
             </div>
         </div>
         <div class="row">
-            <div class="col-10 mr-2">
+            <div class="col-9">
                 <p class="render-katex">{{ question.question_description }}</p>
             </div>
-            <div class="col-2 text-end align-self-end">
+            <div class="col-3 text-end align-self-end">
                 {% if question.difficulty_level == 'Easy' %}
                     <span class="easy">Easy</span>
                 {% endif %}
@@ -54,9 +57,19 @@
                 {% endif %}
             </div>
         </div>
+        <div class="row">
+            <span class="opacity-50">
+                {% if question.comment_count == None %}
+                0
+                {% else %}
+                    {{ question.comment_count }}
+                {% endif %}
+                 comment{% if question.comment_count != 1 %}s{% endif %}
+            </span>
+        </div>
     </div>
-{% endfor %}
-    <script type="text/javascript" src="{{ url_for('static', filename='JavaScript/render_katex.js')}}"></script>
+    {% endfor %}
+    </div>
     <script type="text/javascript" src="{{ url_for('static', filename='JavaScript/play_question.js')}}"></script>
 {% endblock %}
 

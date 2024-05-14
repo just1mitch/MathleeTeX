@@ -1,7 +1,7 @@
 from flask import render_template, request, redirect, url_for, jsonify, flash
 from flask_login import login_required, current_user, logout_user
 from flask_login import login_user
-from sqlalchemy import inspect
+from sqlalchemy import inspect, func
 
 
 from app import app, db
@@ -75,14 +75,18 @@ def play():
     page = request.args.get('page', 1, type=int)
     # Query database for all questions
     # Join user information to the questions
-    query = db.session.query(questions, users).join(users)
-    question_list = query.with_entities(questions.question_id,
+    q = db.session.query(questions, users).join(users)
+    comment_count = db.session.query(questions.question_id, func.count(questions.question_id).label("comment_count")).join(questions.comments).group_by(questions.question_id).subquery('comment_count')
+    q = q.outerjoin(comment_count, comment_count.c.question_id==questions.question_id)
+
+    question_list = q.with_entities(questions.question_id,
                                         questions.title,
                                         questions.question_description,
                                         questions.difficulty_level,
                                         questions.date_posted,
-                                        users.username
-                                        ).paginate(page=page, per_page=2)
+                                        users.username,
+                                        comment_count.c.comment_count
+                                        ).paginate(page=page, per_page=10)
     
     return render_template("play_question.html", question_list=question_list)
 
