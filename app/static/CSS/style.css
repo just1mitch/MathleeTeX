@@ -52,6 +52,30 @@ nav a:hover {
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
 }
 
+.paginate {
+  padding-left: 0.2rem;
+}
+
+.page-link {
+  color: #76ABAE;
+}
+
+.page-link:hover {
+  color: #31363F;
+}
+
+.page-status {
+  padding-left: 0.275rem;
+  font-size: x-small;
+  margin-bottom: auto;
+}
+
+.active > .page-link {
+  color: #fff;
+  background-color: #76ABAE;
+  border-color: #76ABAE;
+}
+
 .prevent-select {
   -webkit-user-select: none; /* Safari */
   -ms-user-select: none; /* IE 10 and IE 11 */

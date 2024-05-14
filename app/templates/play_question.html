@@ -2,28 +2,51 @@
 {% block title %}Play a Quiz{% endblock %}
 
 {% block body %}
-{% for question in question_array %}
+    <div>
+        <p class="page-status">Showing Questions {{ question_list.first }} - {{ question_list.last }} of {{ question_list.total }}</p>
+        <nav>
+            <ul class="pagination paginate">
+                {% for page in question_list.iter_pages() %}
+                    {% if page %}
+                        {% if page != question_list.page %}
+                            <li class="page-item">
+                                <a class="page-link" href="{{ url_for('play', page=page) }}">{{ page }}</a>
+                            </li>
+                        {% else %}
+                            <li class="page-item active">
+                                <a class="page-link">{{ page }}</span></a>
+                            </li>
+                        {% endif %}
+                    {% else %}
+                        <span>...</span>
+                    {% endif %}
+                {% endfor %}
+            </ul>
+        </nav> 
+    </div>
+    
+{% for question in question_list.items %}
     <div class="section question container prevent-select" onclick="">
         <div class="row">
             <div class="col-8">
                 <h5 class="fw-bold render-katex">{{ question.title }}</h5>
             </div>
             <div class="col-4 text-end opacity-50">
-                <p>Posted by {{ question.user }}</p>
+                <p>Posted by {{ question.username }}</p>
             </div>
         </div>
         <div class="row">
             <div class="col-10 mr-2">
-                <p class="render-katex">{{ question.description }}</p>
+                <p class="render-katex">{{ question.question_description }}</p>
             </div>
             <div class="col-2 text-end align-self-end">
-                {% if question.difficulty == 'Easy' %}
+                {% if question.difficulty_level == 'Easy' %}
                     <span class="easy">Easy</span>
                 {% endif %}
-                {% if question.difficulty == 'Medium' %}
+                {% if question.difficulty_level == 'Medium' %}
                     <span class="medium">Medium</span>
                 {% endif %}
-                {% if question.difficulty == 'Hard' %}
+                {% if question.difficulty_level == 'Hard' %}
                     <span class="hard">Hard</span>
                 {% endif %}
             </div>

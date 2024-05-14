@@ -3,6 +3,7 @@ from flask_login import login_required, current_user, logout_user
 from flask_login import login_user
 from sqlalchemy import inspect
 
+
 from app import app, db
 from app.models import users, questions, user_answers, comments, LoginForm, SignupForm, QuestionForm
 
@@ -71,17 +72,22 @@ def logout():
 
 @app.route('/play', methods=['GET'])
 def play():
+    page = request.args.get('page', 1, type=int)
     # Query database for all questions
-    question_list = questions.query.all()
-    question_array = [{
-        'question_id': question.question_id,
-        'title': question.title,
-        'description': question.question_description,
-        'difficulty': question.difficulty_level,
-        'user': users.query.filter_by(user_id=question.user_id).first().username,
-    } for question in question_list]
+    # Join user information to the questions
+    query = db.session.query(questions, users).join(users)
+    question_list = query.with_entities(questions.question_id,
+                                        questions.title,
+                                        questions.question_description,
+                                        questions.difficulty_level,
+                                        questions.date_posted,
+                                        users.username
+                                        ).paginate(page=page, per_page=20)
     
-    return render_template("play_question.html", question_array=question_array)
+    
+
+    
+    return render_template("play_question.html", question_list=question_list)
 
 @app.route('/list_tables')
 def list_tables():
@@ -153,18 +159,3 @@ def create():
 def leaderboard():
     return(render_template('leaderboard.html'))
 
-# @app.route('/list_questions')
-# def list_questions():
-#     questions_array = []
-#     questions_list = questions.query.all()
-#     for question in questions_list:
-#         questions_array.append({
-#             'question_id': question.question_id,
-#             'user_id': question.user_id,
-#             'title': question.title,
-#             'question_description': question.question_description,
-#             'correct_answer': question.correct_answer,
-#             'date_posted': question.date_posted,
-#             'difficulty_level': question.difficulty_level
-#         })
-#     return jsonify(questions_array)
