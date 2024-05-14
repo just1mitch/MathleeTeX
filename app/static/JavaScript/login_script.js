@@ -13,15 +13,15 @@ $(document).ready(function() {
     function switchContainers(a, b) {
         $("#"+ a + "-form").hide();
         $("#" + b + "-form").show();
-        sessionStorage.setItem("lastForm", b);
+        localStorage.setItem("lastForm", b);
     }
     //Hide Form based on whichever option was last selected
-    if(sessionStorage.getItem('lastForm') === "signup"){
+    if(localStorage.getItem('lastForm') === "signup"){
         $('#switch').prop("checked", true);
         switchContainers("login", "signup");
     }
     $('#switch').change(function() {
-        if(sessionStorage.getItem("lastForm") === "signup") {
+        if(localStorage.getItem("lastForm") === "signup") {
             switchContainers("signup", "login");
         } else {
             switchContainers("login", "signup");
@@ -36,13 +36,6 @@ $(document).ready(function() {
         const password = $("#password").val().trim();
         const validUser = userRegex.test(username);
         const validPwd = updatePasswordValidation(password, false);
-        // if(!validUser) {
-        //     $errorContainer.append("<p class='error-message-login'>Invalid username</p>");
-        // }
-        // if(!validPwd) {
-        //     $errorContainer.append("<p class='error-message-login'>Invalid password</p>");
-        // }
-        //credentials are valid - continue with submission
         return validPwd && validUser; // if either is false, the form will not submit - bit more streamlined
     });
 

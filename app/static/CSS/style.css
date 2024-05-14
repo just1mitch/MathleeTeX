@@ -112,7 +112,7 @@ h4 {
   border-radius: 50%;
 }
 input:checked + .slider {
-  background-color: #222831;
+  background-color: #31363F;
 }
 input:checked + .slider:before {
   -webkit-transform: translateX(26px);

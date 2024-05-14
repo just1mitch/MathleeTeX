@@ -3,7 +3,7 @@ from flask_login import login_required, current_user, logout_user
 from flask_login import login_user
 from sqlalchemy import inspect
 
-from app import app, db
+from app import app, db, bcrypt
 from app.models import users, questions, user_answers, comments, LoginForm, SignupForm, QuestionForm
 
 
@@ -27,11 +27,15 @@ def login():
     #Process submitted form
     if login_form.validate_on_submit():
         usr = users.query.filter_by(username=login_form.username.data).first()
-        if usr is not None and usr.password == login_form.password.data:
-            login_user(usr, remember=login_form.remember.data)
-            return redirect(request.args.get('next') or url_for('profile'))
+        if usr is not None:
+            pwd_hash = usr.password
+            if bcrypt.check_password_hash(pwd_hash, login_form.password.data):
+                login_user(usr, remember=login_form.remember.data)
+                return redirect(request.args.get('next') or url_for('profile'))
+            else:
+                flash('flash_login: Incorrect password.')
         else:
-            flash('flash_login: Incorrect username or password. Please try again.', 'error')
+            flash('flash_login: User not found.')
     #Return login page for failed login and GET requests
     return render_template('login_signup.html', login_form=login_form, signup_form=signup_form)
 
@@ -52,8 +56,10 @@ def signup_user():
             #Email is taken
             flash ('flash_signup: Email is already in use. Please try again.')
         else:
-            # Some kind of password store/hash thing should go here for now will just use the password as is
-            new_user = users(username=signup_form.setusername.data, email=signup_form.setemail.data, password=signup_form.createpassword.data)
+            # Hash password before adding new user details to the database
+            raw_pwd = signup_form.createpassword.data
+            hashed_pwd = bcrypt.generate_password_hash(raw_pwd)
+            new_user = users(username=signup_form.setusername.data, email=signup_form.setemail.data, password=hashed_pwd)
             db.session.add(new_user)
             db.session.commit()
             # Successful signup - automatically log the user in
