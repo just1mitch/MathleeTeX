@@ -82,10 +82,7 @@ def play():
                                         questions.difficulty_level,
                                         questions.date_posted,
                                         users.username
-                                        ).paginate(page=page, per_page=20)
-    
-    
-
+                                        ).paginate(page=page, per_page=2)
     
     return render_template("play_question.html", question_list=question_list)
 

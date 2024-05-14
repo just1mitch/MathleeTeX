@@ -27,9 +27,9 @@ footer {
   font-size: 24px;
   font-weight: bold;
 }
-nav {
+/* nav {
   display: flex;
-}
+} */
 nav a {
   text-decoration: none;
   color: #EEEEEE;
@@ -84,6 +84,10 @@ nav a:hover {
 
 .question {
   max-width: 800px;
+}
+
+.dateposted {
+  font-size: small;
 }
 
 .question:hover {

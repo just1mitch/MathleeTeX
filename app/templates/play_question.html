@@ -5,7 +5,7 @@
     <div>
         <p class="page-status">Showing Questions {{ question_list.first }} - {{ question_list.last }} of {{ question_list.total }}</p>
         <nav>
-            <ul class="pagination paginate">
+            <ul class="pagination paginate justify-content-center">
                 {% for page in question_list.iter_pages() %}
                     {% if page %}
                         {% if page != question_list.page %}
@@ -32,7 +32,10 @@
                 <h5 class="fw-bold render-katex">{{ question.title }}</h5>
             </div>
             <div class="col-4 text-end opacity-50">
-                <p>Posted by {{ question.username }}</p>
+                <p>
+                    Posted by {{ question.username }}<br>
+                    <span dateposted="{{ question.date_posted }}" class="dateposted"></span>
+                </p>
             </div>
         </div>
         <div class="row">
