@@ -1,64 +1,47 @@
 <!DOCTYPE html>
 <html lang="en">
+
   <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Home</title>
     <!-- Bootstrap CSS -->
-    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/dreampulse/computer-modern-web-font@master/fonts.css">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-    <!-- KaTeX CSS -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.13.18/dist/katex.min.css">
+    <link rel="stylesheet" type="text/css"
+      href="https://cdn.jsdelivr.net/gh/dreampulse/computer-modern-web-font@master/fonts.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+      integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <!-- Custom CSS -->
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="{{ url_for('static', filename='CSS/style.css') }}">
-   
-    <link
-    rel="stylesheet"
-    href="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/katex.min.css"
-    integrity="sha384-wcIxkf4k558AjM3Yz3BBFQUbk/zgIYC2R0QpeeYb+TwlBVMrlgLqwRjRtGZiK7ww"
-    crossorigin="anonymous">
-  <!-- The loading of KaTeX is deferred to speed up page rendering -->
-  <script
-    src="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/katex.min.js"
-    integrity="sha384-hIoBPJpTUs74ddyc4bFZSM1TVlQDA60VBbJS0oA934VSz82sBx1X7kSx2ATBDIyd"
-    crossorigin="anonymous">
-  </script>
-  <!-- To automatically render math in text elements, include the auto-render extension: -->
-  <script
-    defer
-    src="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/contrib/auto-render.min.js"
-    integrity="sha384-43gviWU0YVjaDtb/GhzOouOXtZMP/7XUzwPTstBeZFe/+rCMvRwr4yROQP43s0Xk"
-    crossorigin="anonymous"
-    onload="renderMathInElement(document.body);">
-  </script>
-  <!-- Including jQuery -->
-  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <!-- Including jQuery -->
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    {% block head %}
+    {% endblock %}
   </head>
-<body>
-  <header>
-    <div class="logo katex-render">\sqrt{MathleeTeX}</div>
-    <nav>
-      <a class="katex-render"  href="{{ url_for('index') }}" >\{home</a>
-      <a class="katex-render" href="{{ url_for('leaderboard') }}" >\{leaderboard</a>
-      <a class="katex-render" href="{{ url_for('create') }}" class="katex-render">\{askQustion</a>
-      <a class="katex-render" href="" class="katex-render">\{seeQuestions</a>
-      {% if current_user.is_authenticated %}
+  
+  <body>
+    <header>
+      <div class="logo katex-render">\sqrt{MathleeTeX}</div>
+      <nav>
+        <a class="katex-render" href="{{ url_for('index') }}">\{home</a>
+        <a class="katex-render" href="{{ url_for('leaderboard') }}">\{leaderboard</a>
+        <a class="katex-render" href="{{ url_for('create') }}" class="katex-render">\{askQustion</a>
+        <a class="katex-render" href="{{ url_for('play') }}" class="katex-render">\{seeQuestions</a>
+        {% if current_user.is_authenticated %}
         <a class="katex-render" href="{{ url_for('profile') }}" class="katex-render">\{profile</a>
         <a class="katex-render" href="{{ url_for('logout') }}" class="katex-render">\{logout</a>
-      {% else %}
+        {% else %}
         <a class="katex-render" href="{{ url_for('login') }}">\{login</a>
-      {% endif %}
-    </nav>
-  </header>
-  {% block body %}
-  <!-- Main content block where individual page content will be inserted -->
-  {% endblock %}
-</body>
+        {% endif %}
+      </nav>
+    </header>
+    {% block body %}
+    <!-- Main content block where individual page content will be inserted -->
+    {% endblock %}
+  </body>
 
 <footer>
   {% block footer %}{% endblock %}
   <script src="{{ url_for('static', filename='JavaScript/katex.js') }}"></script>
 </footer>
-
 </html>

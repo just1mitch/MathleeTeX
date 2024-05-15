@@ -58,4 +58,3 @@ function generateRandomEquation() {
   ];
   return equations[Math.floor(Math.random() * equations.length)];
 }
-

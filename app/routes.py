@@ -2,7 +2,7 @@ from flask import render_template, request, redirect, url_for, jsonify, flash
 from flask_login import login_required, current_user, logout_user
 from flask_login import login_user
 from flask_paginate import Pagination, get_page_args
-from sqlalchemy import inspect
+from sqlalchemy import inspect, func
 
 from app import app, db
 from app.models import users, questions, user_answers, comments, LoginForm, SignupForm, QuestionForm
@@ -71,9 +71,25 @@ def logout():
     flash('You have been logged out')
     return redirect(url_for('login'))
 
-@app.route('/play')
+@app.route('/play', methods=['GET'])
 def play():
-    return render_template("play_quiz.html")
+    page = request.args.get('page', 1, type=int)
+    # Query database for all questions
+    # Join user information to the questions
+    query = db.session.query(questions, users).join(users)
+    comment_count = db.session.query(questions.question_id, func.count(questions.question_id).label("comment_count")).join(questions.comments).group_by(questions.question_id).subquery('comment_count')
+    query = query.outerjoin(comment_count, comment_count.c.question_id==questions.question_id)
+
+    question_list = query.with_entities(questions.question_id,
+                                        questions.title,
+                                        questions.question_description,
+                                        questions.difficulty_level,
+                                        questions.date_posted,
+                                        users.username,
+                                        comment_count.c.comment_count
+                                        ).paginate(page=page, per_page=10)
+    
+    return render_template("play_question.html", question_list=question_list)
 
 @app.route('/list_tables')
 def list_tables():
@@ -115,7 +131,7 @@ def list_questions():
             'question_description': question.question_description,
             'correct_answer': question.correct_answer,
             'date_posted': question.date_posted,
-            'difficulty_level': question.difficulty_level
+            'difficulty': question.difficulty_level
         })
     return jsonify(question_array)
 
@@ -191,18 +207,3 @@ def leaderboard():
     return render_template('leaderboard.html', users=user_list, page=page,
                            per_page=per_page, pagination=pagination, current_user_stats=current_user_stats)
 
-# @app.route('/list_questions')
-# def list_questions():
-#     questions_array = []
-#     questions_list = questions.query.all()
-#     for question in questions_list:
-#         questions_array.append({
-#             'question_id': question.question_id,
-#             'user_id': question.user_id,
-#             'title': question.title,
-#             'question_description': question.question_description,
-#             'correct_answer': question.correct_answer,
-#             'date_posted': question.date_posted,
-#             'difficulty_level': question.difficulty_level
-#         })
-#     return jsonify(questions_array)
