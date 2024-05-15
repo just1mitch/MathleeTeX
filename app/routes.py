@@ -5,7 +5,7 @@ from sqlalchemy import inspect, func
 
 
 from app import app, db
-from app.models import users, questions, user_answers, comments, LoginForm, SignupForm, QuestionForm
+from app.models import users, questions, user_answers, comments, LoginForm, SignupForm, QuestionForm, AnswerForm
 
 
 @app.route('/')
@@ -87,8 +87,9 @@ def play():
                                         users.username,
                                         comment_count.c.comment_count
                                         ).paginate(page=page, per_page=10)
+    answer_form = AnswerForm()
     
-    return render_template("play_question.html", question_list=question_list)
+    return render_template("play_question.html", question_list=question_list, answer_form=answer_form)
 
 @app.route('/list_tables')
 def list_tables():
@@ -160,3 +161,12 @@ def create():
 def leaderboard():
     return(render_template('leaderboard.html'))
 
+@app.route('/answer_question/<qid>', methods=["GET", "POST"])
+@login_required
+def answer_question(qid):
+    if request.method == "GET":
+        question = questions.query.filter_by(question_id=qid).first()
+        code = question.correct_answer
+        return code
+    elif request.method == "POST":
+        return

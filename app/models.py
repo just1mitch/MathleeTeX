@@ -28,6 +28,10 @@ class QuestionForm(FlaskForm):
     description = TextAreaField('Question Description:', validators=[DataRequired(), Length(min=1)])
     code = StringField('Enter Your LaTeX Code:', validators=[DataRequired(), Length(min=1)])
 
+# This class is for answering a question
+class AnswerForm(FlaskForm):
+    answer = StringField('Answer:', validators=[DataRequired(), Length(min=1)])
+
 # This table is for storing user information - username, email, password, sign up date, and points
 class users(UserMixin, db.Model):
     user_id = db.Column(db.Integer, primary_key=True)

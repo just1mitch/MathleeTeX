@@ -216,6 +216,11 @@ input:checked + .slider:before {
 .remember {
   display: flex;
 }
+
+.modal-colour {
+  background-color: #31363F;
+}
+
 label {
   display:block;
   margin-bottom: 5px;
