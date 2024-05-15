@@ -3,7 +3,7 @@ body {
   padding: 0;
   font-family: "Computer Modern Bright", sans-serif;
   background-color: #222831;
-  color: #EEEEEE;
+  color: #FFF;
 }
 header {
   background-color: #31363F;
@@ -32,7 +32,7 @@ nav {
 }
 nav a {
   text-decoration: none;
-  color: #EEEEEE;
+  color: #FFF;
   padding: 0 10px;
 }
 nav a:hover {
@@ -106,7 +106,7 @@ h4 {
   width: 26px;
   left: 4px;
   bottom: 4px;
-  background-color: #EEEEEE;
+  background-color: #FFF;
   -webkit-transition: .4s;
   transition: .4s;
   border-radius: 50%;
@@ -149,47 +149,41 @@ input[type="password"] {
   border: none;
   border-radius: 4px;
   background-color: #222831;
-  color: #EEEEEE;
+  color: #FFF;
 }
 [type="text"]::placeholder {
   text-align: center;
 }
-/* Hide the default checkbox */
 input[type="checkbox"] {
   display: none;
 }
-/* Style the custom checkbox */
 input[type="checkbox"] + label {
   position: relative;
   display: inline-block;
   cursor: pointer;
-  padding-left: 25px; /* Adjust spacing */
-}
-/* Create the checkbox design */
+  padding-left: 25px;
 input[type="checkbox"] + label:before {
   content: '';
   position: absolute;
   left: 0;
   top: 0;
-  width: 18px; /* Checkbox width */
-  height: 18px; /* Checkbox height */
-  border: 2px solid #76ABAE; /* Border color */
-  background-color: #31363F; /* Background color */
-  border-radius: 4px; /* Border radius */
+  width: 18px;
+  height: 18px;
+  border: 2px solid #76ABAE;
+  background-color: #31363F;
+  border-radius: 4px;
 }
-/* Style the checkmark */
 input[type="checkbox"]:checked + label:before {
-  background-color: #76ABAE; /* Background color when checked */
+  background-color: #76ABAE;
 }
-/* Create the checkmark icon */
 input[type="checkbox"]:checked + label:after {
-  content: '\2713'; /* Unicode for checkmark */
+  content: '\2713';
   position:absolute;
-  top: 2px; /* Adjust vertically */
-  left: 2px; /* Adjust horizontally */
-  color: #EEEEEE; /* Checkmark color */
-  font-family: Arial, sans-serif; /* Font family */
-  font-size: 12px; /* Checkmark size */
+  top: 2px;
+  left: 2px;
+  color: #FFF;
+  font-family: Arial, sans-serif;
+  font-size: 12px;
 }
 input[type="submit"] {
   width: 100%;
@@ -197,7 +191,7 @@ input[type="submit"] {
   border: none;
   border-radius: 4px;
   background-color: #76ABAE;
-  color: #EEEEEE;
+  color: #FFF;
   cursor: pointer;
 }
 input[type="submit"]:hover {
@@ -244,16 +238,16 @@ input[type="submit"]:disabled {
   margin-bottom: 15px;
 }
 .banner {
-  background-color: #fff; /* Base color of the paper */
+  background-color: #fff;
   background-image:
     linear-gradient(to right, rgba(0, 0, 0, 0.2) 1px, transparent 1px),
     linear-gradient(to bottom, rgba(0, 0, 0, 0.2) 1px, transparent 1px);
   background-size: 20px 20px;
-  color: #eeeeee;
+  color: #FFF;
   padding: 20px;
   display: flex;
-  flex-direction: column; /* Stack elements vertically */
-  justify-content: center; /* Center content vertically */
+  flex-direction: column;
+  justify-content: center;
   align-items: center;
   position: relative;
   overflow: hidden;
@@ -262,8 +256,8 @@ input[type="submit"]:disabled {
 }
 .content {
   z-index: 1;
-  text-align: center; /* Center the text within .content */
-  background-color: #eeeeee;
+  text-align: center;
+  background-color: #FFF;
   border: none;
   border-radius: 4px;
   padding: 10px 20px;
@@ -281,7 +275,7 @@ input[type="submit"]:disabled {
   border: none;
   border-radius: 4px;
   background-color: #76abae;
-  color: #eeeeee;
+  color: #FFF;
   cursor: pointer;
   margin-top: 20px;
 }
@@ -314,7 +308,7 @@ input[type="submit"]:disabled {
   border-color: #31363F !important;
   z-index: 0 !important;
 }
-.pagination .page-item.disabled .page-link, 
+.pagination .page-item.disabled .page-link,
 .pagination .page-item.disabled .page-link:hover {
   color: #666666 !important;
   padding: 8px 12px;
@@ -341,7 +335,7 @@ input[type="submit"]:disabled {
   background-color: #31363F;
 }
 .table-dark {
-  color: #EEEEEE;
+  color: #FFF;
 }
 #equation-background {
   position:absolute;
@@ -372,4 +366,16 @@ input[type="submit"]:disabled {
   to {
     transform: translate(var(--end-x), var(--end-y)) scale(0);
   }
+}
+.stat-container {
+  background-color: #333;
+  padding: 10px;
+  border-radius: 4px;
+}
+.stat-icon {
+  font-size: 1.5rem;
+  margin-right: 5px;
+}
+.username-display h1 {
+  color: #76ABAE;
 }
