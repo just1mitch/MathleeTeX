@@ -129,10 +129,10 @@ def create():
         description = question_form.description.data
         code = question_form.code.data
         # Enter question into database
-        new_question = questions(user_id=int(current_user.get_id()), 
-                                 title=title, 
-                                 question_description=description, 
-                                 correct_answer=code, 
+        new_question = questions(user_id=int(current_user.get_id()),
+                                 title=title,
+                                 question_description=description,
+                                 correct_answer=code,
                                  difficulty_level=difficulty)
         db.session.add(new_question)
         db.session.commit()
@@ -162,7 +162,7 @@ def leaderboard():
 
 
     user_list = get_users(offset=offset, per_page=per_page)
-    
+
     # init rank with a default value
     rank = None
     if current_user.is_authenticated and request.args.get('show_me'):
@@ -175,16 +175,16 @@ def leaderboard():
 
     current_user_stats = None
 
-    
+
     if current_user.is_authenticated:
         if rank is None:
             rank = users.query.filter(users.points > current_user.points).count() + 1
         current_user_stats = {
             'username': current_user.username,
             'points': current_user.points,
-            'date_joined': current_user.sign_up_date.strftime('%Y-%m-%d %H:%M:%S'),
-            #  'questions_posted': current_user.questions_posted,
-            #'questions_answered': current_user.questions_answered,
+            'date_joined': current_user.sign_up_date.strftime('%Y-%m-%d'),
+            'questions_answered_correctly': current_user.questions_answered_correctly,
+            'total_questions_answered': current_user.total_questions_answered,
             'rank': rank
         }
 

@@ -8,7 +8,7 @@ def create_users(n):
         username = f"user_{i+1}"
         email = f"user_{i+1}@example.com"
         password = "password"
-        points = random.randint(1, 100)
+        points = random.randint(1, 1000)
 
         new_user = users(username=username, email=email, password=password, points=points)
         db.session.add(new_user)

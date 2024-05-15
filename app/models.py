@@ -40,6 +40,14 @@ class users(UserMixin, db.Model):
     def get_id(self):
         return str(self.user_id)
 
+    @property
+    def questions_answered_correctly(self):
+        return user_answers.query.filter_by(user_id=self.user_id, is_correct=True).count()
+
+    @property
+    def total_questions_answered(self):
+        return user_answers.query.filter_by(user_id=self.user_id).count()
+
 # This table is for storing questions - user_id, title, question description, correct answer, date posted, and difficulty level
 class questions(db.Model):
     question_id = db.Column(db.Integer, primary_key=True)
