@@ -75,11 +75,11 @@ def play():
     page = request.args.get('page', 1, type=int)
     # Query database for all questions
     # Join user information to the questions
-    q = db.session.query(questions, users).join(users)
+    query = db.session.query(questions, users).join(users)
     comment_count = db.session.query(questions.question_id, func.count(questions.question_id).label("comment_count")).join(questions.comments).group_by(questions.question_id).subquery('comment_count')
-    q = q.outerjoin(comment_count, comment_count.c.question_id==questions.question_id)
+    query = query.outerjoin(comment_count, comment_count.c.question_id==questions.question_id)
 
-    question_list = q.with_entities(questions.question_id,
+    question_list = query.with_entities(questions.question_id,
                                         questions.title,
                                         questions.question_description,
                                         questions.difficulty_level,
