@@ -243,6 +243,7 @@ input[type="checkbox"] + label {
   display: inline-block;
   cursor: pointer;
   padding-left: 25px;
+}
 input[type="checkbox"] + label:before {
   content: '';
   position: absolute;
