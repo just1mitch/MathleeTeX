@@ -283,11 +283,45 @@ input[type="submit"]:disabled {
   background-color: #76abae;
   color: #eeeeee;
   cursor: pointer;
-  margin-top: 20px; /* Add space between the content and the button */
+  margin-top: 20px;
 }
 .start-button:hover {
   background-color: #222831;
   transition: 0.3s;
+}
+.pagination {
+  display: flex;
+  justify-content: center;
+  padding: 20px 0;
+  margin-bottom: 100px;
+}
+.pagination a {
+  color: #76ABAE;
+  background-color: #31363F;
+  border: 1px solid #76ABAE;
+  padding: 8px 12px;
+  margin: 0 4px;
+  border-radius: 4px;
+  transition: color 0.3s ease-in-out, background-color 0.3s ease-in-out;
+}
+.pagination a:hover {
+  background-color: #76ABAE;
+  color: #222831;
+}
+.pagination .page-item.active .page-link {
+  color: #222831 !important;
+  background-color: #76ABAE !important;
+  border-color: #31363F !important;
+  z-index: 0 !important;
+}
+.pagination .page-item.disabled .page-link, 
+.pagination .page-item.disabled .page-link:hover {
+  color: #666666 !important;
+  padding: 8px 12px;
+  margin: 0 4px;
+  background-color: #3E444C !important;
+  border-color: #4E555C !important;
+  cursor: not-allowed !important;
 }
 .table {
   width: 100%;
