@@ -1,10 +1,67 @@
-{% extends "base.html" %}
-{%block title %}Leaderboard{% endblock %}
+{% extends 'base.html' %}
 
 {% block body %}
-<p>Leaderboard content...</p>
-{% endblock %}
+<div class="container-fluid mt-5">
+    <div class="row">
+        {% if current_user.is_authenticated %}
+        <div class="col-12 mb-4">
+            <div class="card bg-dark text-white">
+                <div class="card-header">
+                    <h2>Your Stats</h2>
+                </div>
+                <div class="card-body">
+                    <h3 class="username-display">User: {{ current_user_stats.username }}</h3>
+                    <h4>Member since {{ current_user_stats.date_joined }}</h4>
 
-{% block footer %}
-<p>Footer content</p>
+                    <h4><span class="stats-symbol">🏆</span> Rank: {{ current_user_stats.rank }}</h4>
+                    <h4><span class="stats-symbol">🔥</span> Points: {{ current_user_stats.points }}</h4>
+                    {% if current_user_stats %}
+                    <a href="{{ url_for('leaderboard', show_me=True) }}" class="btn btn-info start-button">Show My Position</a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        {% endif %}
+        <div class="col-md-8">
+            <div class="card-header">
+                <h2>Leaderboard</h2>
+              </div>
+            <table class="table table-dark table-hover">
+                <thead>
+                    <tr>
+                        <th scope="col">Rank ★</th>
+                        <th scope="col">Username ◎</th>
+                        <th scope="col">Points 🔥</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for user in users %}
+                    <tr class="{{ 'table-info' if current_user.is_authenticated and user.username == current_user.username }}">
+                        <td>{{ loop.index + (page - 1) * per_page }}</td>
+                        <td>{{ user.username }}</td>
+                        <td>{{ user.points }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            {% if pagination.total_pages > 1 %}
+            <nav>
+                {{ pagination.links }}
+            </nav>
+            {% endif %}
+        </div>
+        <div class="col-md-4">
+            <div class="card bg-dark text-white">
+                <div class="card-header">How to Earn Points</div>
+                <div class="card-body">
+                    <ul>
+                        <li>Answering questions correctly</li>
+                        <li>Creating high-quality questions</li>
+                        <li>Leaving helpful comments</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock %}
