@@ -44,11 +44,11 @@
     <nav>
       <a class="katex-render"  href="{{ url_for('index') }}" >\{home</a>
       <a class="katex-render" href="{{ url_for('leaderboard') }}" >\{leaderboard</a>
-      <a class="katex-render" href="{{ url_for('create') }}" class="katex-render">\{askQustion</a>
-      <a class="katex-render" href="" class="katex-render">\{seeQuestions</a>
+      <a class="katex-render" href="{{ url_for('create') }}">\{askQustion</a>
+      <a class="katex-render" href="">\{seeQuestions</a>
       {% if current_user.is_authenticated %}
-        <a class="katex-render" href="{{ url_for('profile') }}" class="katex-render">\{profile</a>
-        <a class="katex-render" href="{{ url_for('logout') }}" class="katex-render">\{logout</a>
+        <a class="katex-render" href="{{ url_for('profile') }}" >\{profile</a>
+        <a class="katex-render" href="{{ url_for('logout') }}">\{logout</a>
       {% else %}
         <a class="katex-render" href="{{ url_for('login') }}">\{login</a>
       {% endif %}
@@ -63,7 +63,7 @@
   <script src="{{ url_for('static', filename='JavaScript/bg.js') }}"></script>
   {% block footer %}{% endblock %}
   <!-- Optional footer content can be added here -->
-  <div class="katex-render"> Copyright &#169 2024\sqrt{MathleeTeX}</div>
+  <div class="katex-render"> Copyright &#169; 2024\sqrt{MathleeTeX}</div>
   
   <div class="socials-container">
     <h5>Follow Us:</h5>

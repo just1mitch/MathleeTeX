@@ -38,7 +38,6 @@ nav a {
 nav a:hover {
   color: #76ABAE;
 }
-
 .active {
   text-decoration: underline;
 }
@@ -51,8 +50,6 @@ nav a:hover {
   border-radius: 8px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
 }
-
-
 h2 {
   text-align: center;
 }
@@ -90,7 +87,7 @@ h2 {
   background-color: #31363F;
   border-radius: 8px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
-
+  
 }
 .about-header {
   width: 100%;
@@ -279,7 +276,7 @@ input:checked + .slider:before {
   margin: 0 10px;
   cursor: pointer;
   text-align: center;
-
+  
 }
 .form-group {
   margin-bottom: 20px;
@@ -342,22 +339,15 @@ font-family: Arial, sans-serif; /* Font family */
 font-size: 12px; /* Checkmark size */
 }
 
-  input[type="submit"] {
-    width: 100%;
-    padding: 10px;
-    border: none;
-    border-radius: 4px;
-    background-color: #76ABAE;
-    color: #EEEEEE;
-    cursor: pointer;
-  }
-  input[type="submit"]:hover {
-    background-color: #222831;
-  }
-
-  .error-section {
-    padding: 0 20px;
-  }
-  .error-section p {
-    color: #ff8989;
-  }
+input[type="submit"] {
+  width: 100%;
+  padding: 10px;
+  border: none;
+  border-radius: 4px;
+  background-color: #76ABAE;
+  color: #EEEEEE;
+  cursor: pointer;
+}
+input[type="submit"]:hover {
+  background-color: #222831;
+}
