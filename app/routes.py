@@ -2,9 +2,9 @@ from flask import render_template, request, redirect, url_for, jsonify, flash
 from flask_login import login_required, current_user, logout_user
 from flask_login import login_user
 from sqlalchemy import inspect, func
+from werkzeug.security import generate_password_hash, check_password_hash
 
-
-from app import app, db, bcrypt
+from app import app, db
 from app.models import users, questions, user_answers, comments, LoginForm, SignupForm, QuestionForm
 
 
@@ -30,7 +30,7 @@ def login():
         usr = users.query.filter_by(username=login_form.username.data).first()
         if usr is not None:
             pwd_hash = usr.password
-            if bcrypt.check_password_hash(pwd_hash, login_form.password.data):
+            if check_password_hash(pwd_hash, login_form.password.data):
                 login_user(usr, remember=login_form.remember.data)
                 return redirect(request.args.get('next') or url_for('profile'))
             else:
@@ -59,7 +59,7 @@ def signup_user():
         else:
             # Hash password before adding new user details to the database
             raw_pwd = signup_form.createpassword.data
-            hashed_pwd = bcrypt.generate_password_hash(raw_pwd)
+            hashed_pwd = generate_password_hash(raw_pwd)
             new_user = users(username=signup_form.setusername.data, email=signup_form.setemail.data, password=hashed_pwd)
             db.session.add(new_user)
             db.session.commit()
@@ -118,7 +118,7 @@ def list_users():
             'user_id': user.user_id,
             'username': user.username,
             'email': user.email,
-            'password': user.password,
+            #'password': user.password,
             'sign_up_date': user.sign_up_date,
             'points': user.points
         })
