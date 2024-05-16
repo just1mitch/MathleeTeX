@@ -48,7 +48,6 @@ $('#code').on('input', function() {
     }
     catch (e) {
         if (e instanceof katex.ParseError) {
-            debugger;
             $('#katexErrorCode').html(e.message);
             $('#katexErrorCode').prop('hidden', false);
             // Prevent submitting form if katex is invalid
