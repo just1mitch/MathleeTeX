@@ -1,16 +1,43 @@
 body {
   margin: 0;
-  padding: 0;
+  padding-top: 60px;
   font-family: "Computer Modern Bright", sans-serif;
   background-color: #222831;
   color: #FFF;
 }
 header {
-  background-color: #31363F;
-  padding: 10px 20px;
+  width: 100%;
+  margin: auto;
   display: flex;
   justify-content: space-between;
   align-items: center;
+}
+header .navbar {
+  background-color: #31363F; 
+  padding: 10px 30px; 
+}
+header .nav-link {
+  margin: 0 10px;
+}
+header .navbar-brand, header .nav-link {
+  color: white; 
+  position: relative;
+}
+header .nav-link:hover {
+  color: #ddd; 
+}
+header .nav-link::before {
+  content: "{";
+  position: absolute;
+  left: -0.5em;
+  top: 0.3em;
+  transition: transform 0.3s ease;
+  font-size: 1.3em;
+  font-weight: bold;
+}
+
+header .nav-link:hover::before {
+  transform: scale(1.4);
 }
 footer {
   background-color: #31363F;
@@ -18,10 +45,31 @@ footer {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  position: fixed;
   bottom: 0px;
-  height: 40px;
+  margin-bottom: 0;
+  position: fixed;
+  height: 60px;
   width: 100%;
+}
+.socials-container {
+  align-items: center;
+  width: 30%;
+  float: right;
+  justify-content: space-between; 
+  display: flex;
+  margin-right: 5%;
+}
+.social-btn {
+  background-color: #76ABAE;
+  border: none;
+  color: #EEEEEE;
+  font-size: 20px;
+  margin-right: 10px;
+  transition: transform 0.3s ease;
+}
+.social-btn:hover {
+  transform: scale(1.2);
+  color: #76ABAE;
 }
 .logo {
   font-size: 24px;
