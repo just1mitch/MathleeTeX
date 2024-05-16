@@ -7,7 +7,7 @@ $(document).ready(function() {
         uppercase: { regex: /(?=.*[A-Z])/, message: "Must contain at least one uppercase letter." },
         lowercase: { regex: /(?=.*[a-z])/, message: "Must contain at least one lowercase letter." },
         digit: { regex: /(?=.*\d)/, message: "Must contain at least one digit." },
-        specialChar: { regex: /(?=.*[^\\w\\d\\s])/, message: "Must contain at least one special character." }
+        specialChar: { regex: /(?=.*\W)/, message: "Must contain at least one special character." }
     }; //requires at least one: lowercase, uppercase, digit and special character (character that isn't alphanumeric or whitespace)
 
     function switchContainers(a, b) {
