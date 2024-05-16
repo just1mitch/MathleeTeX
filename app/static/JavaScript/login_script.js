@@ -1,12 +1,11 @@
 $(document).ready(function() {
     //Define the Regular Expressions to validate inputs on client-end (Length is checked in the HTML form)
-    const userRegex = /^\w{3,20}$/; //requires one or more: Letters, numbers and underscores
     const passwordCriteria = {
         length: { regex: /^.{8,}$/, message: "Password must be at least 8 characters in length." },
         uppercase: { regex: /(?=.*[A-Z])/, message: "Must contain at least one uppercase letter." },
         lowercase: { regex: /(?=.*[a-z])/, message: "Must contain at least one lowercase letter." },
         digit: { regex: /(?=.*\d)/, message: "Must contain at least one digit." },
-        specialChar: { regex: /(?=.*[^\\w\\d\\s])/, message: "Must contain at least one special character." }
+        specialChar: { regex: /(?=.*[\W_])/, message: "Must contain at least one special character." }
     }; //requires at least one: lowercase, uppercase, digit and special character (character that isn't alphanumeric or whitespace)
 
     function switchContainers(a, b) {
@@ -34,7 +33,7 @@ $(document).ready(function() {
         $errorContainer.empty();
         const username = $("#username").val().trim();
         const password = $("#password").val().trim();
-        const validUser = userRegex.test(username);
+        const validUser = checkUserLength(username.length, display=false);
         const validPwd = updatePasswordValidation(password, false);
         if(validPwd && validUser) {
             $(this).off('submit').submit(); // disable this handler and submit the form normally
@@ -47,13 +46,13 @@ $(document).ready(function() {
 
     $('#signupformelement').submit(function(e) {
         e.preventDefault();
-        var $errorContainer = $(this).find(".error-section");
+        var $errorContainer = $(this).find(".error-section").eq(1);
         $errorContainer.empty();
         const username = $("#setusername").val().trim();
         const password = $("#createpassword").val().trim();
         const confirmPassword = $("#confirmpassword").val().trim();
         //validate username
-        const validUser = userRegex.test(username);
+        const validUser = checkUserLength(username.length);
         //validate password
         const validPwd = updatePasswordValidation(password, true);
         //validate confirm password
@@ -68,12 +67,28 @@ $(document).ready(function() {
         }
     });
     
+    $('#setusername').on('input', function() {
+        var len = $(this).val().length;
+        checkUserLength(len);
+    });
+
     $('#createpassword').on('input', function() {
         updatePasswordValidation($(this).val().trim()); // Validate in real-time as user types
     });
 
+
+    function checkUserLength(len, display=true) {
+        if(display) {
+            if(len > 20 || len < 3) {
+                $('#userlength').html("<p class='error'><span class='error-cross'>✘</span> Username must be between 3 and 20 characters in length.</p>");
+            } else {
+                $('#userlength').html("<p class='success'><span class='error-tick'>✔</span> Username is between 3 and 20 characters in length.</p>");
+            }
+        }
+        return (len >= 3 && len <= 20);
+    }
     function updatePasswordValidation(password, display=true) {
-        var $errorContainer = $("#signupformelement div.error-section");
+        var $errorContainer = $("#signupformelement div.error-section").eq(1);
         $errorContainer.empty();
         let isValid = true;
         Object.keys(passwordCriteria).forEach(key => {
