@@ -5,6 +5,17 @@ body {
   background-color: #222831;
   color: #FFF;
 }
+.content-animation {
+  animation: fadeInOut 0.5s ease-out forwards;
+}
+@keyframes fadeInOut {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
 header {
   width: 100%;
   margin: auto;

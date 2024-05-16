@@ -60,12 +60,15 @@
           </div>
       </nav>
   </header>
+  <div id="main-content">
     {% block body %}
     <!-- Main content block where individual page content will be inserted -->
     {% endblock %}
+  </div>
+  
   </body>
 <footer>
-  <script src="{{ url_for('static', filename='JavaScript/bg.js') }}"></script>
+  <script src="{{ url_for('static', filename='JavaScript/page_load.js') }}"></script>
   {% block footer %}{% endblock %}
   <div class="copyright-container">
     <p>Copyright &#169; 2024 <b class="katex-render">\sqrt{MathleeTeX},</b></p>
@@ -76,5 +79,6 @@
     <button class="btn btn-lg social-btn"><i class="fab fa-twitter"></i></button>
     <button class="btn btn-lg social-btn"><i class="fab fa-instagram"></i></button>
   </div>
+
 </footer>
 </html>
