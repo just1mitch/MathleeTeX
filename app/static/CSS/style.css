@@ -1,20 +1,43 @@
 body {
   margin: 0;
-  padding: 0;
+  padding-top: 60px;
   font-family: "Computer Modern Bright", sans-serif;
   background-color: #222831;
   color: #EEEEEE;
 }
 header {
-  background-color: #31363F;
   width: 100%;
   margin: auto;
-  padding: 10px 20px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  position: fixed;
-  z-index: 1000;
+}
+header .navbar {
+  background-color: #31363F; 
+  padding: 10px 30px; 
+}
+header .nav-link {
+  margin: 0 10px;
+}
+header .navbar-brand, header .nav-link {
+  color: white; 
+  position: relative;
+}
+header .nav-link:hover {
+  color: #ddd; 
+}
+header .nav-link::before {
+  content: "{";
+  position: absolute;
+  left: -0.5em;
+  top: 0.3em;
+  transition: transform 0.3s ease;
+  font-size: 1.3em;
+  font-weight: bold;
+}
+
+header .nav-link:hover::before {
+  transform: scale(1.4);
 }
 footer {
   background-color: #31363F;
@@ -23,7 +46,9 @@ footer {
   justify-content: space-between;
   align-items: center;
   bottom: 0px;
-  height: 80px;
+  margin-bottom: 0;
+  position: fixed;
+  height: 60px;
   width: 100%;
 }
 .socials-container {
