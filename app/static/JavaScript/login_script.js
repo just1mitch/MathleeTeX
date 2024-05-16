@@ -1,7 +1,6 @@
 $(document).ready(function() {
     //Define the Regular Expressions to validate inputs on client-end (Length is checked in the HTML form)
     const userRegex = /^\w{3,20}$/; //requires one or more: Letters, numbers and underscores
-    //const pwdRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^\\w\\d\\s]).{8,}$/;
     const passwordCriteria = {
         length: { regex: /^.{8,}$/, message: "Password must be at least 8 characters in length." },
         uppercase: { regex: /(?=.*[A-Z])/, message: "Must contain at least one uppercase letter." },
@@ -28,7 +27,8 @@ $(document).ready(function() {
         }
     });
 
-    $('#loginformelement').submit(function() {
+    $('#loginformelement').submit(function(e) {
+        e.preventDefault();
         var $errorContainer = $(this).find(".error-section");
         //remove any prior error messages
         $errorContainer.empty();
@@ -36,17 +36,17 @@ $(document).ready(function() {
         const password = $("#password").val().trim();
         const validUser = userRegex.test(username);
         const validPwd = updatePasswordValidation(password, false);
-        // if(!validUser) {
-        //     $errorContainer.append("<p class='error-message-login'>Invalid username</p>");
-        // }
-        // if(!validPwd) {
-        //     $errorContainer.append("<p class='error-message-login'>Invalid password</p>");
-        // }
-        //credentials are valid - continue with submission
-        return validPwd && validUser; // if either is false, the form will not submit - bit more streamlined
+        if(validPwd && validUser) {
+            $(this).off('submit').submit(); // disable this handler and submit the form normally
+        } else {
+            $('#loginformelement')[0].reset();
+            $(this).find(".error-section").append("<p class='error'>Please enter valid credentials.</p>");
+            $('#login-form').effect("shake");
+        }
     });
 
-    $('#signupformelement').submit(function() {
+    $('#signupformelement').submit(function(e) {
+        e.preventDefault();
         var $errorContainer = $(this).find(".error-section");
         $errorContainer.empty();
         const username = $("#setusername").val().trim();
@@ -61,7 +61,11 @@ $(document).ready(function() {
         if (!validConfirm) {
             $errorContainer.append("<p class='error-message-signup'><span class='error-cross'>✘</span> Passwords do not match</p>");
         }
-        return validUser && validPwd && validConfirm;
+        if(validUser && validPwd && validConfirm) {
+            $(this).off('submit').submit(); //disable the handler and submit the form
+        } else {
+            $('#signup-form').effect("shake");
+        }
     });
     
     $('#createpassword').on('input', function() {
@@ -69,7 +73,7 @@ $(document).ready(function() {
     });
 
     function updatePasswordValidation(password, display=true) {
-        var $errorContainer = $(".error-section");
+        var $errorContainer = $("#signupformelement div.error-section");
         $errorContainer.empty();
         let isValid = true;
         Object.keys(passwordCriteria).forEach(key => {

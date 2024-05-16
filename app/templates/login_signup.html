@@ -38,7 +38,7 @@
                 {% if messages %}
                     {% for message in messages %}
                         {% if 'flash_login' in message %}
-                            <p class="error-message-login">{{ message|replace('flash_login: ', '') }}</p>
+                            <p class="error">{{ message|replace('flash_login: ', '') }}</p>
                         {% endif %}
                     {% endfor %}
                 {% endif %}
