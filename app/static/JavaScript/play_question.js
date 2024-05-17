@@ -166,6 +166,7 @@ function handleAnswer(data) {
         $('#correctness').addClass('incorrect-answer');
         $('#correctness').removeClass('correct-answer');
         $('#correctness').prop('hidden', false);
+        $('#answerModal').effect('shake');
     }
 }
 
