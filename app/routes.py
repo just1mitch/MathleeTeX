@@ -173,6 +173,20 @@ def create():
 def get_users(offset=0, per_page=10):
     return users.query.order_by(users.points.desc()).slice(offset, offset + per_page).all()
 
+
+@app.route('/delete_question/<int:question_id>', methods=['POST'])
+@login_required
+def delete_question(question_id):
+    # Get the question to delete - we'll use AJAX to send the request
+    question = questions.query.get_or_404(question_id)
+    if current_user.user_id != question.user_id:
+        return jsonify({'error': 'You are not auth to delete this question.'}), 403
+
+    db.session.delete(question)
+    db.session.commit()
+    
+    return jsonify({'success': True})
+
 @app.route('/leaderboard')
 def leaderboard():
     page, per_page, offset = get_page_args(page_parameter='page', per_page_parameter='per_page')
