@@ -75,7 +75,14 @@ def play():
     page = request.args.get('page', 1, type=int)
     # Query database for all questions
     # Join user information to the questions
-    query = db.session.query(questions, users).join(users)
+    # If user is signed in, don't display questions posted by them
+    # They can view these on the profile page, and shouldnt be able to answer
+    # their own questions anyways
+    user = current_user.get_id()
+    if user is not None:
+        query = db.session.query(questions, users).join(users).filter(questions.user_id != user)
+    else:
+        query = db.session.query(questions, users).join(users)
     comment_count = db.session.query(questions.question_id, func.count(questions.question_id).label("comment_count")).join(questions.comments).group_by(questions.question_id).subquery('comment_count')
     query = query.outerjoin(comment_count, comment_count.c.question_id==questions.question_id)
 
