@@ -18,7 +18,13 @@ def index():
 @app.route('/profile')
 @login_required
 def profile():
-    return render_template('profile.html', name=current_user.username)
+    user_questions = questions.query.filter_by(user_id=current_user.user_id).all()
+    # Get the number of attempts and comments for each question
+    for question in user_questions:
+        # changed this to just use the count method based on the user_answers table - simpler than a large join
+        question.num_attempts = user_answers.query.filter_by(question_id=question.question_id).count()
+        question.num_comments = comments.query.filter_by(question_id=question.question_id).count()
+    return render_template('profile.html', user_questions=user_questions)
 
 #Login attempts are directed here
 @app.route('/login', methods=['GET', 'POST'])
