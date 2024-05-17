@@ -210,7 +210,7 @@ def check_answer(qid):
             points = max(0, 9 - attempts * 3)
         
         response = {
-            'completed': correct_answer == answer,
+            'completed': new_attempt.is_correct,
             'points': points
         }
         
