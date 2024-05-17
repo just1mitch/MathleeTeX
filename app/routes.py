@@ -197,14 +197,29 @@ def check_answer(qid):
                                    answer_text = answer,
                                    attempt_number = attempts + 1)
         correct_answer = questions.query.filter_by(question_id=qid).first().correct_answer
-        if(correct_answer == answer):
-            new_attempt.is_correct = True
-            db.session.add(new_attempt)
-            db.session.commit()
-            return 'Correct'
+        
+        new_attempt.is_correct = correct_answer == answer
+
+        # Calculate points earned
+        difficulty = questions.query.filter(questions.question_id == qid).first().difficulty_level
+        if difficulty == 'Easy':
+            points = max(0, 3 - attempts)
+        elif difficulty == 'Medium':
+            points = max(0, 6 - attempts * 2)
         else:
-            new_attempt.is_correct = False
-            db.session.add(new_attempt)
-            db.session.commit()
-            return 'Incorrect'
+            points = max(0, 9 - attempts * 3)
+        
+        response = {
+            'completed': correct_answer == answer,
+            'points': points
+        }
+        
+        # Commit to database and return results
+        if(new_attempt.is_correct):
+            # Add points to users total if the answer was correct
+            user = users.query.filter(users.user_id == current_user.get_id()).first()
+            user.points += points
+        db.session.add(new_attempt)
+        db.session.commit()
+        return response
     return

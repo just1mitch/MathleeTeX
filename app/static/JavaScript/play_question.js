@@ -160,24 +160,21 @@ function handleAnswer(data) {
             $('#katexErrorCode').prop('hidden', false);
         }
     }
-    switch (data){
-        case 'Correct':
-            answerCorrect();
-        case 'Incorrect':
-            $('#correctness').html('Incorrect');
-            $('#correctness').addClass('incorrect-answer');
-            $('#correctness').removeClass('correct-answer');
-            $('#correctness').prop('hidden', false);
-        default:
-            return;
+    if (data.completed) answerCorrect(data.points);
+    else {
+        $('#correctness').html('Incorrect!');
+        $('#correctness').addClass('incorrect-answer');
+        $('#correctness').removeClass('correct-answer');
+        $('#correctness').prop('hidden', false);
     }
 }
 
-function answerCorrect() {
+function answerCorrect(points = null) {
     // Blank out submit button and text entry after correct
     $('#answer').prop('disabled', true);
     $('#answerSubmit').prop('disabled', true);
-    $('#correctness').html('Correct');
+    if(points === null) $('#correctness').html('Correct!');
+    else $('#correctness').html('Correct!<br>' + points + ' Points Earned!');
     $('#correctness').addClass('correct-answer');
     $('#correctness').removeClass('incorrect-answer');
     $('#correctness').prop('hidden', false);
