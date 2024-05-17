@@ -1,14 +1,75 @@
 {% extends "katexscripts.html" %}
-{% block title %}{{ name }}{% endblock %}
-
+{% block title %}User Profile{% endblock %}
 {% block body %}
-    <h1>Welcome, {{ name }}!</h1>
-    
+<div class="container-fluid mt-5">
+    <div class="row">
+        <div class="col-md-4">
+            <div class="card text-white mb-4">
+                <div class="card-header">
+                    <h2>Recent Comments</h2>
+                </div>
+                <div class="card-body">
+                        <hr>
+                        <p>No comments yet.</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-8">
+            <div class="card text-white">
+                <div class="card-header">
+                    <h2>Your Questions</h2>
+                </div>
+                <div class="card-body" style="overflow-y: auto; height: 600px;">
+                    {% for question in user_questions %}
+                        <div id="question-{{ question.question_id }}" class="section question container prevent-select" onclick="">
+                            <div class="row">
+                                <div class="col-8">
+                                    <h5 class="fw-bold render-katex">{{ question.title }}</h5>
+                                </div>
+                                <div class="col-4 text-end opacity-50">
+                                    <p class="mb-0">
+                                        <span dateposted="{{ question.date_posted }}" class="dateposted">{{ question.date_posted }}</span>
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-9">
+                                    <p class="render-katex">{{ question.question_description }}</p>
+                                </div>
+                                <div class="col-3 text-end align-self-end">
+                                    {% if question.difficulty_level == 'Easy' %}
+                                        <span class="easy">Easy</span>
+                                    {% elif question.difficulty_level == 'Medium' %}
+                                        <span class="medium">Medium</span>
+                                    {% elif question.difficulty_level == 'Hard' %}
+                                        <span class="hard">Hard</span>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-6">
+                                    <p>🗒️ {{ question.num_attempts }} attempts</p>
+                                    <span>💬 {{ question.num_comments }} comment{% if question.num_comments != 1 %}s{% endif %}</span>
+                                </div>
+                                <div class="col-6 text-end">
+                                    <br>
+                                    <button onclick="deleteQuestion({{ question.question_id }})" class="btn btn-danger"><i class="fa fa-trash" aria-hidden="true"></i></button>
+                                </div>
+                            </div>
+                        </div>
+                        <hr>
+                    {% else %}
+                        <p>You have not posted any questions yet.</p>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
-    <!--Can include other profile info such as points, created quizzes and so forth once they're implemented-->
-    <a href="{{url_for('logout') }}" class="navbar-item">Logout</a>
 {% endblock %}
-
 {% block footer %}
-<!--Footer content...-->
+
+<script src="{{ url_for('static', filename='JavaScript/delete_question.js') }}"></script>
+
 {% endblock %}
