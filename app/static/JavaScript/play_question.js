@@ -51,7 +51,7 @@ $('#answer').on('input', function () {
     }
 })
 
-function showModal(qid, code, title, difficulty, description, username, date_posted) {
+function showModal(qid, code, title, difficulty, description, username, date_posted, attempts, completed) {
     // setting individually as Safari doesn't support createElement 'options' feature
     // https://developer.mozilla.org/en-US/docs/Web/API/Document/createElement
     let btn = document.createElement("button");
@@ -72,7 +72,8 @@ function showModal(qid, code, title, difficulty, description, username, date_pos
     // Add data to modal
     $('.modal-title').html(title);
     $('.modal-description').html(description);
-    $('.modal-byline').html("Posted by " + username + " " + date_posted);
+    $('#byline').html("Posted by " + username + " " + date_posted);
+    $('#attempts').html("Attempts Made: " + attempts);
     $('#answer').val('');
     $('#submit-answer').attr('qid', qid);
     // katex.render('', document.getElementById('katexdyna'), { throwOnError: false })
@@ -94,6 +95,7 @@ function showModal(qid, code, title, difficulty, description, username, date_pos
 
     document.body.appendChild(btn);
     $('#modalToggle').click();
+    if (completed) answerCorrect();
 }
 
 function showQuestion(qid, title, difficulty, description, username, date_posted) {
@@ -113,13 +115,15 @@ function showQuestion(qid, title, difficulty, description, username, date_posted
             alert('Error (' + jqXHR.status + '): ' + errorThrown);
             return false;
         },
-        success: function (code) {
+        success: function (response) {
             // If not signed in, send to login page
-            if(code.slice(0,15) === "<!DOCTYPE html>"){
+            if(typeof response === "string"){
                 window.location.href = $("a:contains('login')").attr('href');
             }
-            // Else, show modal
-            else showModal(qid, code, title, difficulty, description, username, date_posted)
+            let completed = response.completed;
+            let code = response.code;
+            let attempts = response.attempts;
+            showModal(qid, code, title, difficulty, description, username, date_posted, attempts, completed);
         }
     })
 }
@@ -158,21 +162,23 @@ function handleAnswer(data) {
     }
     switch (data){
         case 'Correct':
-            // Blank out submit button and text entry after correct
-            $('#answer').prop('disabled', true);
-            $('#answerSubmit').prop('disabled', true);
-            $('#correctness').html('Correct');
-            $('#correctness').addClass('correct-answer');
-            $('#correctness').removeClass('incorrect-answer');
-            $('#correctness').prop('hidden', false);
-            return
+            answerCorrect();
         case 'Incorrect':
             $('#correctness').html('Incorrect');
             $('#correctness').addClass('incorrect-answer');
             $('#correctness').removeClass('correct-answer');
             $('#correctness').prop('hidden', false);
-            return
         default:
-            return
+            return;
     }
+}
+
+function answerCorrect() {
+    // Blank out submit button and text entry after correct
+    $('#answer').prop('disabled', true);
+    $('#answerSubmit').prop('disabled', true);
+    $('#correctness').html('Correct');
+    $('#correctness').addClass('correct-answer');
+    $('#correctness').removeClass('incorrect-answer');
+    $('#correctness').prop('hidden', false);
 }

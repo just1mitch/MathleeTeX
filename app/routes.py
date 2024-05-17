@@ -162,17 +162,42 @@ def leaderboard():
 @app.route('/answer_question/<qid>', methods=["GET"])
 @login_required
 def answer_question(qid):
+    # Get question information
     question = questions.query.filter_by(question_id=qid).first()
     code = question.correct_answer
-    return code
+    # Get users attempt amounts
+    attempts = user_answers.query.filter(user_answers.user_id == current_user.get_id(), user_answers.question_id == qid).count()
+    # Get boolean if user has answered correctly
+    if(user_answers.query.filter(user_answers.user_id == current_user.get_id(), user_answers.question_id == qid, user_answers.is_correct == True).first()) is not None:
+        completed = True
+    else: completed = False
+    response = {
+        'code': code,
+        'attempts': attempts,
+        'completed': completed
+    }
+    return response
 
 @app.route('/check_answer/<qid>', methods=["POST"])
 def check_answer(qid):
     answer_form = AnswerForm(request.form)
     if answer_form.validate_on_submit():
+        answer = answer_form.answer.data
+        attempts = user_answers.query.filter(user_answers.user_id == current_user.get_id(), user_answers.question_id == qid).count()
+        # Add attempt to database
+        new_attempt = user_answers(question_id=qid,
+                                   user_id=current_user.get_id(),
+                                   answer_text = answer,
+                                   attempt_number = attempts + 1)
         correct_answer = questions.query.filter_by(question_id=qid).first().correct_answer
-        if(correct_answer == answer_form.answer.data):
+        if(correct_answer == answer):
+            new_attempt.is_correct = True
+            db.session.add(new_attempt)
+            db.session.commit()
             return 'Correct'
         else:
+            new_attempt.is_correct = False
+            db.session.add(new_attempt)
+            db.session.commit()
             return 'Incorrect'
     return

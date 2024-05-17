@@ -5,8 +5,6 @@ from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField, BooleanField, EmailField, RadioField, TextAreaField
 from wtforms.validators import DataRequired, Length, Email, EqualTo, Regexp, ValidationError
 
-
-
 # This class is for formatting/validating Login Form input - username, password, remember me
 class LoginForm(FlaskForm):
     username = StringField('Username:', validators=[DataRequired(), Length(min=3, max=20)])
