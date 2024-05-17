@@ -11,15 +11,15 @@ $(document).ready(function() {
     function switchContainers(a, b) {
         $("#"+ a + "-form").hide();
         $("#" + b + "-form").show();
-        sessionStorage.setItem("lastForm", b);
+        localStorage.setItem("lastForm", b);
     }
     //Hide Form based on whichever option was last selected
-    if(sessionStorage.getItem('lastForm') === "signup"){
+    if(localStorage.getItem('lastForm') === "signup"){
         $('#switch').prop("checked", true);
         switchContainers("login", "signup");
     }
     $('#switch').change(function() {
-        if(sessionStorage.getItem("lastForm") === "signup") {
+        if(localStorage.getItem("lastForm") === "signup") {
             switchContainers("signup", "login");
         } else {
             switchContainers("login", "signup");
