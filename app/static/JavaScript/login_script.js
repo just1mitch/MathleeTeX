@@ -58,7 +58,7 @@ $(document).ready(function() {
         //validate confirm password
         const validConfirm = password === confirmPassword;
         if (!validConfirm) {
-            $errorContainer.append("<p class='error-message-signup'><span class='error-cross'>✘</span> Passwords do not match</p>");
+            $errorContainer.append("<p class='error'><span class='error-cross'>✘</span> Passwords do not match</p>");
         }
         if(validUser && validPwd && validConfirm) {
             $(this).off('submit').submit(); //disable the handler and submit the form
@@ -88,7 +88,7 @@ $(document).ready(function() {
         return (len >= 3 && len <= 20);
     }
     function updatePasswordValidation(password, display=true) {
-        var $errorContainer = $("#signupformelement div.error-section").eq(1);
+        var $errorContainer = $("#signupformelement div.error-section").eq(1); //select the second div, so the username length error isn't overwritten
         $errorContainer.empty();
         let isValid = true;
         Object.keys(passwordCriteria).forEach(key => {
