@@ -257,11 +257,11 @@ def check_answer(qid):
         # Calculate points earned
         difficulty = questions.query.filter(questions.question_id == qid).first().difficulty_level
         if difficulty == 'Easy':
-            points = max(0, 3 - attempts)
+            points = max(1, 3 - attempts)
         elif difficulty == 'Medium':
-            points = max(0, 6 - attempts * 2)
+            points = max(1, 6 - attempts * 2)
         else:
-            points = max(0, 9 - attempts * 3)
+            points = max(1, 9 - attempts * 3)
         
         response = {
             'completed': new_attempt.is_correct,
