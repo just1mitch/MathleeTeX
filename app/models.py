@@ -18,7 +18,7 @@ class LoginForm(FlaskForm):
 class SignupForm(FlaskForm):
     setemail = EmailField('Email:', validators=[DataRequired()])
     setusername = StringField('Username:', validators=[DataRequired(), Length(min=3, max=20)])
-    createpassword = PasswordField('Password:', validators=[DataRequired(), Length(min=8)])
+    createpassword = PasswordField('Password:', validators=[DataRequired(), Length(min=8), Regexp('(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_])')])
     confirmpassword = PasswordField('Repeat Password', validators=[DataRequired(), EqualTo('createpassword')])
 
 # This class is for formatting/validating Creating Question input - difficulty, title, description, code

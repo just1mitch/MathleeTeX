@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Home</title>
+    <title>{%block title %}{% endblock %}</title>
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" type="text/css"
       href="https://cdn.jsdelivr.net/gh/dreampulse/computer-modern-web-font@master/fonts.css">
@@ -14,11 +14,13 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='CSS/style.css') }}">
     <!-- Including jQuery -->
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.13.3/jquery-ui.min.js"></script>
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
       <!-- Font Awesome -->
     <script src="{{ url_for('static', filename='JavaScript/all.min.js') }}"></script>
+
     {% block head %}
     {% endblock %}
   </head>
