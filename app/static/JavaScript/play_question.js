@@ -122,7 +122,12 @@ function showQuestion(qid, title, difficulty, description, username, date_posted
             return false;
         },
         success: function (code) {
-            showModal(qid, code, title, difficulty, description, username, date_posted)
+            // If not signed in, send to login page
+            if(code.slice(0,15) === "<!DOCTYPE html>"){
+                window.location.href = $("a:contains('login')").attr('href');
+            }
+            // Else, show modal
+            else showModal(qid, code, title, difficulty, description, username, date_posted)
         }
     })
 }
