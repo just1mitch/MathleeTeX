@@ -16,7 +16,7 @@ class LoginForm(FlaskForm):
 class SignupForm(FlaskForm):
     setemail = EmailField('Email:', validators=[DataRequired()])
     setusername = StringField('Username:', validators=[DataRequired(), Length(min=3, max=20)])
-    createpassword = PasswordField('Password:', validators=[DataRequired(), Length(min=8)])
+    createpassword = PasswordField('Password:', validators=[DataRequired(), Length(min=8), Regexp('(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_])')])
     confirmpassword = PasswordField('Repeat Password', validators=[DataRequired(), EqualTo('createpassword')])
 
 # This class is for formatting/validating Creating Question input - difficulty, title, description, code
@@ -41,6 +41,14 @@ class users(UserMixin, db.Model):
 
     def get_id(self):
         return str(self.user_id)
+
+    @property
+    def questions_answered_correctly(self):
+        return user_answers.query.filter_by(user_id=self.user_id, is_correct=True).count()
+
+    @property
+    def total_questions_answered(self):
+        return user_answers.query.filter_by(user_id=self.user_id).count()
 
 # This table is for storing questions - user_id, title, question description, correct answer, date posted, and difficulty level
 class questions(db.Model):
