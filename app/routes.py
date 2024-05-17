@@ -153,20 +153,25 @@ def create():
         db.session.add(new_question)
         db.session.commit()
         return redirect(url_for('play'))
-    else:
-        print(question_form.errors)
     return(render_template('create_question.html', question_form=question_form))
 
 @app.route('/leaderboard')
 def leaderboard():
     return(render_template('leaderboard.html'))
 
-@app.route('/answer_question/<qid>', methods=["GET", "POST"])
+@app.route('/answer_question/<qid>', methods=["GET"])
 @login_required
 def answer_question(qid):
-    if request.method == "GET":
-        question = questions.query.filter_by(question_id=qid).first()
-        code = question.correct_answer
-        return code
-    elif request.method == "POST":
+    question = questions.query.filter_by(question_id=qid).first()
+    code = question.correct_answer
+    return code
+
+@app.route('/check_answer/<qid>', methods=["POST"])
+def check_answer(qid):
+    answer_form = AnswerForm(request.form)
+    if answer_form.validate_on_submit():
         return
+    else:
+        print(answer_form.errors)
+    return
+        # correct_answer = questions.query.filter_by(question_id=qid).first()
