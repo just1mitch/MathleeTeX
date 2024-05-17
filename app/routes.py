@@ -170,8 +170,9 @@ def answer_question(qid):
 def check_answer(qid):
     answer_form = AnswerForm(request.form)
     if answer_form.validate_on_submit():
-        return
-    else:
-        print(answer_form.errors)
+        correct_answer = questions.query.filter_by(question_id=qid).first().correct_answer
+        if(correct_answer == answer_form.answer.data):
+            return 'Correct'
+        else:
+            return 'Incorrect'
     return
-        # correct_answer = questions.query.filter_by(question_id=qid).first()

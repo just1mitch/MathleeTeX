@@ -39,33 +39,15 @@ $(document).ready(function () {
 })
 
 $('#answer').on('input', function () {
-    // $('#katexdyna').prop('hidden', false);
-    try {
-        // katex.render($(this).val(), document.getElementById('katexdyna'), { throwOnError: false })
-        // // Also render to string - if there are errors, will catch and display underneath the rendered text
-        // katex.renderToString($(this).val())
-        // if ($(this).val().length === 0) $('#katexdyna').prop('hidden', true);
-        $('#answerSubmit').prop('disabled', false);
-        // $('#katexErrorCode').prop('hidden', true);
-        console.log($(this).val().length);
-        if ($(this).val().length > 50) {
-            $('#answerError').html("Error: Answer length must be less than 50 characters (currently " + $(this).val().length + ")")
-            $('#answerError').parent().show();
-            $('#answerSubmit').prop('disabled', true);
-        }
-        else {
-            $('#answerError').parent().hide();
-            $('#answerSubmit').prop('disabled', false);
-        }
-
+    $('#answerSubmit').prop('disabled', false);
+    if ($(this).val().length > 50) {
+        $('#answerError').html("Error: Answer length must be less than 50 characters (currently " + $(this).val().length + ")")
+        $('#answerError').parent().show();
+        $('#answerSubmit').prop('disabled', true);
     }
-    catch (e) {
-        if (e instanceof katex.ParseError) {
-            $('#katexErrorCode').html(e.message);
-            $('#katexErrorCode').prop('hidden', false);
-            // Prevent submitting form if katex is invalid
-            $('#answerSubmit').prop('disabled', true);
-        }
+    else {
+        $('#answerError').parent().hide();
+        $('#answerSubmit').prop('disabled', false);
     }
 })
 
@@ -93,7 +75,7 @@ function showModal(qid, code, title, difficulty, description, username, date_pos
     $('.modal-byline').html("Posted by " + username + " " + date_posted);
     $('#answer').val('');
     $('#submit-answer').attr('qid', qid);
-    katex.render('', document.getElementById('katexdyna'), { throwOnError: false })
+    // katex.render('', document.getElementById('katexdyna'), { throwOnError: false })
     if (difficulty == 'Easy') {
         $('.modal-difficulty').html("<span class='easy'>Easy</span>");
         $('.modal-difficulty').addClass('ps-4');
@@ -115,12 +97,20 @@ function showModal(qid, code, title, difficulty, description, username, date_pos
 }
 
 function showQuestion(qid, title, difficulty, description, username, date_posted) {
+    // Reset Modal
+    $('#answer').prop('disabled', false);
+    $('#answerSubmit').prop('disabled', false);
+    $('#katexErrorCode').prop('hidden', true);
+    $('#renderedAnswer').prop('hidden', true);
+    $('#correctness').prop('hidden', true);
+
     // Make AJAX query for the code
     $.ajax({
         type: "GET",
         url: '/answer_question/' + qid,
         timeout: 30000,
-        error: function () {
+        error: function (jqXHR, _, errorThrown) {
+            alert('Error (' + jqXHR.status + '): ' + errorThrown);
             return false;
         },
         success: function (code) {
@@ -135,6 +125,7 @@ function showQuestion(qid, title, difficulty, description, username, date_posted
 }
 
 $('#submit-answer').submit(function(e) {
+    $('#katexErrorCode').prop('hidden', true); // Hide error code again
     e.preventDefault();
     $.ajax({
         headers: {
@@ -142,7 +133,46 @@ $('#submit-answer').submit(function(e) {
         },
         type: "POST",
         url: "/check_answer/" + $(this).attr('qid'),
-        data: $(this).serialize()
+        data: $(this).serialize(),
+        timeout: 30000,
+        error: function (jqXHR, _, errorThrown) {
+            alert('Error (' + jqXHR.status + '): ' + errorThrown);
+            return false;
+        },
+        success: handleAnswer
     })
 })
 
+function handleAnswer(data) {
+    // Display rendered code after submitted regardless of correctness
+    try {
+        $('#renderedAnswer').prop('hidden', false);
+        katex.render($('#answer').val(), document.getElementById('renderedAnswer'), { throwOnError: false })
+        katex.renderToString($('#answer').val()) // may cause error 
+    }
+    catch (e) {
+        if (e instanceof katex.ParseError) {
+            $('#katexErrorCode').html(e.message);
+            $('#katexErrorCode').prop('hidden', false);
+        }
+    }
+    switch (data){
+        case 'Correct':
+            // Blank out submit button and text entry after correct
+            $('#answer').prop('disabled', true);
+            $('#answerSubmit').prop('disabled', true);
+            $('#correctness').html('Correct');
+            $('#correctness').addClass('correct-answer');
+            $('#correctness').removeClass('incorrect-answer');
+            $('#correctness').prop('hidden', false);
+            return
+        case 'Incorrect':
+            $('#correctness').html('Incorrect');
+            $('#correctness').addClass('incorrect-answer');
+            $('#correctness').removeClass('correct-answer');
+            $('#correctness').prop('hidden', false);
+            return
+        default:
+            return
+    }
+}
