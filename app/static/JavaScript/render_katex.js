@@ -23,7 +23,7 @@ function renderKaTeX() {
             }
 
         })
-    })
+    });
 
     // Use jQuery to find all elements with the class 'katex-render'
     $('.katex-render').each(function () {

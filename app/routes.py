@@ -1,6 +1,7 @@
 from flask import render_template, request, redirect, url_for, jsonify, flash
 from flask_login import login_required, current_user, logout_user
 from flask_login import login_user
+from flask_paginate import Pagination, get_page_args
 from sqlalchemy import inspect, func
 from werkzeug.security import generate_password_hash, check_password_hash
 
@@ -10,7 +11,8 @@ from app.models import users, questions, user_answers, comments, LoginForm, Sign
 
 @app.route('/')
 def index():
-    return render_template('index.html')
+    top_users = users.query.order_by(users.points.desc()).limit(5).all() # Get top 5 users
+    return render_template('index.html', top_users=top_users)
 
 
 @app.route('/profile')
@@ -150,10 +152,10 @@ def create():
         description = question_form.description.data
         code = question_form.code.data
         # Enter question into database
-        new_question = questions(user_id=int(current_user.get_id()), 
-                                 title=title, 
-                                 question_description=description, 
-                                 correct_answer=code, 
+        new_question = questions(user_id=int(current_user.get_id()),
+                                 title=title,
+                                 question_description=description,
+                                 correct_answer=code,
                                  difficulty_level=difficulty)
         db.session.add(new_question)
         db.session.commit()
@@ -162,7 +164,53 @@ def create():
         print(question_form.errors)
     return(render_template('create_question.html', question_form=question_form))
 
+def get_users(offset=0, per_page=10):
+    return users.query.order_by(users.points.desc()).slice(offset, offset + per_page).all()
+
 @app.route('/leaderboard')
 def leaderboard():
-    return(render_template('leaderboard.html'))
+    page, per_page, offset = get_page_args(page_parameter='page', per_page_parameter='per_page')
+    total = users.query.count()
+
+    show_me = 'show_me' in request.args
+    if current_user.is_authenticated and show_me:
+        rank = users.query.filter(users.points > current_user.points).count() + 1
+        calculated_page = (rank - 1) // per_page + 1
+
+        # Redirect if show_me is set but a specific page is also requested
+        if request.args.get('page') and int(request.args.get('page')) != calculated_page:
+            return redirect(url_for('leaderboard', page=request.args.get('page')))
+        page = calculated_page
+        offset = (page - 1) * per_page
+
+
+    user_list = get_users(offset=offset, per_page=per_page)
+
+    # init rank with a default value
+    rank = None
+    if current_user.is_authenticated and request.args.get('show_me'):
+        rank = users.query.filter(users.points > current_user.points).count() + 1
+        page = (rank - 1) // per_page + 1
+        offset = (page - 1) * per_page
+        user_list = get_users(offset=offset, per_page=per_page)
+
+    pagination = Pagination(page=page, per_page=per_page, total=total)
+
+    current_user_stats = None
+
+
+    if current_user.is_authenticated:
+        if rank is None:
+            rank = users.query.filter(users.points > current_user.points).count() + 1
+        current_user_stats = {
+            'username': current_user.username,
+            'points': current_user.points,
+            'date_joined': current_user.sign_up_date.strftime('%Y-%m-%d'),
+            'questions_answered_correctly': current_user.questions_answered_correctly,
+            'total_questions_answered': current_user.total_questions_answered,
+            'rank': rank
+        }
+
+    return render_template('leaderboard.html', users=user_list, page=page,
+                           per_page=per_page, pagination=pagination, current_user_stats=current_user_stats)
 
