@@ -3,6 +3,57 @@
 {% block body %}
 <div class="container-fluid mt-5">
     <div class="row">
+        <div class="col-12 mb-4">
+            <div class="card text-white">
+                <div class="card-header">
+                    <h2>Your Stats</h2>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-8">
+                            <div class="stat-container d-flex align-items-center justify-content-between mb-2">
+                                <div>
+                                    <span class="stat-icon">🏆</span>
+                                    <span>Rank</span>
+                                </div>
+                                <h4>{{ current_user_stats.rank }}</h4>
+                            </div>
+                            <div class="stat-container d-flex align-items-center justify-content-between mb-2">
+                                <div>
+                                    <span class="stat-icon">🗒️</span>
+                                    <span>Questions Answered</span>
+                                </div>
+                                <h4>{{ current_user_stats.total_questions_answered }}</h4>
+                            </div>
+                            <div class="stat-container d-flex align-items-center justify-content-between mb-2">
+                                <div>
+                                    <span class="stat-icon">✔️</span>
+                                    <span>Correct Answers</span>
+                                </div>
+                                <h4>{{ current_user_stats.questions_answered_correctly }}</h4>
+                            </div>
+                            <div class="stat-container d-flex align-items-center justify-content-between mb-2">
+                                <div>
+                                    <span class="stat-icon">🔥</span>
+                                    <span>Points</span>
+                                </div>
+                                <h4>{{ current_user_stats.points }}</h4>
+                            </div>
+                            {% if current_user_stats %}
+                            <a href="{{ url_for('leaderboard', show_me=True) }}" class="start-button btn btn-info">Show My Ranking</a>
+                            {% endif %}
+                        </div>
+                        <div class="col-md-4 d-flex align-items-center justify-content-center">
+                            <div class="username-display text-center">
+                                <h1 class="display-3">{{ current_user.username }}</h1>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+        </div>
+    </div>
+    
+    <div class="row">
         <div class="col-md-4">
             <div class="card text-white mb-4">
                 <div class="card-header">
@@ -53,6 +104,7 @@
                                 </div>
                                 <div class="col-6 text-end">
                                     <br>
+                                    <button onclick="showQuestion({{ question.question_id }}, '{{ question.title }}', '{{ question.difficulty_level }}', '{{ question.question_description }}', '{{ current_user.username }}', '{{ question.date_posted }}')" class="btn btn-primary"><i class="fa-solid fa-eye"></i></button>
                                     <button onclick="deleteQuestion({{ question.question_id }})" class="btn btn-danger"><i class="fa fa-trash" aria-hidden="true"></i></button>
                                 </div>
                             </div>
@@ -67,9 +119,44 @@
     </div>
 </div>
 
+<div class="modal fade" id="answerModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content modal-colour">
+            <div class="modal-header">
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-10 p-0">
+                            <h2 class="modal-title text-start"></h2>
+                        </div>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="row mb-0">
+                        <div class="col-10 p-0">
+                            <p id="byline" class="modal-byline opacity-50 text-start mb-0"></p>
+                        </div>
+                    </div>
+                    <div class="row mb-0">
+                        <div class="col-10 p-0">
+                            <p id="attempts" class="modal-byline opacity-50 text-start mb-0"></p>
+                        </div>
+                        <div class="modal-difficulty col-2 ps-4"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-body">
+                <p class="render-katex form-group modal-description"></p>
+                <h2 class="modal-code"></h2>
+            </div>
+        </div>
+    </div>
+</div>
+
 {% endblock %}
 {% block footer %}
-
+<script src="{{ url_for('static', filename='JavaScript/play_question.js') }}"></script>
 <script src="{{ url_for('static', filename='JavaScript/delete_question.js') }}"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+    crossorigin="anonymous"></script>
 
 {% endblock %}
