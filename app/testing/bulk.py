@@ -1,6 +1,5 @@
 from app import db
 from app.models import users, questions, user_answers, comments
-from werkzeug.security import generate_password_hash
 import random
 from datetime import datetime, timedelta
 
@@ -8,7 +7,7 @@ def add_users(n):
     for _ in range(n):
         username = f"user{random.randint(1000, 9999)}"
         email = f"{username}@example.com"
-        password = generate_password_hash('testpassword', method='sha256')
+        password = "Password"
         sign_up_date = datetime.utcnow() - timedelta(days=random.randint(0, 365))
         points = random.randint(0, 200)
 
