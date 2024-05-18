@@ -5,8 +5,6 @@ from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField, BooleanField, EmailField, RadioField, TextAreaField
 from wtforms.validators import DataRequired, Length, Email, EqualTo, Regexp, ValidationError
 
-
-
 # This class is for formatting/validating Login Form input - username, password, remember me
 class LoginForm(FlaskForm):
     username = StringField('Username:', validators=[DataRequired(), Length(min=3, max=20)])
@@ -27,6 +25,10 @@ class QuestionForm(FlaskForm):
     title = StringField('Question Title:', validators=[DataRequired(), Length(min=1)])
     description = TextAreaField('Question Description:', validators=[DataRequired(), Length(min=1)])
     code = StringField('Enter Your LaTeX Code:', validators=[DataRequired(), Length(min=1)])
+
+# This class is for answering a question
+class AnswerForm(FlaskForm):
+    answer = StringField('Answer:', validators=[DataRequired(), Length(min=1)])
 
 # This table is for storing user information - username, email, password, sign up date, and points
 class users(UserMixin, db.Model):

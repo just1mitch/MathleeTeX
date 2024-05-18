@@ -9,6 +9,7 @@ $(document).ready(function () {
 
 function renderKaTeX() {
 
+    // Find all instances of katex in the text of element with class render-katex
     $('.render-katex').each(function () {
         const element = $(this);
         element.text().split("\\").forEach(function (string) {
@@ -28,6 +29,7 @@ function renderKaTeX() {
     // Use jQuery to find all elements with the class 'katex-render'
     $('.katex-render').each(function () {
         const text = $(this).text();
+        console.log($(this));
         try {
             katex.render(text, this, {
                 throwOnError: false  // This option will render the original text if there's a parsing error

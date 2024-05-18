@@ -6,7 +6,7 @@ from sqlalchemy import inspect, func
 from werkzeug.security import generate_password_hash, check_password_hash
 
 from app import app, db
-from app.models import users, questions, user_answers, comments, LoginForm, SignupForm, QuestionForm
+from app.models import users, questions, user_answers, comments, LoginForm, SignupForm, QuestionForm, AnswerForm
 
 
 @app.route('/')
@@ -89,7 +89,14 @@ def play():
     page = request.args.get('page', 1, type=int)
     # Query database for all questions
     # Join user information to the questions
-    query = db.session.query(questions, users).join(users)
+    # If user is signed in, don't display questions posted by them
+    # They can view these on the profile page, and shouldnt be able to answer
+    # their own questions anyways
+    user = current_user.get_id()
+    if user is not None:
+        query = db.session.query(questions, users).join(users).filter(questions.user_id != user)
+    else:
+        query = db.session.query(questions, users).join(users)
     comment_count = db.session.query(questions.question_id, func.count(questions.question_id).label("comment_count")).join(questions.comments).group_by(questions.question_id).subquery('comment_count')
     query = query.outerjoin(comment_count, comment_count.c.question_id==questions.question_id)
 
@@ -101,8 +108,9 @@ def play():
                                         users.username,
                                         comment_count.c.comment_count
                                         ).paginate(page=page, per_page=10)
+    answer_form = AnswerForm()
     
-    return render_template("play_question.html", question_list=question_list)
+    return render_template("play_question.html", question_list=question_list, answer_form=answer_form)
 
 @app.route('/list_tables')
 def list_tables():
@@ -166,8 +174,6 @@ def create():
         db.session.add(new_question)
         db.session.commit()
         return redirect(url_for('play'))
-    else:
-        print(question_form.errors)
     return(render_template('create_question.html', question_form=question_form))
 
 def get_users(offset=0, per_page=10):
@@ -234,3 +240,60 @@ def leaderboard():
     return render_template('leaderboard.html', users=user_list, page=page,
                            per_page=per_page, pagination=pagination, current_user_stats=current_user_stats)
 
+@app.route('/answer_question/<qid>', methods=["GET"])
+@login_required
+def answer_question(qid):
+    # Get question information
+    question = questions.query.filter_by(question_id=qid).first()
+    code = question.correct_answer
+    # Get users attempt amounts
+    attempts = user_answers.query.filter(user_answers.user_id == current_user.get_id(), user_answers.question_id == qid).count()
+    # Get boolean if user has answered correctly
+    if(user_answers.query.filter(user_answers.user_id == current_user.get_id(), user_answers.question_id == qid, user_answers.is_correct == True).first()) is not None:
+        completed = True
+    else: completed = False
+    response = {
+        'code': code,
+        'attempts': attempts,
+        'completed': completed
+    }
+    return response
+
+@app.route('/check_answer/<qid>', methods=["POST"])
+def check_answer(qid):
+    answer_form = AnswerForm(request.form)
+    if answer_form.validate_on_submit():
+        answer = answer_form.answer.data
+        attempts = user_answers.query.filter(user_answers.user_id == current_user.get_id(), user_answers.question_id == qid).count()
+        # Add attempt to database
+        new_attempt = user_answers(question_id=qid,
+                                   user_id=current_user.get_id(),
+                                   answer_text = answer,
+                                   attempt_number = attempts + 1)
+        correct_answer = questions.query.filter_by(question_id=qid).first().correct_answer
+        
+        new_attempt.is_correct = correct_answer == answer
+
+        # Calculate points earned
+        difficulty = questions.query.filter(questions.question_id == qid).first().difficulty_level
+        if difficulty == 'Easy':
+            points = max(1, 3 - attempts)
+        elif difficulty == 'Medium':
+            points = max(1, 6 - attempts * 2)
+        else:
+            points = max(1, 9 - attempts * 3)
+        
+        response = {
+            'completed': new_attempt.is_correct,
+            'points': points
+        }
+        
+        # Commit to database and return results
+        if(new_attempt.is_correct):
+            # Add points to users total if the answer was correct
+            user = users.query.filter(users.user_id == current_user.get_id()).first()
+            user.points += points
+        db.session.add(new_attempt)
+        db.session.commit()
+        return response
+    return
