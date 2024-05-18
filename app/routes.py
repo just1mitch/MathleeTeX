@@ -24,7 +24,20 @@ def profile():
         # changed this to just use the count method based on the user_answers table - simpler than a large join
         question.num_attempts = user_answers.query.filter_by(question_id=question.question_id).count()
         question.num_comments = comments.query.filter_by(question_id=question.question_id).count()
-    return render_template('profile.html', user_questions=user_questions)
+    rank = None
+    if current_user.is_authenticated:
+        if rank is None:
+            rank = users.query.filter(users.points > current_user.points).count() + 1
+            current_user_stats = {
+            'username': current_user.username,
+            'points': current_user.points,
+            'date_joined': current_user.sign_up_date.strftime('%Y-%m-%d'),
+            'questions_answered_correctly': current_user.questions_answered_correctly,
+            'total_questions_answered': current_user.total_questions_answered,
+            'rank': rank
+        }
+            answer_form = AnswerForm()
+    return render_template('profile.html', user_questions=user_questions, current_user_stats=current_user_stats, answer_form=answer_form)
 
 #Login attempts are directed here
 @app.route('/login', methods=['GET', 'POST'])
@@ -173,7 +186,7 @@ def create():
                                  difficulty_level=difficulty)
         db.session.add(new_question)
         db.session.commit()
-        return redirect(url_for('play'))
+        return redirect(url_for('profile'))
     return(render_template('create_question.html', question_form=question_form))
 
 def get_users(offset=0, per_page=10):
