@@ -1,43 +1,3 @@
-function timeSince(_, dateposted) {
-    let date = new Date(dateposted.getAttribute('dateposted'));
-    let seconds = Math.floor((new Date() - date) / 1000) + date.getTimezoneOffset() * 60;
-    let interval = seconds / 31536000;
-    if (interval > 1) {
-        dateposted.innerText = Math.floor(interval) + " years ago";
-        return;
-    }
-    interval = seconds / 2592000;
-    if (interval > 1) {
-        dateposted.innerText = Math.floor(interval) + " months ago";
-        return;
-    }
-    interval = seconds / 86400;
-    if (interval > 1) {
-        dateposted.innerText = Math.floor(interval) + " days ago";
-        return;
-    }
-    interval = seconds / 3600;
-    if (interval > 1) {
-        dateposted.innerText = Math.floor(interval) + " hours ago";
-        return;
-    }
-    interval = seconds / 60;
-    if (interval > 1) {
-        dateposted.innerText = Math.floor(interval) + " minutes ago";
-        return;
-    }
-    dateposted.innerText = Math.floor(interval) + " seconds ago";
-}
-
-function setTimes() {
-    $('.dateposted').each(timeSince)
-}
-
-$(document).ready(function () {
-    setTimes();
-    setInterval(setTimes, 5000)
-})
-
 $('#answer').on('input', function () {
     $('#answerSubmit').prop('disabled', false);
     if ($(this).val().length > 50) {
@@ -51,9 +11,10 @@ $('#answer').on('input', function () {
     }
 })
 
-function showModal(qid, code, title, difficulty, description, username, date_posted, attempts, completed) {
+function showModal(qid, code, title, difficulty, description, username, date_posted, attempts, completed, points) {
     // setting individually as Safari doesn't support createElement 'options' feature
     // https://developer.mozilla.org/en-US/docs/Web/API/Document/createElement
+    // Create invisible button to trigger modal
     let btn = document.createElement("button");
     btn.setAttribute("type", "button");
     btn.setAttribute("id", "modalToggle");
@@ -74,9 +35,9 @@ function showModal(qid, code, title, difficulty, description, username, date_pos
     $('.modal-description').html(description);
     $('#byline').html("Posted by " + username + " " + date_posted);
     $('#attempts').html("Attempts Made: " + attempts);
+   
     $('#answer').val('');
     $('#submit-answer').attr('qid', qid);
-    // katex.render('', document.getElementById('katexdyna'), { throwOnError: false })
     if (difficulty == 'Easy') {
         $('.modal-difficulty').html("<span class='easy'>Easy</span>");
         $('.modal-difficulty').addClass('ps-4');
@@ -92,10 +53,15 @@ function showModal(qid, code, title, difficulty, description, username, date_pos
         $('.modal-difficulty').addClass('ps-4');
         $('.modal-difficulty').removeClass('ps-0');
     }
-
+    
+    if (completed) {
+        $('#points').html("Points Earned: " + points);
+        answerCorrect(points);
+    }
+    else $('#points').html("Points Available: " + points);
+    // Click invisible button to trigger Bootstrap Modal
     document.body.appendChild(btn);
     $('#modalToggle').click();
-    if (completed) answerCorrect();
 }
 
 function showQuestion(qid, title, difficulty, description, username, date_posted) {
@@ -106,26 +72,13 @@ function showQuestion(qid, title, difficulty, description, username, date_posted
     $('#renderedAnswer').prop('hidden', true);
     $('#correctness').prop('hidden', true);
 
-    // Make AJAX query for the code
-    $.ajax({
-        type: "GET",
-        url: '/answer_question/' + qid,
-        timeout: 30000,
-        error: function (jqXHR, _, errorThrown) {
-            alert('Error (' + jqXHR.status + '): ' + errorThrown);
-            return false;
-        },
-        success: function (response) {
-            // If not signed in, send to login page
-            if(typeof response === "string"){
-                window.location.href = $("a:contains('login')").attr('href');
-            }
-            let completed = response.completed;
-            let code = response.code;
-            let attempts = response.attempts;
-            showModal(qid, code, title, difficulty, description, username, date_posted, attempts, completed);
-        }
-    })
+    getQuestion(qid).then(response => {
+        let completed = response.completed;
+        let code = response.code;
+        let attempts = response.attempts;
+        let points = response.points;
+        showModal(qid, code, title, difficulty, description, username, date_posted, attempts, completed, points);
+    }).catch();
 }
 
 $('#submit-answer').submit(function(e) {
@@ -160,8 +113,12 @@ function handleAnswer(data) {
             $('#katexErrorCode').prop('hidden', false);
         }
     }
+    // Increment attempts made
+    $('#attempts').html("Attempts Made: " + data.attempts);
+    // Respond to answer validity
     if (data.completed) answerCorrect(data.points);
     else {
+        $('#points').html("Points Available: " + data.points);
         $('#correctness').html('Incorrect!');
         $('#correctness').addClass('incorrect-answer');
         $('#correctness').removeClass('correct-answer');
@@ -170,13 +127,20 @@ function handleAnswer(data) {
     }
 }
 
-function answerCorrect(points = null) {
+function answerCorrect(points) {
     // Blank out submit button and text entry after correct
-    $('#answer').prop('disabled', true);
-    $('#answerSubmit').prop('disabled', true);
-    if(points === null) $('#correctness').html('Correct!');
-    else $('#correctness').html('Correct!<br>' + points + ' Points Earned!');
+    // Display correct notification to user
+    $('#submit-answer').prop('hidden', true);
+    $('#points').html("Points Earned: " + points);
+    $('#correctness').html('Correct!<br>' + points + ' Points Earned!');
     $('#correctness').addClass('correct-answer');
     $('#correctness').removeClass('incorrect-answer');
     $('#correctness').prop('hidden', false);
+
+    // load comments asynchronously
+    getComments($('#submit-answer').attr('qid')).then(comments => {
+        $('#commentSection').prop('hidden', false);
+        $('#commentSection').html(comments);
+        $('.dateposted').each(timeSince);
+    }).catch();
 }

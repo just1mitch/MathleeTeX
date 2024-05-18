@@ -7,7 +7,7 @@ def create_users(n):
     for i in range(n):
         username = f"user_{i+1}"
         email = f"user_{i+1}@example.com"
-        password = "password"
+        password = "T3sting!"
         points = random.randint(1, 1000)
 
         new_user = users(username=username, email=email, password=password, points=points)

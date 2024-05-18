@@ -110,6 +110,22 @@ nav a:hover {
   border-radius: 0.375rem;
 }
 
+.comment {
+  margin-top: 5px !important;
+  margin-bottom: 5px !important;
+  padding: 10px !important;
+  padding-bottom: 0px !important;
+  max-width: 450px !important;
+  color: #76ABAE;
+  
+}
+
+.comment-byline {
+  margin-bottom: 5px;
+  font-size: smaller;
+  
+}
+
 .incorrect-answer {
   color: #fff;
   font-weight: bolder;
@@ -117,6 +133,19 @@ nav a:hover {
   border-color: #dc3545;
   padding: 0.375rem 0.75rem;
   border-radius: 0.375rem;
+}
+
+.comment-section {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  padding: 0.75rem;
+  border-top: 1px solid #fff;
+}
+
+.create-comment {
+  max-width: 450px !important;
 }
 
 .section {
