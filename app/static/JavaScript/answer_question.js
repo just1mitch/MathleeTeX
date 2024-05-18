@@ -14,6 +14,7 @@ $('#answer').on('input', function () {
 function showModal(qid, code, title, difficulty, description, username, date_posted, attempts, completed, points) {
     // setting individually as Safari doesn't support createElement 'options' feature
     // https://developer.mozilla.org/en-US/docs/Web/API/Document/createElement
+    // Create invisible button to trigger modal
     let btn = document.createElement("button");
     btn.setAttribute("type", "button");
     btn.setAttribute("id", "modalToggle");
@@ -71,27 +72,13 @@ function showQuestion(qid, title, difficulty, description, username, date_posted
     $('#renderedAnswer').prop('hidden', true);
     $('#correctness').prop('hidden', true);
 
-    // Make AJAX query for the code
-    $.ajax({
-        type: "GET",
-        url: '/answer_question/' + qid,
-        timeout: 30000,
-        error: function (jqXHR, _, errorThrown) {
-            alert('Error (' + jqXHR.status + '): ' + errorThrown);
-            return false;
-        },
-        success: function (response) {
-            // If not signed in, send to login page
-            if(typeof response === "string"){
-                window.location.href = $("a:contains('login')").attr('href');
-            }
-            let completed = response.completed;
-            let code = response.code;
-            let attempts = response.attempts;
-            let points = response.points;
-            showModal(qid, code, title, difficulty, description, username, date_posted, attempts, completed, points);
-        }
-    })
+    getQuestion(qid).then(response => {
+        let completed = response.completed;
+        let code = response.code;
+        let attempts = response.attempts;
+        let points = response.points;
+        showModal(qid, code, title, difficulty, description, username, date_posted, attempts, completed, points);
+    }).catch();
 }
 
 $('#submit-answer').submit(function(e) {

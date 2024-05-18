@@ -88,7 +88,7 @@
                                 </div>
                                 <div class="col-4 text-end opacity-50">
                                     <p class="mb-0">
-                                        <span dateposted="{{ question.date_posted }}" class="dateposted">{{ question.date_posted }}</span>
+                                        <span dateposted="{{ question.date_posted }}" class="dateposted question{{ question.question_id }}">{{ question.date_posted }}</span>
                                     </p>
                                 </div>
                             </div>
@@ -113,7 +113,7 @@
                                 </div>
                                 <div class="col-6 text-end">
                                     <br>
-                                    <button onclick="showQuestion({{ question.question_id }}, '{{ question.title }}', '{{ question.difficulty_level }}', '{{ question.question_description }}', '{{ current_user.username }}', '{{ question.date_posted }}')" class="btn btn-primary"><i class="fa-solid fa-eye"></i></button>
+                                    <button onclick='showPreview({{ question.question_id }}, {{ question.title|tojson }}, {{ question.question_description|tojson }}, $(".dateposted.question{{ question.question_id }}").text(), {{ question.difficulty_level|tojson }})' class="btn btn-primary question-preview"><i class="fa-solid fa-eye"></i></button>
                                     <button onclick="deleteQuestion({{ question.question_id }})" class="btn btn-danger"><i class="fa fa-trash" aria-hidden="true"></i></button>
                                 </div>
                             </div>
@@ -143,11 +143,6 @@
                         <div class="col-10 p-0">
                             <p id="byline" class="modal-byline opacity-50 text-start mb-0"></p>
                         </div>
-                    </div>
-                    <div class="row mb-0">
-                        <div class="col-10 p-0">
-                            <p id="attempts" class="modal-byline opacity-50 text-start mb-0"></p>
-                        </div>
                         <div class="modal-difficulty col-2 ps-4"></div>
                     </div>
                 </div>
@@ -156,6 +151,7 @@
                 <p class="render-katex form-group modal-description"></p>
                 <h2 class="modal-code"></h2>
             </div>
+            <div id="commentSection" class="comment-section" hidden></div>
         </div>
     </div>
 </div>
@@ -163,7 +159,9 @@
 {% endblock %}
 {% block footer %}
 <script src="{{ url_for('static', filename='JavaScript/date_posted.js') }}"></script>
-<script src="{{ url_for('static', filename='JavaScript/delete_question.js') }}"></script>
+<script src="{{ url_for('static', filename='JavaScript/profile.js') }}"></script>
+<script src="{{ url_for('static', filename='JavaScript/get_question.js') }}"></script>
+<script src="{{ url_for('static', filename='JavaScript/comments.js') }}"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
     integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
     crossorigin="anonymous"></script>

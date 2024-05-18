@@ -268,7 +268,7 @@ def get_comments(qid):
     question_comments = comments.query.filter(comments.question_id==qid).join(users)
     question_comments = question_comments.with_entities(users.username,
                                                         comments.body,
-                                                        comments.date_posted).order_by(comments.date_posted.desc())
+                                                        comments.date_posted).order_by(comments.date_posted.desc()).limit(25)
     return render_template('comments_section.html', comment_form=comment_form, question_comments=question_comments)
 
 @app.route('/create_comment/<qid>', methods=["POST"])

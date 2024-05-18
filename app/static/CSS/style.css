@@ -116,11 +116,14 @@ nav a:hover {
   padding: 10px !important;
   padding-bottom: 0px !important;
   max-width: 450px !important;
+  color: #76ABAE;
+  
 }
 
 .comment-byline {
   margin-bottom: 5px;
   font-size: smaller;
+  
 }
 
 .incorrect-answer {
