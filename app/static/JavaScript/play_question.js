@@ -95,7 +95,7 @@ function showModal(qid, code, title, difficulty, description, username, date_pos
     
     if (completed) {
         $('#points').html("Points Earned: " + points);
-        answerCorrect();
+        answerCorrect(points);
     }
     else $('#points').html("Points Available: " + points);
     // Click invisible button to trigger Bootstrap Modal
@@ -180,13 +180,12 @@ function handleAnswer(data) {
     }
 }
 
-function answerCorrect(points = null) {
+function answerCorrect(points) {
     // Blank out submit button and text entry after correct
     $('#answer').prop('disabled', true);
     $('#answerSubmit').prop('disabled', true);
     $('#points').html("Points Earned: " + points);
-    if(points === null) $('#correctness').html('Correct!');
-    else $('#correctness').html('Correct!<br>' + points + ' Points Earned!');
+    $('#correctness').html('Correct!<br>' + points + ' Points Earned!');
     $('#correctness').addClass('correct-answer');
     $('#correctness').removeClass('incorrect-answer');
     $('#correctness').prop('hidden', false);
