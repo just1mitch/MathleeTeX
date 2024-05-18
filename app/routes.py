@@ -3,11 +3,10 @@ from flask_login import login_required, current_user, logout_user
 from flask_login import login_user
 from flask_paginate import Pagination, get_page_args
 from sqlalchemy import inspect, func
-from werkzeug.security import generate_password_hash, check_password_hash
 
 from app import app, db
 from app.models import users, questions, user_answers, comments, LoginForm, SignupForm, QuestionForm, AnswerForm
-
+from app.controllers import users_control, questions_control, user_answers_control
 
 @app.route('/')
 def index():
@@ -29,16 +28,11 @@ def login():
     signup_form = SignupForm()
     #Process submitted form
     if login_form.validate_on_submit():
-        usr = users.query.filter_by(username=login_form.username.data).first()
-        if usr is not None:
-            pwd_hash = usr.password
-            if check_password_hash(pwd_hash, login_form.password.data):
-                login_user(usr, remember=login_form.remember.data)
-                return redirect(request.args.get('next') or url_for('profile'))
-            else:
-                flash('flash_login: Incorrect password.')
+        (success, error) = users_control.attempt_login(login_form)
+        if success:
+            return redirect(request.args.get('next') or url_for('profile'))
         else:
-            flash('flash_login: User not found.')
+            flash(error)
     #Return login page for failed login and GET requests
     return render_template('login_signup.html', login_form=login_form, signup_form=signup_form)
 
@@ -48,25 +42,10 @@ def login():
 def signup_user():
     signup_form = SignupForm()
     if signup_form.validate_on_submit():
-        user_exists = users.query.filter_by(username=signup_form.setusername.data).first() is not None
-        email_exists = users.query.filter_by(email=signup_form.setemail.data).first() is not None
-        #Check for duplicate credentials
-        if user_exists:
-            #Username is taken
-            print('username already exists')
-            flash ('flash_signup: Username is taken. Please try again.')
-        elif email_exists:
-            #Email is taken
-            flash ('flash_signup: Email is already in use. Please try again.')
+        (usr, error) = users_control.create_user(signup_form)
+        if error is not None:
+            flash(error)
         else:
-            # Hash password before adding new user details to the database
-            raw_pwd = signup_form.createpassword.data
-            hashed_pwd = generate_password_hash(raw_pwd)
-            new_user = users(username=signup_form.setusername.data, email=signup_form.setemail.data, password=hashed_pwd)
-            db.session.add(new_user)
-            db.session.commit()
-            # Successful signup - automatically log the user in
-            usr = users.query.filter_by(username=signup_form.setusername.data).first()
             login_user(usr)
             return redirect(url_for('profile'))
     return redirect(url_for('login'))
@@ -155,19 +134,8 @@ def list_questions():
 def create():
     question_form = QuestionForm()
     if question_form.validate_on_submit():
-        difficulty = question_form.difficulty.data
-        title = question_form.title.data
-        description = question_form.description.data
-        code = question_form.code.data
-        # Enter question into database
-        new_question = questions(user_id=int(current_user.get_id()),
-                                 title=title,
-                                 question_description=description,
-                                 correct_answer=code,
-                                 difficulty_level=difficulty)
-        db.session.add(new_question)
-        db.session.commit()
-        return redirect(url_for('play'))
+        questions_control.add_question(question_form)
+        return redirect(url_for('profile'))
     return(render_template('create_question.html', question_form=question_form))
 
 def get_users(offset=0, per_page=10):
@@ -235,7 +203,8 @@ def answer_question(qid):
     response = {
         'code': code,
         'attempts': attempts,
-        'completed': completed
+        'completed': completed,
+        'points': user_answers_control.points_available(qid, attempts)
     }
     return response
 
@@ -244,37 +213,6 @@ def check_answer(qid):
     if current_user.is_authenticated:
         answer_form = AnswerForm(request.form)
         if answer_form.validate_on_submit():
-            answer = answer_form.answer.data
-            attempts = user_answers.query.filter(user_answers.user_id == current_user.get_id(), user_answers.question_id == qid).count()
-            # Add attempt to database
-            new_attempt = user_answers(question_id=qid,
-                                    user_id=current_user.get_id(),
-                                    answer_text = answer,
-                                    attempt_number = attempts + 1)
-            correct_answer = questions.query.filter_by(question_id=qid).first().correct_answer
-            
-            new_attempt.is_correct = correct_answer == answer
-
-            # Calculate points earned
-            difficulty = questions.query.filter(questions.question_id == qid).first().difficulty_level
-            if difficulty == 'Easy':
-                points = max(1, 3 - attempts)
-            elif difficulty == 'Medium':
-                points = max(1, 6 - attempts * 2)
-            else:
-                points = max(1, 9 - attempts * 3)
-            
-            response = {
-                'completed': new_attempt.is_correct,
-                'points': points
-            }
-            
-            # Commit to database and return results
-            if(new_attempt.is_correct):
-                # Add points to users total if the answer was correct
-                user = users.query.filter(users.user_id == current_user.get_id()).first()
-                user.points += points
-            db.session.add(new_attempt)
-            db.session.commit()
+            response = user_answers_control.add_attempt(qid, answer_form)
             return response
     return

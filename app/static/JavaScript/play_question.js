@@ -51,7 +51,7 @@ $('#answer').on('input', function () {
     }
 })
 
-function showModal(qid, code, title, difficulty, description, username, date_posted, attempts, completed) {
+function showModal(qid, code, title, difficulty, description, username, date_posted, attempts, completed, points) {
     // setting individually as Safari doesn't support createElement 'options' feature
     // https://developer.mozilla.org/en-US/docs/Web/API/Document/createElement
     let btn = document.createElement("button");
@@ -74,9 +74,9 @@ function showModal(qid, code, title, difficulty, description, username, date_pos
     $('.modal-description').html(description);
     $('#byline').html("Posted by " + username + " " + date_posted);
     $('#attempts').html("Attempts Made: " + attempts);
+   
     $('#answer').val('');
     $('#submit-answer').attr('qid', qid);
-    // katex.render('', document.getElementById('katexdyna'), { throwOnError: false })
     if (difficulty == 'Easy') {
         $('.modal-difficulty').html("<span class='easy'>Easy</span>");
         $('.modal-difficulty').addClass('ps-4');
@@ -92,10 +92,15 @@ function showModal(qid, code, title, difficulty, description, username, date_pos
         $('.modal-difficulty').addClass('ps-4');
         $('.modal-difficulty').removeClass('ps-0');
     }
-
+    
+    if (completed) {
+        $('#points').html("Points Earned: " + points);
+        answerCorrect();
+    }
+    else $('#points').html("Points Available: " + points);
+    // Click invisible button to trigger Bootstrap Modal
     document.body.appendChild(btn);
     $('#modalToggle').click();
-    if (completed) answerCorrect();
 }
 
 function showQuestion(qid, title, difficulty, description, username, date_posted) {
@@ -123,7 +128,8 @@ function showQuestion(qid, title, difficulty, description, username, date_posted
             let completed = response.completed;
             let code = response.code;
             let attempts = response.attempts;
-            showModal(qid, code, title, difficulty, description, username, date_posted, attempts, completed);
+            let points = response.points;
+            showModal(qid, code, title, difficulty, description, username, date_posted, attempts, completed, points);
         }
     })
 }
@@ -160,8 +166,12 @@ function handleAnswer(data) {
             $('#katexErrorCode').prop('hidden', false);
         }
     }
+    // Increment attempts made
+    $('#attempts').html("Attempts Made: " + data.attempts);
+    // Respond to answer validity
     if (data.completed) answerCorrect(data.points);
     else {
+        $('#points').html("Points Available: " + data.points);
         $('#correctness').html('Incorrect!');
         $('#correctness').addClass('incorrect-answer');
         $('#correctness').removeClass('correct-answer');
@@ -174,6 +184,7 @@ function answerCorrect(points = null) {
     // Blank out submit button and text entry after correct
     $('#answer').prop('disabled', true);
     $('#answerSubmit').prop('disabled', true);
+    $('#points').html("Points Earned: " + points);
     if(points === null) $('#correctness').html('Correct!');
     else $('#correctness').html('Correct!<br>' + points + ' Points Earned!');
     $('#correctness').addClass('correct-answer');

@@ -17,7 +17,7 @@
     </div>
 </div>
 
-<div class="section" id="login-form">
+<div class="section end-section" id="login-form">
     <h2>Login</h2>
     <form id="loginformelement" action="{{ url_for('login') }}" method="post">
         {{ login_form.hidden_tag() }}
@@ -48,7 +48,7 @@
     </form>
 </div>
 
-<div class="section" id="signup-form" style="display:none;">
+<div class="section end-section" id="signup-form" style="display:none;">
     <h2>Sign Up</h2>
     <form id="signupformelement" action="{{ url_for('signup_user') }}" method="post">
         {{ signup_form.hidden_tag() }}
