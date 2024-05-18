@@ -18,7 +18,28 @@ def index():
 @app.route('/profile')
 @login_required
 def profile():
-    return render_template('profile.html', name=current_user.username)
+    user_questions = questions.query.filter_by(user_id=current_user.user_id).all()
+    # filter out deleted questions
+    user_questions = [q for q in user_questions if not q.deleted]
+    # Get the number of attempts and comments for each question
+    for question in user_questions:
+        # changed this to just use the count method based on the user_answers table - simpler than a large join
+        question.num_attempts = user_answers.query.filter_by(question_id=question.question_id).count()
+        question.num_comments = comments.query.filter_by(question_id=question.question_id).count()
+    rank = None
+    if current_user.is_authenticated:
+        if rank is None:
+            rank = users.query.filter(users.points > current_user.points).count() + 1
+            current_user_stats = {
+            'username': current_user.username,
+            'points': current_user.points,
+            'date_joined': current_user.sign_up_date.strftime('%Y-%m-%d'),
+            'questions_answered_correctly': current_user.questions_answered_correctly,
+            'total_questions_answered': current_user.total_questions_answered,
+            'rank': rank
+        }
+            answer_form = AnswerForm()
+    return render_template('profile.html', user_questions=user_questions, current_user_stats=current_user_stats, answer_form=answer_form)
 
 #Login attempts are directed here
 @app.route('/login', methods=['GET', 'POST'])
@@ -92,6 +113,10 @@ def play():
     else:
         query = db.session.query(questions, users).join(users)
     comment_count = db.session.query(questions.question_id, func.count(questions.question_id).label("comment_count")).join(questions.comments).group_by(questions.question_id).subquery('comment_count')
+    
+    # Filter out deleted questions
+    query = query.filter(questions.deleted == False)
+    
     query = query.outerjoin(comment_count, comment_count.c.question_id==questions.question_id)
 
     question_list = query.with_entities(questions.question_id,
@@ -167,11 +192,26 @@ def create():
                                  difficulty_level=difficulty)
         db.session.add(new_question)
         db.session.commit()
-        return redirect(url_for('play'))
+        return redirect(url_for('profile'))
     return(render_template('create_question.html', question_form=question_form))
 
 def get_users(offset=0, per_page=10):
     return users.query.order_by(users.points.desc()).slice(offset, offset + per_page).all()
+
+
+@app.route('/delete_question/<int:qid>', methods=['POST'])
+@login_required
+def delete_question(qid):
+    # Get the question to delete - we'll use AJAX to send the request
+    question = questions.query.get_or_404(qid)
+    if current_user.user_id != question.user_id:
+        return jsonify({'error': 'You are not auth to delete this question.'}), 403
+
+    # set the deleted boolean to True
+    question.deleted = True
+    db.session.commit()
+    
+    return jsonify({'success': True})
 
 @app.route('/leaderboard')
 def leaderboard():
