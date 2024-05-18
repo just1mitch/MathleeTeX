@@ -95,6 +95,21 @@ nav a:hover {
 .dateposted {
   font-size: small;
 }
+.modal-content {
+  background-color: #222831;
+  color: #EEEEEE;
+}
+.btn-custom {
+  background-color: #31363F;
+  color: #EEEEEE;
+  margin: 5px 0;
+}
+.btn-custom:hover {
+  background-color: #76ABAE;
+}
+.image-container img {
+  max-width: 100%;
+}
 
 .question:hover {
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
