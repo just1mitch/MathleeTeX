@@ -16,7 +16,7 @@ class LoginForm(FlaskForm):
 class SignupForm(FlaskForm):
     setemail = EmailField('Email:', validators=[DataRequired()])
     setusername = StringField('Username:', validators=[DataRequired(), Length(min=3, max=20)])
-    createpassword = PasswordField('Password:', validators=[DataRequired(), Length(min=8), Regexp('(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_])')])
+    createpassword = PasswordField('Password:', validators=[DataRequired(), Length(min=8), Regexp("(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_])")])
     confirmpassword = PasswordField('Repeat Password', validators=[DataRequired(), EqualTo('createpassword')])
 
 # This class is for formatting/validating Creating Question input - difficulty, title, description, code
@@ -80,7 +80,6 @@ class user_answers(db.Model):
 class comments(db.Model):
     comment_id = db.Column(db.Integer, primary_key=True)
     question_id = db.Column(db.Integer, db.ForeignKey('questions.question_id'))
-    answer_id = db.Column(db.Integer, db.ForeignKey('user_answers.answer_id'))
     user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'), nullable=False)
     body = db.Column(db.Text, nullable=False)
     date_posted = db.Column(db.DateTime, default=datetime.utcnow)
