@@ -241,39 +241,40 @@ def answer_question(qid):
 
 @app.route('/check_answer/<qid>', methods=["POST"])
 def check_answer(qid):
-    answer_form = AnswerForm(request.form)
-    if answer_form.validate_on_submit():
-        answer = answer_form.answer.data
-        attempts = user_answers.query.filter(user_answers.user_id == current_user.get_id(), user_answers.question_id == qid).count()
-        # Add attempt to database
-        new_attempt = user_answers(question_id=qid,
-                                   user_id=current_user.get_id(),
-                                   answer_text = answer,
-                                   attempt_number = attempts + 1)
-        correct_answer = questions.query.filter_by(question_id=qid).first().correct_answer
-        
-        new_attempt.is_correct = correct_answer == answer
+    if current_user.is_authenticated:
+        answer_form = AnswerForm(request.form)
+        if answer_form.validate_on_submit():
+            answer = answer_form.answer.data
+            attempts = user_answers.query.filter(user_answers.user_id == current_user.get_id(), user_answers.question_id == qid).count()
+            # Add attempt to database
+            new_attempt = user_answers(question_id=qid,
+                                    user_id=current_user.get_id(),
+                                    answer_text = answer,
+                                    attempt_number = attempts + 1)
+            correct_answer = questions.query.filter_by(question_id=qid).first().correct_answer
+            
+            new_attempt.is_correct = correct_answer == answer
 
-        # Calculate points earned
-        difficulty = questions.query.filter(questions.question_id == qid).first().difficulty_level
-        if difficulty == 'Easy':
-            points = max(1, 3 - attempts)
-        elif difficulty == 'Medium':
-            points = max(1, 6 - attempts * 2)
-        else:
-            points = max(1, 9 - attempts * 3)
-        
-        response = {
-            'completed': new_attempt.is_correct,
-            'points': points
-        }
-        
-        # Commit to database and return results
-        if(new_attempt.is_correct):
-            # Add points to users total if the answer was correct
-            user = users.query.filter(users.user_id == current_user.get_id()).first()
-            user.points += points
-        db.session.add(new_attempt)
-        db.session.commit()
-        return response
+            # Calculate points earned
+            difficulty = questions.query.filter(questions.question_id == qid).first().difficulty_level
+            if difficulty == 'Easy':
+                points = max(1, 3 - attempts)
+            elif difficulty == 'Medium':
+                points = max(1, 6 - attempts * 2)
+            else:
+                points = max(1, 9 - attempts * 3)
+            
+            response = {
+                'completed': new_attempt.is_correct,
+                'points': points
+            }
+            
+            # Commit to database and return results
+            if(new_attempt.is_correct):
+                # Add points to users total if the answer was correct
+                user = users.query.filter(users.user_id == current_user.get_id()).first()
+                user.points += points
+            db.session.add(new_attempt)
+            db.session.commit()
+            return response
     return
