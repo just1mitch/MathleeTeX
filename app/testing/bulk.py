@@ -58,8 +58,7 @@ def add_comments(n):
         db.session.add(comment)
     db.session.commit()
 
-# Run the functions to populate the database
-add_users(100)  # Add 100 users
-add_questions(200)  # Add 200 questions
-add_user_answers(500)  # Add 500 answers
-add_comments(300)  # Add 300 comments
+add_users(100)
+add_questions(200)
+add_user_answers(500)
+add_comments(300)
