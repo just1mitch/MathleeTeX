@@ -7,7 +7,7 @@ function deleteQuestion(questionId) {
             if (response.ok) {
                 //Might aswell use existing code to animate the deletion of the question
                 document.getElementById(`question-${questionId}`).classList.add('content-animation');
-                document.getElementById(`question-${questionId}`).remove();
+                setTimeout(() => { document.getElementById(`question-${questionId}`).remove(); }, 500);
                 console.log('Question deleted successfully.');
             } else {
                 console.error('Failed to delete question.');
