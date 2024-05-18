@@ -59,6 +59,7 @@ function showModal(qid, code, title, difficulty, description, username, date_pos
         answerCorrect(points);
     }
     else $('#points').html("Points Available: " + points);
+    renderKaTeX();
     // Click invisible button to trigger Bootstrap Modal
     document.body.appendChild(btn);
     $('#modalToggle').click();
@@ -142,5 +143,6 @@ function answerCorrect(points) {
         $('#commentSection').prop('hidden', false);
         $('#commentSection').html(comments);
         $('.dateposted').each(timeSince);
+        renderKaTeX();
     }).catch();
 }
