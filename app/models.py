@@ -60,6 +60,7 @@ class questions(db.Model):
     date_posted = db.Column(db.DateTime, default=datetime.utcnow)
     difficulty_level = db.Column(db.String, nullable=False)
     comments = db.relationship('comments', backref='questions')
+    deleted = db.Column(db.Boolean, default=False)
 
 # This table is for storing user answers - question_id, user_id, answer text, whether the answer is correct, attempt number, and date posted
 class user_answers(db.Model):

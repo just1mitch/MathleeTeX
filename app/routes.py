@@ -19,6 +19,8 @@ def index():
 @login_required
 def profile():
     user_questions = questions.query.filter_by(user_id=current_user.user_id).all()
+    # filter out deleted questions
+    user_questions = [q for q in user_questions if not q.deleted]
     # Get the number of attempts and comments for each question
     for question in user_questions:
         # changed this to just use the count method based on the user_answers table - simpler than a large join
@@ -111,6 +113,10 @@ def play():
     else:
         query = db.session.query(questions, users).join(users)
     comment_count = db.session.query(questions.question_id, func.count(questions.question_id).label("comment_count")).join(questions.comments).group_by(questions.question_id).subquery('comment_count')
+    
+    # Filter out deleted questions
+    query = query.filter(questions.deleted == False)
+    
     query = query.outerjoin(comment_count, comment_count.c.question_id==questions.question_id)
 
     question_list = query.with_entities(questions.question_id,
@@ -201,18 +207,8 @@ def delete_question(qid):
     if current_user.user_id != question.user_id:
         return jsonify({'error': 'You are not auth to delete this question.'}), 403
 
-    # Remove all the comments associated with the question
-    comments_to_delete = comments.query.filter_by(question_id=qid).all()
-    for comment in comments_to_delete:
-        db.session.delete(comment)
-
-    # Delete all user answers associated with the question
-    user_answers_to_delete = user_answers.query.filter_by(question_id=qid).all()
-    for user_answer in user_answers_to_delete:
-        db.session.delete(user_answer)
-
-    # Finally, delete the question itself
-    db.session.delete(question)
+    # set the deleted boolean to True
+    question.deleted = True
     db.session.commit()
     
     return jsonify({'success': True})
