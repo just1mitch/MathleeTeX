@@ -73,10 +73,10 @@
                             <p class="katex-display katex-error-section" id="katexErrorCode"></p>
                         </div>
                         <input id="answerSubmit" type="submit" value="Submit">
-                    </form>
+                    </form><br>
                     <h2 id="correctness"></h2>
             </div>
-            <div id="commentSection" class="modal-footer"></div>
+            <div id="commentSection" class="comment-section" hidden></div>
         </div>
     </div>
 </div>
@@ -129,7 +129,7 @@
 </div>
 <script type="text/javascript" src="{{ url_for('static', filename='JavaScript/play_question.js')}}"></script>
 <script type="text/javascript" src="{{ url_for('static', filename='JavaScript/answer_question.js')}}"></script>
-<script type="text/javascript" src="{{ url_for('static', filename='JavaScript/create_comment.js')}}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='JavaScript/comments.js')}}"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
     integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
     crossorigin="anonymous"></script>

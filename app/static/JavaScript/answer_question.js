@@ -149,19 +149,11 @@ function answerCorrect(points) {
     $('#correctness').addClass('correct-answer');
     $('#correctness').removeClass('incorrect-answer');
     $('#correctness').prop('hidden', false);
-    
-    // load comment section
-    $.ajax({
-        type: 'GET',
-        url: '/get_comments/' + $('#submit-answer').attr('qid'),
-        timeout: 30000,
-        error: function (jqXHR, _, errorThrown) {
-            alert('Error (' + jqXHR.status + '): ' + errorThrown);
-            return false;
-        },
-        success: function(comments) {
-            $('#commentSection').html(comments);
-            $('.dateposted').each(timeSince)
-        }
-    }) 
+
+    // load comments asynchronously
+    getComments($('#submit-answer').attr('qid')).then(comments => {
+        $('#commentSection').prop('hidden', false);
+        $('#commentSection').html(comments);
+        $('.dateposted').each(timeSince);
+    }).catch();
 }

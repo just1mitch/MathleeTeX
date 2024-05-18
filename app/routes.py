@@ -3,6 +3,7 @@ from flask_login import login_required, current_user, logout_user
 from flask_login import login_user
 from flask_paginate import Pagination, get_page_args
 from sqlalchemy import inspect, func
+from .usertest import create_users
 
 from app import app, db
 from app.models import users, questions, user_answers, comments, LoginForm, SignupForm, QuestionForm, AnswerForm, CommentForm
@@ -43,6 +44,7 @@ def profile():
 #Login attempts are directed here
 @app.route('/login', methods=['GET', 'POST'])
 def login():
+    create_users(20)
     if current_user.is_authenticated:
         return redirect(url_for('profile'))
     login_form = LoginForm()
@@ -105,7 +107,7 @@ def play():
                                         questions.date_posted,
                                         users.username,
                                         comment_count.c.comment_count
-                                        ).paginate(page=page, per_page=10)
+                                        ).order_by(questions.date_posted.desc()).paginate(page=page, per_page=10)
     answer_form = AnswerForm()
     
     return render_template("play_question.html", question_list=question_list, answer_form=answer_form)
@@ -255,7 +257,7 @@ def check_answer(qid):
         if answer_form.validate_on_submit():
             response = user_answers_control.add_attempt(qid, answer_form)
             return response
-    return
+    return jsonify({'message': 'Unauthorized: Must be signed in'}), 401
 
 @app.route('/get_comments/<qid>', methods=["GET"])
 def get_comments(qid):
@@ -263,7 +265,7 @@ def get_comments(qid):
     question_comments = comments.query.filter(comments.question_id==qid).join(users)
     question_comments = question_comments.with_entities(users.username,
                                                         comments.body,
-                                                        comments.date_posted)
+                                                        comments.date_posted).order_by(comments.date_posted.desc())
     return render_template('comments_section.html', comment_form=comment_form, question_comments=question_comments)
 
 @app.route('/create_comment/<qid>', methods=["POST"])
@@ -271,4 +273,5 @@ def create_comment(qid):
     if current_user.is_authenticated:
         comment_form = CommentForm(request.form)
         comments_control.add_comment(qid, comment_form)
-    return
+        return jsonify({'message': 'Comment created successfully'}), 201
+    return jsonify({'message': 'Unauthorized: Must be signed in'}), 401

@@ -1,11 +1,16 @@
-<div class="section">
+<div class="section create-comment">
     <form id="submit-comment" method="post">
         {{ comment_form.hidden_tag() }}
-        {{ comment_form.comment(class_="create-comment large-text-box") }}
+        {{ comment_form.comment(class_="large-text-box") }}
         <input id="commentSubmit" type="submit" value="Add Comment">
     </form>
     
 </div>
+{% if question_comments.count() == 0 %}
+<div>
+    <p>No Comments Yet...</p>
+</div>
+{% endif %}
 {% for comment in question_comments %}
 <div class="comment section">
     <p class="comment-body">{{ comment.body }}</p>
