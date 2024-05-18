@@ -193,14 +193,25 @@ def get_users(offset=0, per_page=10):
     return users.query.order_by(users.points.desc()).slice(offset, offset + per_page).all()
 
 
-@app.route('/delete_question/<int:question_id>', methods=['POST'])
+@app.route('/delete_question/<int:qid>', methods=['POST'])
 @login_required
-def delete_question(question_id):
+def delete_question(qid):
     # Get the question to delete - we'll use AJAX to send the request
-    question = questions.query.get_or_404(question_id)
+    question = questions.query.get_or_404(qid)
     if current_user.user_id != question.user_id:
         return jsonify({'error': 'You are not auth to delete this question.'}), 403
 
+    # Remove all the comments associated with the question
+    comments_to_delete = comments.query.filter_by(question_id=qid).all()
+    for comment in comments_to_delete:
+        db.session.delete(comment)
+
+    # Delete all user answers associated with the question
+    user_answers_to_delete = user_answers.query.filter_by(question_id=qid).all()
+    for user_answer in user_answers_to_delete:
+        db.session.delete(user_answer)
+
+    # Finally, delete the question itself
     db.session.delete(question)
     db.session.commit()
     
