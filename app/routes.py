@@ -38,8 +38,12 @@ def profile():
             'total_questions_answered': current_user.total_questions_answered,
             'rank': rank
         }
-            answer_form = AnswerForm()
-    return render_template('profile.html', user_questions=user_questions, current_user_stats=current_user_stats, answer_form=answer_form)
+        answer_form = AnswerForm()
+        recent_comments = comments.query.filter(current_user.get_id() == comments.user_id).join(users).order_by(comments.date_posted.desc()).limit(5)
+        recent_comments = recent_comments.with_entities(users.username,
+                                                        comments.body,
+                                                        comments.date_posted)
+    return render_template('profile.html', user_questions=user_questions, current_user_stats=current_user_stats, answer_form=answer_form, recent_comments=recent_comments)
 
 #Login attempts are directed here
 @app.route('/login', methods=['GET', 'POST'])
