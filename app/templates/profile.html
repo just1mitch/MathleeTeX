@@ -68,7 +68,7 @@
                     {% for comment in recent_comments %}
                     <div class="comment section">
                         <p class="comment-body">{{ comment.body }}</p>
-                        <p class="comment-byline opacity-50">{{ comment.username }}, <span class="dateposted" dateposted="{{ comment.date_posted }}"></span></p>
+                        <p class="comment-byline opacity-50 dateposted" dateposted="{{ comment.date_posted }}"></p>
                     </div>
                     {% endfor %}
                 </div>
