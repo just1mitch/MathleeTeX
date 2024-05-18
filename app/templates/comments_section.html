@@ -1,0 +1,14 @@
+<div class="section">
+    <form id="submit-comment" method="post">
+        {{ comment_form.hidden_tag() }}
+        {{ comment_form.comment(class_="create-comment large-text-box") }}
+        <input id="commentSubmit" type="submit" value="Add Comment">
+    </form>
+    
+</div>
+{% for comment in question_comments %}
+<div class="comment section">
+    <p class="comment-body">{{ comment.body }}</p>
+    <p class="comment-byline opacity-50">{{ comment.username }}, <span class="dateposted" dateposted="{{ comment.date_posted }}"></span></p>
+</div>
+{% endfor %}

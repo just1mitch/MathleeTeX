@@ -58,24 +58,25 @@
                 </div>
             </div>
             <div class="modal-body">
-                <p class="render-katex form-group modal-description"></p>
-                <h2 class="modal-code"></h2>
-                <form id="submit-answer" method="post">
-                    {{ answer_form.hidden_tag() }}
-                    <div class="form-group">
-                        <h4>{{ answer_form.answer.label }}</h4>
-                        {{ answer_form.answer(class_='katex-display', placeholder_="Enter Raw LaTeX",
-                        autocomplete="off") }}
-                        <div class="error-section">
-                            <p class="katex-error-section" id="answerError"></p>
+                    <p class="render-katex form-group modal-description"></p>
+                    <h2 class="modal-code"></h2>
+                    <form id="submit-answer" method="post">
+                        {{ answer_form.hidden_tag() }}
+                        <div class="form-group">
+                            <h4>{{ answer_form.answer.label }}</h4>
+                            {{ answer_form.answer(class_='katex-display', placeholder_="Enter Raw LaTeX",
+                            autocomplete="off") }}
+                            <div class="error-section">
+                                <p class="katex-error-section" id="answerError"></p>
+                            </div>
+                            <h2 class="katex-display" id="renderedAnswer" hidden></h2>
+                            <p class="katex-display katex-error-section" id="katexErrorCode"></p>
                         </div>
-                        <h2 id="correctness"></h2>
-                        <h2 class="katex-display" id="renderedAnswer" hidden></h2>
-                        <p class="katex-display katex-error-section" id="katexErrorCode"></p>
-                    </div>
-                    <input id="answerSubmit" type="submit" value="Submit">
-                </form>
+                        <input id="answerSubmit" type="submit" value="Submit">
+                    </form>
+                    <h2 id="correctness"></h2>
             </div>
+            <div id="commentSection" class="modal-footer"></div>
         </div>
     </div>
 </div>
@@ -126,6 +127,8 @@
     {% endfor %}
 </div>
 <script type="text/javascript" src="{{ url_for('static', filename='JavaScript/play_question.js')}}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='JavaScript/answer_question.js')}}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='JavaScript/create_comment.js')}}"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
     integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
     crossorigin="anonymous"></script>

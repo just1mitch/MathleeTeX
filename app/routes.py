@@ -5,8 +5,8 @@ from flask_paginate import Pagination, get_page_args
 from sqlalchemy import inspect, func
 
 from app import app, db
-from app.models import users, questions, user_answers, comments, LoginForm, SignupForm, QuestionForm, AnswerForm
-from app.controllers import users_control, questions_control, user_answers_control
+from app.models import users, questions, user_answers, comments, LoginForm, SignupForm, QuestionForm, AnswerForm, CommentForm
+from app.controllers import users_control, questions_control, user_answers_control, comments_control
 
 @app.route('/')
 def index():
@@ -215,4 +215,20 @@ def check_answer(qid):
         if answer_form.validate_on_submit():
             response = user_answers_control.add_attempt(qid, answer_form)
             return response
+    return
+
+@app.route('/get_comments/<qid>', methods=["GET"])
+def get_comments(qid):
+    comment_form = CommentForm()
+    question_comments = comments.query.filter(comments.question_id==qid).join(users)
+    question_comments = question_comments.with_entities(users.username,
+                                                        comments.body,
+                                                        comments.date_posted)
+    return render_template('comments_section.html', comment_form=comment_form, question_comments=question_comments)
+
+@app.route('/create_comment/<qid>', methods=["POST"])
+def create_comment(qid):
+    if current_user.is_authenticated:
+        comment_form = CommentForm(request.form)
+        comments_control.add_comment(qid, comment_form)
     return

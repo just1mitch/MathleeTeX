@@ -30,6 +30,10 @@ class QuestionForm(FlaskForm):
 class AnswerForm(FlaskForm):
     answer = StringField('Answer:', validators=[DataRequired(), Length(min=1)])
 
+# This class is for submitting a comment
+class CommentForm(FlaskForm):
+    comment = TextAreaField(validators=[DataRequired(), Length(min=1)])
+
 # This table is for storing user information - username, email, password, sign up date, and points
 class users(UserMixin, db.Model):
     user_id = db.Column(db.Integer, primary_key=True)
