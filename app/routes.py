@@ -3,7 +3,7 @@ from flask_login import login_required, current_user, logout_user
 from flask_login import login_user
 from flask_paginate import Pagination, get_page_args
 from sqlalchemy import inspect, func
-from .usertest import create_users
+from .testing.usertest import create_users
 
 from app import app, db
 from app.models import users, questions, user_answers, comments, LoginForm, SignupForm, QuestionForm, AnswerForm, CommentForm
