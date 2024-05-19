@@ -7,5 +7,5 @@ To run the application:
     > flask db stamp
     > flask db migrate
     > flask db upgrade
-    > flask run
+    > flask --app run.py run
 
