@@ -16,6 +16,8 @@ function renderKaTeX() {
             try {
                 let html = katex.renderToString("\\" + string);
                 element.html(element.text().replace("\\" + string, html));
+                // Remove render-katex class after render is done, such that multiple renders dont occur
+                element.removeClass('render-katex');
             }
             catch (e) {
                 if (e instanceof katex.ParseError) {
@@ -34,6 +36,7 @@ function renderKaTeX() {
             katex.render(text, this, {
                 throwOnError: false  // This option will render the original text if there's a parsing error
             });
+            $(this).removeClass('katex-render');
         } catch (e) {
             console.error("KaTeX render error:", e);
         }
