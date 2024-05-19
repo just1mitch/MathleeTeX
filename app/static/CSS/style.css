@@ -116,8 +116,11 @@ nav a:hover {
   padding: 10px !important;
   padding-bottom: 0px !important;
   max-width: 450px !important;
-  color: #76ABAE;
-  
+  color: #76ABAE; 
+}
+
+.comment-body {
+  overflow-wrap: break-word;
 }
 
 .comment-byline {

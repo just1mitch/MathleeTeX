@@ -142,5 +142,6 @@ function answerCorrect(points) {
         $('#commentSection').prop('hidden', false);
         $('#commentSection').html(comments);
         $('.dateposted').each(timeSince);
+        renderKaTeX();
     }).catch();
 }
