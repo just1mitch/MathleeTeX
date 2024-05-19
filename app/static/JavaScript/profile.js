@@ -64,6 +64,7 @@ function showPreview(qid, title, description, date_posted, difficulty) {
             $('#commentSection').prop('hidden', false);
             $('#commentSection').html(comments);
             $('.dateposted').each(timeSince);
+            renderKaTeX();
         }).catch();
     }).catch();
     return;
