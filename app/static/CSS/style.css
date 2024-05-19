@@ -86,9 +86,6 @@ footer {
   font-size: 24px;
   font-weight: bold;
 }
-/* nav {
-  display: flex;
-} */
 nav a {
   text-decoration: none;
   color: #FFF;
@@ -203,6 +200,25 @@ nav a:hover {
 
 .dateposted {
   font-size: small;
+}
+.help-btn {
+  color: #EEEEEE;
+  margin: 10px;
+}
+.modal-content {
+  background-color: #222831;
+  color: #EEEEEE;
+}
+.btn-custom {
+  background-color: #31363F;
+  color: #EEEEEE;
+  margin: 5px 0;
+}
+.btn-custom:hover {
+  background-color: #76ABAE;
+}
+.image-container img {
+  max-width: 100%;
 }
 
 .question:hover {
