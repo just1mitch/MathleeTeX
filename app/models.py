@@ -22,13 +22,13 @@ class SignupForm(FlaskForm):
 # This class is for formatting/validating Creating Question input - difficulty, title, description, code
 class QuestionForm(FlaskForm):
     difficulty = RadioField('Select a Difficulty:', choices=[('Easy', 'Easy'), ('Medium', 'Medium'), ('Hard', 'Hard')], default='Easy', validators=[DataRequired()])
-    title = StringField('Question Title:', validators=[DataRequired(), Length(min=1, max=50)])
-    description = TextAreaField('Question Description:', validators=[DataRequired(), Length(min=1, max=250)])
-    code = StringField('Enter Your LaTeX Code:', validators=[DataRequired(), Length(min=1, max=50)])
+    title = StringField('Question Title:', validators=[DataRequired(), Length(min=1, max=51)])
+    description = TextAreaField('Question Description:', validators=[DataRequired(), Length(min=1, max=251)])
+    code = StringField('Enter Your LaTeX Code:', validators=[DataRequired(), Length(min=1, max=51)])
 
 # This class is for answering a question
 class AnswerForm(FlaskForm):
-    answer = StringField('Answer:', validators=[DataRequired(), Length(min=1)])
+    answer = StringField('Answer:', validators=[DataRequired(), Length(min=1, max=51)])
 
 # This class is for submitting a comment
 class CommentForm(FlaskForm):
