@@ -5,8 +5,6 @@ from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField, BooleanField, EmailField, RadioField, TextAreaField
 from wtforms.validators import DataRequired, Length, Email, EqualTo, Regexp, ValidationError
 
-
-
 # This class is for formatting/validating Login Form input - username, password, remember me
 class LoginForm(FlaskForm):
     username = StringField('Username:', validators=[DataRequired(), Length(min=3, max=20)])
@@ -18,7 +16,7 @@ class LoginForm(FlaskForm):
 class SignupForm(FlaskForm):
     setemail = EmailField('Email:', validators=[DataRequired()])
     setusername = StringField('Username:', validators=[DataRequired(), Length(min=3, max=20)])
-    createpassword = PasswordField('Password:', validators=[DataRequired(), Length(min=8)])
+    createpassword = PasswordField('Password:', validators=[DataRequired(), Length(min=8), Regexp("(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_])")])
     confirmpassword = PasswordField('Repeat Password', validators=[DataRequired(), EqualTo('createpassword')])
 
 # This class is for formatting/validating Creating Question input - difficulty, title, description, code
@@ -27,6 +25,14 @@ class QuestionForm(FlaskForm):
     title = StringField('Question Title:', validators=[DataRequired(), Length(min=1)])
     description = TextAreaField('Question Description:', validators=[DataRequired(), Length(min=1)])
     code = StringField('Enter Your LaTeX Code:', validators=[DataRequired(), Length(min=1)])
+
+# This class is for answering a question
+class AnswerForm(FlaskForm):
+    answer = StringField('Answer:', validators=[DataRequired(), Length(min=1)])
+
+# This class is for submitting a comment
+class CommentForm(FlaskForm):
+    comment = TextAreaField(validators=[DataRequired(), Length(min=1)])
 
 # This table is for storing user information - username, email, password, sign up date, and points
 class users(UserMixin, db.Model):
@@ -40,6 +46,14 @@ class users(UserMixin, db.Model):
     def get_id(self):
         return str(self.user_id)
 
+    @property
+    def questions_answered_correctly(self):
+        return user_answers.query.filter_by(user_id=self.user_id, is_correct=True).count()
+
+    @property
+    def total_questions_answered(self):
+        return user_answers.query.filter_by(user_id=self.user_id).count()
+
 # This table is for storing questions - user_id, title, question description, correct answer, date posted, and difficulty level
 class questions(db.Model):
     question_id = db.Column(db.Integer, primary_key=True)
@@ -50,6 +64,7 @@ class questions(db.Model):
     date_posted = db.Column(db.DateTime, default=datetime.utcnow)
     difficulty_level = db.Column(db.String, nullable=False)
     comments = db.relationship('comments', backref='questions')
+    deleted = db.Column(db.Boolean, default=False)
 
 # This table is for storing user answers - question_id, user_id, answer text, whether the answer is correct, attempt number, and date posted
 class user_answers(db.Model):
@@ -66,7 +81,6 @@ class user_answers(db.Model):
 class comments(db.Model):
     comment_id = db.Column(db.Integer, primary_key=True)
     question_id = db.Column(db.Integer, db.ForeignKey('questions.question_id'))
-    answer_id = db.Column(db.Integer, db.ForeignKey('user_answers.answer_id'))
     user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'), nullable=False)
     body = db.Column(db.Text, nullable=False)
     date_posted = db.Column(db.DateTime, default=datetime.utcnow)

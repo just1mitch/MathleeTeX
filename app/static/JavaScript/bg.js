@@ -52,7 +52,6 @@ function generateRandomEquation() {
       '\\left(\\frac{x^2}{y^3}\\right)^4',
       '\\frac{d}{dx}\\left(\\int_{0}^{x} f(u)\\,du\\right)=f(x)',
       '\\sqrt{\\frac{a}{b}}',
-      '\\2+2=4',
       '\\frac{d}{dx}e^{ax}=ae^{ax}',
       '\\sqrt[3]{x^3 + y^3}',
       '\\frac{\\partial u}{\\partial t} + (u \\cdot \\nabla)u = -\\frac{1}{\\rho}\\nabla p + \\nu\\nabla^2u'

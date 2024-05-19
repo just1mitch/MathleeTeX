@@ -9,11 +9,11 @@ function timeSince(_, dateposted) {
     interval = seconds / 2592000;
     if (interval > 1) {
         dateposted.innerText = Math.floor(interval) + " months ago";
-        return ;
+        return;
     }
     interval = seconds / 86400;
     if (interval > 1) {
-        dateposted.innerText = Math.floor(interval) +" days ago";
+        dateposted.innerText = Math.floor(interval) + " days ago";
         return;
     }
     interval = seconds / 3600;
@@ -26,7 +26,7 @@ function timeSince(_, dateposted) {
         dateposted.innerText = Math.floor(interval) + " minutes ago";
         return;
     }
-    dateposted.innerText = Math.floor(interval) + " seconds";
+    dateposted.innerText = Math.floor(interval) + " seconds ago";
 }
 
 function setTimes() {

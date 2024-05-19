@@ -2,34 +2,89 @@
 {% block title %}Play a Quiz{% endblock %}
 
 {% block body %}
-    <div>
-        <nav >
-            <ul class="pagination paginate justify-content-center my-2">
-                {% for page in question_list.iter_pages() %}
-                    {% if page %}
-                        {% if page != question_list.page %}
-                            <li class="page-item">
-                                <a class="page-link" href="{{ url_for('play', page=page) }}">{{ page }}</a>
-                            </li>
-                        {% else %}
-                            <li class="page-item active">
-                                <a class="page-link">{{ page }}</span></a>
-                            </li>
-                        {% endif %}
-                    {% else %}
-                    <li class="page-item disabled">
-                        <a class="page-link">...</a>
-                    </li> 
-                    {% endif %}
-                {% endfor %}
-            </ul>
-        </nav>
-        <p class="page-status">Showing Questions {{ question_list.first }} - {{ question_list.last }} of {{ question_list.total }}</p>
+<div>
+    <nav>
+        <ul class="pagination paginate justify-content-center my-2">
+            {% for page in question_list.iter_pages() %}
+            {% if page %}
+            {% if page != question_list.page %}
+            <li class="page-item">
+                <a class="page-link" href="{{ url_for('play', page=page) }}">{{ page }}</a>
+            </li>
+            {% else %}
+            <li class="page-item active">
+                <a class="page-link">{{ page }}</span></a>
+            </li>
+            {% endif %}
+            {% else %}
+            <li class="page-item disabled">
+                <a class="page-link">...</a>
+            </li>
+            {% endif %}
+            {% endfor %}
+        </ul>
+    </nav>
+    <p class="page-status">Showing Questions {{ question_list.first }} - {{ question_list.last }} of {{
+        question_list.total }}</p>
+</div>
+
+<div class="modal fade" id="answerModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content modal-colour">
+            <div class="modal-header">
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-10 p-0">
+                            <h2 class="modal-title text-start"></h2>
+                        </div>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="row mb-0">
+                        <div class="col-10 p-0">
+                            <p id="byline" class="modal-byline opacity-50 text-start mb-0"></p>
+                        </div>
+                    </div>
+                    <div class="row mb-0">
+                        <div class="col-10 p-0">
+                            <p id="attempts" class="modal-byline opacity-50 text-start mb-0"></p>
+                        </div>
+                    </div>
+                    <div class="row mb-0">
+                        <div class="col-10 p-0">
+                            <p id="points" class="modal-byline opacity-50 text-start mb-0"></p>
+                        </div>
+                        <div class="modal-difficulty col-2 ps-4"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-body">
+                    <p class="render-katex form-group modal-description"></p>
+                    <h2 class="modal-code"></h2>
+                    <form id="submit-answer" method="post">
+                        {{ answer_form.hidden_tag() }}
+                        <div class="form-group">
+                            <h4>{{ answer_form.answer.label }}</h4>
+                            {{ answer_form.answer(class_='katex-display', placeholder_="Enter Raw LaTeX",
+                            autocomplete="off") }}
+                            <div class="error-section">
+                                <p class="katex-error-section" id="answerError"></p>
+                            </div>
+                            <h2 class="katex-display" id="renderedAnswer" hidden></h2>
+                            <p class="katex-display katex-error-section" id="katexErrorCode"></p>
+                        </div>
+                        <input id="answerSubmit" type="submit" value="Submit">
+                    </form><br>
+                    <h2 id="correctness"></h2>
+            </div>
+            <div id="commentSection" class="comment-section" hidden></div>
+        </div>
     </div>
-    
+</div>
+
 <div class="end-section">
-{% for question in question_list.items %}
-    <div class="section question container prevent-select" onclick="">
+    {% for question in question_list.items %}
+    <div class="section question container prevent-select"
+        onclick='showQuestion(qid={{ question.question_id }}, title={{ question.title|tojson }}, difficulty={{ question.difficulty_level|tojson }}, description={{ question.question_description|tojson }}, username={{ question.username|tojson }}, date_posted=$(".dateposted.question{{ question.question_id }}").text())'>
         <div class="row">
             <div class="col-8">
                 <h5 class="fw-bold render-katex">{{ question.title }}</h5>
@@ -37,7 +92,8 @@
             <div class="col-4 text-end opacity-50">
                 <p class="mb-0">
                     Posted by {{ question.username }}<br>
-                    <span dateposted="{{ question.date_posted }}" class="dateposted"></span>
+                    <span dateposted="{{ question.date_posted }}"
+                        class="dateposted question{{ question.question_id }}"></span>
                 </p>
             </div>
         </div>
@@ -47,30 +103,37 @@
             </div>
             <div class="col-3 text-end align-self-end">
                 {% if question.difficulty_level == 'Easy' %}
-                    <span class="easy">Easy</span>
+                <span class="easy">Easy</span>
                 {% endif %}
                 {% if question.difficulty_level == 'Medium' %}
-                    <span class="medium">Medium</span>
+                <span class="medium">Medium</span>
                 {% endif %}
                 {% if question.difficulty_level == 'Hard' %}
-                    <span class="hard">Hard</span>
+                <span class="hard">Hard</span>
                 {% endif %}
             </div>
         </div>
         <div class="row">
             <span class="opacity-50">
+                💬
                 {% if question.comment_count == None %}
                 0
                 {% else %}
-                    {{ question.comment_count }}
+                {{ question.comment_count }}
                 {% endif %}
-                 comment{% if question.comment_count != 1 %}s{% endif %}
+                comment{% if question.comment_count != 1 %}s{% endif %}
             </span>
         </div>
     </div>
     {% endfor %}
-    </div>
-    <script type="text/javascript" src="{{ url_for('static', filename='JavaScript/play_question.js')}}"></script>
+</div>
+<script type="text/javascript" src="{{ url_for('static', filename='JavaScript/date_posted.js')}}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='JavaScript/answer_question.js')}}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='JavaScript/get_question.js')}}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='JavaScript/comments.js')}}"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+    crossorigin="anonymous"></script>
 {% endblock %}
 
 {%block footer %}

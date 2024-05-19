@@ -17,7 +17,7 @@
     </div>
 </div>
 
-<div class="section" id="login-form">
+<div class="section end-section" id="login-form">
     <h2>Login</h2>
     <form id="loginformelement" action="{{ url_for('login') }}" method="post">
         {{ login_form.hidden_tag() }}
@@ -38,7 +38,7 @@
                 {% if messages %}
                     {% for message in messages %}
                         {% if 'flash_login' in message %}
-                            <p class="error-message-login">{{ message|replace('flash_login: ', '') }}</p>
+                            <p class="error">{{ message|replace('flash_login: ', '') }}</p>
                         {% endif %}
                     {% endfor %}
                 {% endif %}
@@ -48,7 +48,7 @@
     </form>
 </div>
 
-<div class="section" id="signup-form" style="display:none;">
+<div class="section end-section" id="signup-form" style="display:none;">
     <h2>Sign Up</h2>
     <form id="signupformelement" action="{{ url_for('signup_user') }}" method="post">
         {{ signup_form.hidden_tag() }}
@@ -68,6 +68,7 @@
             <label for="confirmpassword">Confirm Password:</label>
             <input type="password" id="confirmpassword" name="confirmpassword" required>
         </div>
+        <div class="error-section" id="userlength"></div>
         <div class="error-section">
             {% with messages = get_flashed_messages() %}
                 {% if messages %}
@@ -86,9 +87,6 @@
 {% endblock %}
 
 {% block footer %}
-<footer>
-    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
     <script type="text/javascript" src="{{ url_for('static', filename='JavaScript/login_script.js')}}"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
-</footer>
 {% endblock %}

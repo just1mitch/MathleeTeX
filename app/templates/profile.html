@@ -1,14 +1,169 @@
 {% extends "katexscripts.html" %}
-{% block title %}{{ name }}{% endblock %}
-
+{% block title %}User Profile{% endblock %}
 {% block body %}
-    <h1>Welcome, {{ name }}!</h1>
+<div class="container-fluid mt-5">
+    <div class="row">
+        <div class="col-12 mb-4">
+            <div class="card text-white">
+                <div class="card-header">
+                    <h2>Your Stats</h2>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-8">
+                            <div class="stat-container d-flex align-items-center justify-content-between mb-2">
+                                <div>
+                                    <span class="stat-icon">🏆</span>
+                                    <span>Rank</span>
+                                </div>
+                                <h4>{{ current_user_stats.rank }}</h4>
+                            </div>
+                            <div class="stat-container d-flex align-items-center justify-content-between mb-2">
+                                <div>
+                                    <span class="stat-icon">🗒️</span>
+                                    <span>Questions Answered</span>
+                                </div>
+                                <h4>{{ current_user_stats.total_questions_answered }}</h4>
+                            </div>
+                            <div class="stat-container d-flex align-items-center justify-content-between mb-2">
+                                <div>
+                                    <span class="stat-icon">✔️</span>
+                                    <span>Correct Answers</span>
+                                </div>
+                                <h4>{{ current_user_stats.questions_answered_correctly }}</h4>
+                            </div>
+                            <div class="stat-container d-flex align-items-center justify-content-between mb-2">
+                                <div>
+                                    <span class="stat-icon">🔥</span>
+                                    <span>Points</span>
+                                </div>
+                                <h4>{{ current_user_stats.points }}</h4>
+                            </div>
+                            {% if current_user_stats %}
+                            <a href="{{ url_for('leaderboard', show_me=True) }}" class="start-button btn btn-info">Show My Ranking</a>
+                            {% endif %}
+                        </div>
+                        <div class="col-md-4 d-flex align-items-center justify-content-center">
+                            <div class="username-display text-center">
+                                <h1 class="display-3">{{ current_user.username }}</h1>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+        </div>
+    </div>
     
+    <div class="row">
+        <div class="col-md-4">
+            <div class="card text-white mb-4">
+                <div class="card-header">
+                    <h2>Recent Comments</h2>
+                </div>
+                <div class="card-body">
+                    {% if recent_comments.count() == 0 %}
+                    <div>
+                        <p>No Comments Yet...</p>
+                    </div>
+                    {% endif %}
+                    {% for comment in recent_comments %}
+                    <div class="comment section">
+                        <p class="comment-body">{{ comment.body }}</p>
+                        <p class="comment-byline opacity-50 dateposted" dateposted="{{ comment.date_posted }}"></p>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+        <div class="col-md-8 end-section">
+            <div class="card text-white">
+                <div class="card-header">
+                    <h2>Your Questions</h2>
+                </div>
+                <div class="card-body" style="overflow-y: auto; height: 600px;">
+                    {% for question in user_questions %}
+                        <div id="question-{{ question.question_id }}" class="section question container prevent-select" onclick="">
+                            <div class="row">
+                                <div class="col-8">
+                                    <h5 class="fw-bold render-katex">{{ question.title }}</h5>
+                                </div>
+                                <div class="col-4 text-end opacity-50">
+                                    <p class="mb-0">
+                                        <span dateposted="{{ question.date_posted }}" class="dateposted question{{ question.question_id }}">{{ question.date_posted }}</span>
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-9">
+                                    <p class="render-katex">{{ question.question_description }}</p>
+                                </div>
+                                <div class="col-3 text-end align-self-end">
+                                    {% if question.difficulty_level == 'Easy' %}
+                                        <span class="easy">Easy</span>
+                                    {% elif question.difficulty_level == 'Medium' %}
+                                        <span class="medium">Medium</span>
+                                    {% elif question.difficulty_level == 'Hard' %}
+                                        <span class="hard">Hard</span>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-6">
+                                    <p>🗒️ {{ question.num_attempts }} attempts</p>
+                                    <span>💬 {{ question.num_comments }} comment{% if question.num_comments != 1 %}s{% endif %}</span>
+                                </div>
+                                <div class="col-6 text-end">
+                                    <br>
+                                    <button onclick='showPreview({{ question.question_id }}, {{ question.title|tojson }}, {{ question.question_description|tojson }}, $(".dateposted.question{{ question.question_id }}").text(), {{ question.difficulty_level|tojson }})' class="btn btn-primary question-preview"><i class="fa-solid fa-eye"></i></button>
+                                    <button onclick="deleteQuestion({{ question.question_id }})" class="btn btn-danger"><i class="fa fa-trash" aria-hidden="true"></i></button>
+                                </div>
+                            </div>
+                        </div>
+                        <hr>
+                    {% else %}
+                        <p>You have not posted any questions yet.</p>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
-    <!--Can include other profile info such as points, created quizzes and so forth once they're implemented-->
-    <a href="{{url_for('logout') }}" class="navbar-item">Logout</a>
+<div class="modal fade" id="answerModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content modal-colour">
+            <div class="modal-header">
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-10 p-0">
+                            <h2 class="modal-title text-start"></h2>
+                        </div>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="row mb-0">
+                        <div class="col-10 p-0">
+                            <p id="byline" class="modal-byline opacity-50 text-start mb-0"></p>
+                        </div>
+                        <div class="modal-difficulty col-2 ps-4"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-body">
+                <p class="render-katex form-group modal-description"></p>
+                <h2 class="modal-code"></h2>
+            </div>
+            <div id="commentSection" class="comment-section" hidden></div>
+        </div>
+    </div>
+</div>
+
 {% endblock %}
-
 {% block footer %}
-<!--Footer content...-->
+<script src="{{ url_for('static', filename='JavaScript/date_posted.js') }}"></script>
+<script src="{{ url_for('static', filename='JavaScript/profile.js') }}"></script>
+<script src="{{ url_for('static', filename='JavaScript/get_question.js') }}"></script>
+<script src="{{ url_for('static', filename='JavaScript/comments.js') }}"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+    crossorigin="anonymous"></script>
+
 {% endblock %}
