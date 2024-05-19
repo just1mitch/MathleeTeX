@@ -2,7 +2,6 @@ venv/
 __pycache__/
 development/
 *.pyc
-*.db
 .DS_Store
 .vscode/
 *.db-journal
