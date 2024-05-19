@@ -1,6 +1,12 @@
 {% extends "katexscripts.html" %}
 {% block title %}Play a Quiz{% endblock %}
 
+{% block head %}
+<!-- Custom CSS -->
+<link rel="stylesheet" href="{{ url_for('static', filename='CSS/questions.css') }}">
+{% endblock %}
+
+
 {% block body %}
 <div>
     <nav>

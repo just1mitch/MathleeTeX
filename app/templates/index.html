@@ -1,6 +1,12 @@
 {% extends "katexscripts.html" %}
 {% block title %}Home{% endblock %}
 
+{% block head %}
+<!-- Custom CSS -->
+<link rel="stylesheet" href="{{ url_for('static', filename='CSS/index.css') }}">
+{% endblock %}
+
+
 {% block body %}
   <div class="banner">
     <div id="equation-background"></div>

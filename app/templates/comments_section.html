@@ -1,3 +1,9 @@
+{% block head %}
+<!-- Custom CSS -->
+<link rel="stylesheet" href="{{ url_for('static', filename='CSS/comments.css') }}">
+{% endblock %}
+
+
 <div class="section create-comment">
     <form id="submit-comment" method="post">
         {{ comment_form.hidden_tag() }}
