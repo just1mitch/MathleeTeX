@@ -1,10 +1,12 @@
 <!-- katexscripts extends base.html but includes the scripts to show katex -->
 {% extends "katexscripts.html" %}
 {% block title %}Make a Quiz{% endblock %}
-
+   
 {% block body %}
     <!-- Help Button -->
-    <button type="button" class="btn btn-info" data-toggle="modal" data-target="#latexHelpModal">Help</button>
+    <button type="button" class="btn btn-info help-btn" data-toggle="modal" data-target="#latexHelpModal">
+        &#x2753;
+    </button>
 
     <!-- Modal -->
     <div class="modal fade" id="latexHelpModal" tabindex="-1" aria-labelledby="latexHelpModalLabel" aria-hidden="true">
@@ -94,14 +96,6 @@
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     
-    <script>
-        document.querySelectorAll('.btn-custom').forEach(button => {
-            button.addEventListener('click', function() {
-                const imageName = this.getAttribute('data-image');
-                document.getElementById('modalImage').src = "static/img/" + imageName;
-            });
-        });
-    </script>
 {% endblock %}
 
 {% block footer %}

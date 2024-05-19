@@ -27,9 +27,6 @@ footer {
   font-size: 24px;
   font-weight: bold;
 }
-/* nav {
-  display: flex;
-} */
 nav a {
   text-decoration: none;
   color: #EEEEEE;
@@ -94,6 +91,10 @@ nav a:hover {
 
 .dateposted {
   font-size: small;
+}
+.help-btn {
+  color: #EEEEEE;
+  margin: 10px;
 }
 .modal-content {
   background-color: #222831;

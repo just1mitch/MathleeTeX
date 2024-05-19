@@ -1,3 +1,11 @@
+// display respective images of LaTex Commands in help modal
+document.querySelectorAll('.btn-custom').forEach(button => {
+    button.addEventListener('click', function() {
+        const imageName = this.getAttribute('data-image');
+        document.getElementById('modalImage').src = "static/img/" + imageName;
+    });
+});
+
 // Validate Title and Description Inputs of create question form
 function validateInput() {
     const title = $("#title").val().trim();
