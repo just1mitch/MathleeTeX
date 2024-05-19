@@ -1,0 +1,33 @@
+#equation-background {
+    position:absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.equation {
+    position: absolute;
+    font-family: 'Times New Roman', Times, serif;
+    color: rgb(0, 0, 0);
+    font-size: 2em;
+    opacity: 0.8;
+    z-index: 0;
+}
+
+.equation.fly {
+    animation: flyPast 5s linear forwards;
+}
+
+@keyframes flyPast {
+    from {
+        transform: translate(var(--start-x), var(--start-y)) scale(1);
+    }
+    to {
+        transform: translate(var(--end-x), var(--end-y)) scale(0);
+    }
+}
