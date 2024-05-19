@@ -32,7 +32,7 @@ class AnswerForm(FlaskForm):
 
 # This class is for submitting a comment
 class CommentForm(FlaskForm):
-    comment = TextAreaField(validators=[DataRequired(), Length(min=1)])
+    comment = TextAreaField(validators=[DataRequired(), Length(min=1, max=251)])
 
 # This table is for storing user information - username, email, password, sign up date, and points
 class users(UserMixin, db.Model):
