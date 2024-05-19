@@ -8,7 +8,7 @@
       <h1>Welcome to MathleeTeX!</h1>
       <p>Simplified questions by the community for the community!</p>
     </div>
-    <button class="start-button"><a href="{{ url_for('play') }}" class="nav-link">Start your Mathleetex today!</a></button>
+    <button id="startPlay" class="start-button"><a href="{{ url_for('play') }}" class="nav-link">Start your Mathleetex today!</a></button>
   </div>
   <br>
   <div class="row">
@@ -56,7 +56,7 @@
               {% endfor %}
           </tbody>
           </table>
-          <button class="start-button"><a href="{{ url_for('leaderboard') }}" class="nav-link">View Leaderboard ➤</a></button>
+          <button id="startLeaderboard" class="start-button"><a href="{{ url_for('leaderboard') }}" class="nav-link">View Leaderboard ➤</a></button>
         </div>
       </div>
     </div>

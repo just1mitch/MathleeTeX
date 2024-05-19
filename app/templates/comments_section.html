@@ -2,6 +2,7 @@
     <form id="submit-comment" method="post">
         {{ comment_form.hidden_tag() }}
         {{ comment_form.comment(class_="large-text-box") }}
+        <div class="error-section"><p class="katex-error-section" id="commentError"></p></div>
         <input id="commentSubmit" type="submit" value="Add Comment">
     </form>
     
@@ -13,7 +14,7 @@
 {% endif %}
 {% for comment in question_comments %}
 <div class="comment section">
-    <p class="comment-body">{{ comment.body }}</p>
+    <p class="comment-body render-katex">{{ comment.body }}</p>
     <p class="comment-byline opacity-50">{{ comment.username }}, <span class="dateposted" dateposted="{{ comment.date_posted }}"></span></p>
 </div>
 {% endfor %}
