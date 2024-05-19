@@ -4,17 +4,16 @@ from os import path, makedirs
 from time import sleep
 from selenium import webdriver
 from selenium.webdriver.common.by import By
-from webdriver_manager.chrome import ChromeDriverManager
-from selenium.webdriver.chrome.service import Service as ChromeService
-
-# https://googlechromelabs.github.io/chrome-for-testing/
+from selenium.webdriver.firefox.service import Service
+from webdriver_manager.firefox import GeckoDriverManager
 
 # Test the Home Page functionality
 class TestHomePage(unittest.TestCase):
 
     def setUp(self) -> None:
         # Create driver and set config
-        self.driver = webdriver.Chrome(service=ChromeService(ChromeDriverManager().install()))
+        service = Service(executable_path=GeckoDriverManager().install())
+        self.driver = webdriver.Firefox(service=service)
         self.driver.maximize_window()
         self.driver.get("http://127.0.0.1:5000/")
 
@@ -47,7 +46,8 @@ class TestHomePage(unittest.TestCase):
 class TestHeaderLinks(unittest.TestCase):
     def setUp(self) -> None:
         # Create driver and set config
-        self.driver = webdriver.Chrome(service=ChromeService(ChromeDriverManager().install()))
+        service = Service(executable_path=GeckoDriverManager().install())
+        self.driver = webdriver.Firefox(service=service)
         self.driver.maximize_window()
         self.driver.get("http://127.0.0.1:5000/")
 
@@ -85,7 +85,7 @@ if __name__ == '__main__':
     dirname = path.dirname(__file__)
     dirpath = path.join(dirname, 'logs')
     makedirs(dirpath, exist_ok=True)
-    filepath = path.join(dirpath, 'chrome.txt')
+    filepath = path.join(dirpath, 'firefox.txt')
     
     with open(filepath, 'w+', encoding='utf-8') as logfile:
         main(logfile)
