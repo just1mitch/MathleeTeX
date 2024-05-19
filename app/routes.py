@@ -115,50 +115,6 @@ def play():
     
     return render_template("play_question.html", question_list=question_list, answer_form=answer_form)
 
-@app.route('/list_tables')
-def list_tables():
-    inspector = inspect(db.engine)
-    tables = inspector.get_table_names()
-    return jsonify(tables)
-
-@app.route('/list_columns/<table_name>')
-def list_columns(table_name):
-    inspector = inspect(db.engine)
-    columns = inspector.get_columns(table_name)
-    column_info = [{ 'name': col['name'], 'type': str(col['type']) } for col in columns]
-    return jsonify(column_info)
-
-@app.route('/list_users')
-def list_users():
-    user_array = []
-    users_list = users.query.all()
-    for user in users_list:
-        user_array.append({
-            'user_id': user.user_id,
-            'username': user.username,
-            'email': user.email,
-            #'password': user.password,
-            'sign_up_date': user.sign_up_date,
-            'points': user.points
-        })
-    return jsonify(user_array)
-
-@app.route('/list_questions')
-def list_questions():
-    question_array = []
-    question_list = questions.query.all()
-    for question in question_list:
-        question_array.append({
-            'question_id': question.question_id,
-            'user_id': question.user_id,
-            'title': question.title,
-            'question_description': question.question_description,
-            'correct_answer': question.correct_answer,
-            'date_posted': question.date_posted,
-            'difficulty': question.difficulty_level
-        })
-    return jsonify(question_array)
-
 @app.route('/create', methods=["GET", "POST"])
 @login_required
 def create():
