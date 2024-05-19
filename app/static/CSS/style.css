@@ -194,17 +194,11 @@ h4 {
 .form-group {
   margin-bottom: 20px;
 }
-.remember {
-  display: flex;
-}
-
-
 
 label {
   display:block;
   margin-bottom: 5px;
 }
-
 textarea,
 input[type="text"],
 input[type="email"],
@@ -221,38 +215,7 @@ input[type="password"] {
 [type="text"]::placeholder {
   text-align: center;
 }
-input[type="checkbox"] {
-  display: none;
-}
-input[type="checkbox"] + label {
-  position: relative;
-  display: inline-block;
-  cursor: pointer;
-  padding-left: 25px;
-}
-input[type="checkbox"] + label:before {
-  content: '';
-  position: absolute;
-  left: 0;
-  top: 0;
-  width: 18px;
-  height: 18px;
-  border: 2px solid #76ABAE;
-  background-color: #31363F;
-  border-radius: 4px;
-}
-input[type="checkbox"]:checked + label:before {
-  background-color: #76ABAE;
-}
-input[type="checkbox"]:checked + label:after {
-  content: '\2713';
-  position:absolute;
-  top: 2px;
-  left: 2px;
-  color: #FFF;
-  font-family: Arial, sans-serif;
-  font-size: 12px;
-}
+
 input[type="submit"] {
   width: 100%;
   padding: 10px;
