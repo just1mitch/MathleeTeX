@@ -36,7 +36,7 @@
                     </div>
                     <!-- Image Display Area -->
                     <div class="image-container col-9 text-center">
-                        <img id="modalImage" src="default.png" alt="LaTeX Command" class="img-fluid">
+                        <img id="modalImage" src="static/img/accents.png" alt="LaTeX Command" class="img-fluid">
                     </div>
                 </div>
             </div>
@@ -98,7 +98,7 @@
         document.querySelectorAll('.btn-custom').forEach(button => {
             button.addEventListener('click', function() {
                 const imageName = this.getAttribute('data-image');
-                document.getElementById('modalImage').src = imageName;
+                document.getElementById('modalImage').src = "static/img/" + imageName;
             });
         });
     </script>
