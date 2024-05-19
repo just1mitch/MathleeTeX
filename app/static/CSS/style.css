@@ -113,8 +113,11 @@ nav a:hover {
   padding: 10px !important;
   padding-bottom: 0px !important;
   max-width: 450px !important;
-  color: #76ABAE;
-  
+  color: #76ABAE; 
+}
+
+.comment-body {
+  overflow-wrap: break-word;
 }
 
 .comment-byline {
@@ -228,10 +231,13 @@ nav a:hover {
   transform: translateY(-1px);
   box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2)
 }
+
 h2 {
+  overflow: hidden;
   text-align: center;
   color: #76ABAE;
 }
+
 h4 {
   text-align: center;
 }
@@ -423,6 +429,13 @@ input[type="submit"]:disabled {
   color: #ff8989;
   font-size: x-small;
   text-align: center;
+}
+
+.katex-display {
+  display: block !important;
+  margin: 1em 0 !important;
+  text-align: center !important;
+  overflow: overlay;
 }
 .card {
   margin: 20px auto;

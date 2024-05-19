@@ -1,5 +1,18 @@
 $(document).on('submit', '#submit-comment', createComment);
 
+$(document).on('input', '#comment', function() {
+    $('#commentSubmit').prop('disabled', false);
+    if ($(this).val().length > 250) {
+        $('#commentError').html("Error: Comment length must be less than 250 characters (currently " + $(this).val().length + ")")
+        $('#commentError').parent().show();
+        $('#commentSubmit').prop('disabled', true);
+    }
+    else {
+        $('#commentError').parent().hide();
+        $('#commentSubmit').prop('disabled', false);
+    }
+})
+
 function createComment(e) {
     e.preventDefault();
     $.ajax({
