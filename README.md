@@ -6,10 +6,10 @@
 ## CITS3403 - Agile Web Development - Group Project, 2024.
 
 **Developed by:**
-- Jack Blackwood
-- Mitchell Otley
-- Nate Trew
-- James Wigfield
+- [Jack Blackwood](https://github.com/QuamCode)
+- [Mitchell Otley](https://github.com/just1mitch)
+- [Nate Trew](https://github.com/Nate202003)
+- [James Wigfield](https://github.com/JamesW293)
 
 **Startup Steps:**
 1. Clone the repository
